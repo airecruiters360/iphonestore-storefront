@@ -316,7 +316,9 @@
 }
 
   function cardHtml(l) {
-    const specs = [l.storage ? `${l.storage}GB` : null, l.color, l.carrier_lock ? `${l.carrier_lock} Locked` : "Unlocked"]
+    const cleanStorage = l.storage ? String(l.storage).replace(/gb/i, "").trim() : null;
+        const carrierText = !l.carrier_lock || l.carrier_lock.toLowerCase() === "unlocked" ? "Unlocked" : `${l.carrier_lock} Locked`;
+        const specs = [cleanStorage ? `${cleanStorage}GB` : null, l.color, carrierText]
       .filter(Boolean)
       .join(" · ");
     const lowStock = l.quantity_available <= 2;
