@@ -41,6 +41,7 @@ gap: 16px;
 }
 .logo { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; }
 .logo span { color: var(--ink-soft); font-weight: 500; }
+.logo-img { height: 26px; width: auto; display: block; }
 .hero {
 max-width: 1120px;
 margin: 0 auto;
@@ -266,7 +267,7 @@ font-size: 13px;
 
 <header>
 <div class="header-inner">
-<div class="logo">iPhoneStore<span>.io</span></div>
+<img src="/logo.svg" alt="iPhoneStore.io" class="logo-img" />
 </div>
 </header>
 
@@ -288,7 +289,7 @@ font-size: 13px;
 <div class="modal-overlay" id="modalOverlay">
 <div class="modal">
 <div id="modalForm">
-<h2 id="modalTitle">Reserve this device</h2>
+<h2 id="modalTitle">Buy this device</h2>
 <p class="sub" id="modalSub"></p>
 
 <div class="bundles" id="bundleOptions">
@@ -333,7 +334,7 @@ font-size: 13px;
 <button class="btn-pay" id="stripePayBtn" type="button">Pay</button>
 <p class="payment-message" id="paymentMessage"></p>
 
-<div class="pay-divider">Or reserve without paying now</div>
+<div class="pay-divider">Your contact info</div>
 
 <div class="field">
 <label>Your name</label>
@@ -353,14 +354,6 @@ font-size: 13px;
 </div>
 <div class="modal-actions">
 <button class="btn-secondary" id="cancelBtn">Cancel</button>
-<button class="btn-primary" id="submitBtn">Submit</button>
-</div>
-</div>
-<div id="modalSuccess" style="display:none;">
-<div class="success-msg">
-<h2>Thanks!</h2>
-<p class="sub">We got your request and will reach out shortly to complete your purchase.</p>
-<button class="btn-primary" id="closeSuccessBtn" style="width:100%;">Close</button>
 </div>
 </div>
 </div>
@@ -469,7 +462,7 @@ return `
 </div>
 <div class="stock ${lowStock ? "low" : ""}">${lowStock ? `Only ${l.quantity_available} left` : "In stock"}</div>
 </div>
-<button class="cta" data-listing-id="${l.listing_id}">Reserve This Device</button>
+<button class="cta" data-listing-id="${l.listing_id}">Buy Now</button>
 </div>
 `;
 }
@@ -623,7 +616,7 @@ if (!redirectStatus) return;
 if (redirectStatus === "succeeded" || redirectStatus === "processing") {
 alert("Thanks! Your payment is being processed - you'll get confirmation shortly.");
 } else if (redirectStatus === "failed") {
-alert("That payment didn't go through. Please try again or reserve without paying now.");
+alert("That payment didn't go through. Please try again or contact us for help.");
 }
 window.history.replaceState({}, document.title, window.location.pathname);
 })();
@@ -633,7 +626,6 @@ selectedListing = allListings.find((l) => l.listing_id === listingId);
 if (!selectedListing) return;
 document.getElementById("modalSub").textContent = `${selectedListing.product_name} - ${money(deviceListPrice(selectedListing))}`;
 document.getElementById("modalForm").style.display = "block";
-document.getElementById("modalSuccess").style.display = "none";
 document.getElementById("fName").value = "";
 document.getElementById("fPhone").value = "";
 document.getElementById("fEmail").value = "";
@@ -657,55 +649,8 @@ document.getElementById("modalOverlay").classList.remove("open");
 }
 
 document.getElementById("cancelBtn").addEventListener("click", closeModal);
-document.getElementById("closeSuccessBtn").addEventListener("click", closeModal);
 document.getElementById("modalOverlay").addEventListener("click", (e) => {
 if (e.target.id === "modalOverlay") closeModal();
-});
-
-document.getElementById("submitBtn").addEventListener("click", async () => {
-const name = document.getElementById("fName").value.trim();
-const phone = document.getElementById("fPhone").value.trim();
-const email = document.getElementById("fEmail").value.trim();
-const message = document.getElementById("fMessage").value.trim();
-const { label: accessoryBundle, price: accessoryBundlePrice } = getBundleSelection();
-const { listTotal } = computeTotals();
-
-if (!name || !phone) {
-alert("Please enter your name and phone number so we can reach you.");
-return;
-}
-
-const submitBtn = document.getElementById("submitBtn");
-submitBtn.disabled = true;
-submitBtn.textContent = "Submitting...";
-
-const { error } = await sb.from("storefront_inquiries").insert({
-listing_id: selectedListing.listing_id,
-device_catalog_id: selectedListing.device_catalog_id,
-product_name: selectedListing.product_name,
-color: selectedListing.color,
-storage: selectedListing.storage,
-condition_grade: selectedListing.condition_grade,
-retail_price: listTotal,
-customer_name: name,
-customer_phone: phone,
-customer_email: email || null,
-message: message || null,
-accessory_bundle: accessoryBundle,
-accessory_bundle_price: accessoryBundlePrice,
-});
-
-submitBtn.disabled = false;
-submitBtn.textContent = "Submit";
-
-if (error) {
-console.error(error);
-alert("Something went wrong submitting your request. Please try again.");
-return;
-}
-
-document.getElementById("modalForm").style.display = "none";
-document.getElementById("modalSuccess").style.display = "block";
 });
 
 document.getElementById("search").addEventListener("input", render);
