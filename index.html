@@ -142,8 +142,20 @@ max-height: 90vh;
 overflow-y: auto;
 }
 .modal h2 { margin: 0 0 4px; font-size: 20px; }
-.modal p.sub { margin: 0 0 18px; color: var(--ink-soft); font-size: 14px; }
-.field { margin-bottom: 12px; }
+.modal p.sub { margin: 0 0 8px; color: var(--ink-soft); font-size: 14px; }
+.modal-specs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
+.modal-specs span {
+font-size: 11px;
+font-weight: 600;
+padding: 3px 8px;
+border-radius: 999px;
+background: var(--accent-soft);
+color: #3730a3;
+}
+.modal-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; margin: 0 0 16px; }
+.field { margin-bottom: 12px; flex: 1; }
+.field-row { display: flex; gap: 10px; margin-bottom: 0; }
+.field-row .field { margin-bottom: 12px; }
 .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
 .field input, .field textarea {
 width: 100%;
@@ -291,13 +303,17 @@ font-size: 13px;
 <div id="modalForm">
 <h2 id="modalTitle">Buy this device</h2>
 <p class="sub" id="modalSub"></p>
+<div class="modal-specs" id="modalSpecs"></div>
+<p class="modal-desc" id="modalDescription"></p>
 
 <div class="bundles" id="bundleOptions">
 <label class="bundle-option">
-<input type="radio" name="bundle" value="none" checked />
+<input type="radio" name="bundle" value="case_screen_charger" data-price="39.99" checked />
 <div class="bundle-text">
-<div class="bundle-name">No accessories</div>
+<div class="bundle-name">Case + screen + 20W charging block<span class="bundle-tag">Online exclusive</span></div>
+<div class="bundle-desc">Fitted case, tempered glass screen protector, and a 20W USB-C fast charging block.</div>
 </div>
+<div class="bundle-price">$39.99</div>
 </label>
 <label class="bundle-option">
 <input type="radio" name="bundle" value="case_screen" data-price="24.99" />
@@ -308,13 +324,66 @@ font-size: 13px;
 <div class="bundle-price">$24.99</div>
 </label>
 <label class="bundle-option">
-<input type="radio" name="bundle" value="case_screen_charger" data-price="39.99" />
+<input type="radio" name="bundle" value="none" />
 <div class="bundle-text">
-<div class="bundle-name">Case + screen + 20W charging block<span class="bundle-tag">Online exclusive</span></div>
-<div class="bundle-desc">Fitted case, tempered glass screen protector, and a 20W USB-C fast charging block.</div>
+<div class="bundle-name">No accessories</div>
 </div>
-<div class="bundle-price">$39.99</div>
 </label>
+</div>
+
+<label class="bundle-option" id="warrantyOption">
+<input type="checkbox" id="warrantyOptIn" />
+<div class="bundle-text">
+<div class="bundle-name">12-Month Extended Warranty</div>
+<div class="bundle-desc">Optional add-on beyond the included 90-day warranty. Charged at face value - no markup or discount.</div>
+</div>
+<div class="bundle-price" id="warrantyPriceLabel">$0.00</div>
+</label>
+
+<div class="pay-divider">Your info & shipping</div>
+
+<div class="field-row">
+<div class="field">
+<label>First name</label>
+<input id="fFirstName" type="text" placeholder="Jane" />
+</div>
+<div class="field">
+<label>Last name</label>
+<input id="fLastName" type="text" placeholder="Doe" />
+</div>
+</div>
+<div class="field">
+<label>Phone number</label>
+<input id="fPhone" type="tel" placeholder="(555) 123-4567" />
+</div>
+<div class="field">
+<label>Email</label>
+<input id="fEmail" type="email" placeholder="jane@email.com" />
+</div>
+<div class="field">
+<label>Shipping address</label>
+<input id="fAddress1" type="text" placeholder="Street address" />
+</div>
+<div class="field">
+<input id="fAddress2" type="text" placeholder="Apt / suite (optional)" />
+</div>
+<div class="field-row">
+<div class="field">
+<label>City</label>
+<input id="fCity" type="text" placeholder="City" />
+</div>
+<div class="field">
+<label>State</label>
+<input id="fState" type="text" placeholder="State" maxlength="2" />
+</div>
+<div class="field">
+<label>ZIP</label>
+<input id="fZip" type="text" placeholder="ZIP" maxlength="10" />
+</div>
+</div>
+<div class="field">
+<label>Note (optional)</label>
+<textarea id="fMessage" rows="2" placeholder="Best time to reach you, questions, etc."></textarea>
 </div>
 
 <div class="pay-divider">Choose how to pay</div>
@@ -334,24 +403,6 @@ font-size: 13px;
 <button class="btn-pay" id="stripePayBtn" type="button">Pay</button>
 <p class="payment-message" id="paymentMessage"></p>
 
-<div class="pay-divider">Your contact info</div>
-
-<div class="field">
-<label>Your name</label>
-<input id="fName" type="text" placeholder="Jane Doe" />
-</div>
-<div class="field">
-<label>Phone number</label>
-<input id="fPhone" type="tel" placeholder="(555) 123-4567" />
-</div>
-<div class="field">
-<label>Email (optional)</label>
-<input id="fEmail" type="email" placeholder="jane@email.com" />
-</div>
-<div class="field">
-<label>Note (optional)</label>
-<textarea id="fMessage" rows="2" placeholder="Best time to reach you, questions, etc."></textarea>
-</div>
 <div class="modal-actions">
 <button class="btn-secondary" id="cancelBtn">Cancel</button>
 </div>
@@ -406,6 +457,33 @@ return Math.round(n * 100) / 100;
 
 function deviceListPrice(l) {
 return round2(Number(l.retail_price) * FINANCING_MARKUP);
+}
+
+// --- Grade / condition descriptions shown in the checkout modal ---
+const GRADE_DESCRIPTIONS = {
+new: "New device in original box. Device may be open box.",
+a: "Devices are fully inspected and certified for functionality. A grade is the best condition with few blemishes and will show minor use. Comes with a 30-day money-back guarantee (you pay return shipping). All devices include a 90-day warranty.",
+};
+function descriptionForGrade(grade) {
+const key = String(grade || "").trim().toLowerCase();
+if (GRADE_DESCRIPTIONS[key]) return GRADE_DESCRIPTIONS[key];
+return "Devices are fully inspected and tested for functionality prior to shipping. All devices include a 90-day warranty.";
+}
+
+// --- Extended warranty add-on: face-value only, no markup/discount, tier
+// depends on the device's list price. ---
+function warrantyPriceForDevice(l) {
+if (!l) return 0;
+const price = deviceListPrice(l);
+if (price < 400) return 40;
+if (price < 600) return 50;
+return 80;
+}
+function getWarrantySelection() {
+const checkbox = document.getElementById("warrantyOptIn");
+if (!checkbox || !checkbox.checked || !selectedListing) return { price: 0, label: null };
+const price = warrantyPriceForDevice(selectedListing);
+return { price, label: `12-Month Extended Warranty ($${price})` };
 }
 
 async function loadListings() {
@@ -483,13 +561,54 @@ price: bundleInput && bundleInput.dataset.price ? Number(bundleInput.dataset.pri
 };
 }
 
+// --- Contact + shipping fields: read current values (used both for the
+// Stripe metadata refresh and for pre-payment validation). ---
+function getContactFields() {
+const val = (id) => (document.getElementById(id) ? document.getElementById(id).value.trim() : "");
+const firstName = val("fFirstName");
+const lastName = val("fLastName");
+return {
+firstName,
+lastName,
+fullName: [firstName, lastName].filter(Boolean).join(" "),
+phone: val("fPhone"),
+email: val("fEmail"),
+address1: val("fAddress1"),
+address2: val("fAddress2"),
+city: val("fCity"),
+state: val("fState"),
+zip: val("fZip"),
+message: val("fMessage"),
+};
+}
+
+// Returns null if everything required is valid, otherwise a user-facing
+// error message describing the first problem found.
+function validateContactFields() {
+const c = getContactFields();
+if (!c.firstName) return "Please enter your first name.";
+if (!c.lastName) return "Please enter your last name.";
+const digits = c.phone.replace(/\D/g, "");
+if (digits.length !== 10) return "Please enter a valid 10-digit phone number.";
+if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(c.email)) return "Please enter a valid email address.";
+if (!c.address1) return "Please enter your shipping street address.";
+if (!c.city) return "Please enter your shipping city.";
+if (!c.state) return "Please enter your shipping state.";
+if (!c.zip) return "Please enter your shipping ZIP code.";
+return null;
+}
+
 // Computes both the "pay over time" (list) total and the "pay in full"
 // (discounted) total for the currently selected device + bundle.
 function computeTotals() {
 if (!selectedListing) return { listTotal: 0, fullTotal: 0 };
 const { price: bundlePrice } = getBundleSelection();
-const listTotal = round2(deviceListPrice(selectedListing) + (bundlePrice || 0));
-const fullTotal = round2(listTotal * PAY_IN_FULL_DISCOUNT);
+const { price: warrantyPrice } = getWarrantySelection();
+const deviceAndBundleListTotal = round2(deviceListPrice(selectedListing) + (bundlePrice || 0));
+const deviceAndBundleFullTotal = round2(deviceAndBundleListTotal * PAY_IN_FULL_DISCOUNT);
+// Warranty is always added at face value - never marked up or discounted.
+const listTotal = round2(deviceAndBundleListTotal + (warrantyPrice || 0));
+const fullTotal = round2(deviceAndBundleFullTotal + (warrantyPrice || 0));
 return { listTotal, fullTotal };
 }
 
@@ -527,6 +646,8 @@ if (!stripe || !selectedListing) return;
 
 const amount = currentTotal();
 const bundle = getBundleSelection();
+const warranty = getWarrantySelection();
+const contact = getContactFields();
 const methods = PAYMENT_METHODS_BY_MODE[currentPayMode] || PAYMENT_METHODS_BY_MODE.full;
 
 try {
@@ -542,12 +663,19 @@ productName: selectedListing.product_name,
 color: selectedListing.color,
 storage: selectedListing.storage,
 conditionGrade: selectedListing.condition_grade,
-customerName: document.getElementById("fName").value.trim(),
-customerPhone: document.getElementById("fPhone").value.trim(),
-customerEmail: document.getElementById("fEmail").value.trim(),
-message: document.getElementById("fMessage").value.trim(),
+customerName: contact.fullName,
+customerPhone: contact.phone,
+customerEmail: contact.email,
+message: contact.message,
+shippingAddress1: contact.address1,
+shippingAddress2: contact.address2,
+shippingCity: contact.city,
+shippingState: contact.state,
+shippingZip: contact.zip,
 accessoryBundle: bundle.label,
 accessoryBundlePrice: bundle.price,
+warrantyLabel: warranty.label,
+warrantyPrice: warranty.price,
 }),
 });
 const data = await resp.json();
@@ -587,6 +715,13 @@ document.getElementById("stripePayBtn").addEventListener("click", async () => {
 if (!stripe || !stripeElements || !currentClientSecret) return;
 const payBtn = document.getElementById("stripePayBtn");
 const paymentMessage = document.getElementById("paymentMessage");
+
+const validationError = validateContactFields();
+if (validationError) {
+if (paymentMessage) paymentMessage.textContent = validationError;
+return;
+}
+
 payBtn.disabled = true;
 payBtn.textContent = "Processing...";
 
@@ -625,13 +760,41 @@ function openModal(listingId) {
 selectedListing = allListings.find((l) => l.listing_id === listingId);
 if (!selectedListing) return;
 document.getElementById("modalSub").textContent = `${selectedListing.product_name} - ${money(deviceListPrice(selectedListing))}`;
+
+const cleanStorage = selectedListing.storage ? String(selectedListing.storage).replace(/gb/i, "").trim() : null;
+const carrierText = !selectedListing.carrier_lock || selectedListing.carrier_lock.toLowerCase() === "unlocked"
+? "Unlocked"
+: `${selectedListing.carrier_lock} Locked`;
+const gradeText = selectedListing.condition_grade || "Used";
+const specChips = [gradeText, cleanStorage ? `${cleanStorage}GB` : null, selectedListing.color, carrierText]
+.filter(Boolean)
+.map((s) => `<span>${s}</span>`)
+.join("");
+document.getElementById("modalSpecs").innerHTML = specChips;
+document.getElementById("modalDescription").textContent = descriptionForGrade(selectedListing.condition_grade);
+
 document.getElementById("modalForm").style.display = "block";
-document.getElementById("fName").value = "";
+document.getElementById("fFirstName").value = "";
+document.getElementById("fLastName").value = "";
 document.getElementById("fPhone").value = "";
 document.getElementById("fEmail").value = "";
+document.getElementById("fAddress1").value = "";
+document.getElementById("fAddress2").value = "";
+document.getElementById("fCity").value = "";
+document.getElementById("fState").value = "";
+document.getElementById("fZip").value = "";
 document.getElementById("fMessage").value = "";
-const noneOption = document.querySelector('input[name="bundle"][value="none"]');
-if (noneOption) noneOption.checked = true;
+const paymentMessage = document.getElementById("paymentMessage");
+if (paymentMessage) paymentMessage.textContent = "";
+
+const defaultBundle = document.querySelector('input[name="bundle"][value="case_screen_charger"]');
+if (defaultBundle) defaultBundle.checked = true;
+
+const warrantyCheckbox = document.getElementById("warrantyOptIn");
+if (warrantyCheckbox) warrantyCheckbox.checked = false;
+const warrantyPriceLabel = document.getElementById("warrantyPriceLabel");
+if (warrantyPriceLabel) warrantyPriceLabel.textContent = money(warrantyPriceForDevice(selectedListing));
+
 currentPayMode = "full";
 document.querySelectorAll(".pay-mode-btn").forEach((b) => {
 b.classList.toggle("active", b.dataset.mode === "full");
@@ -642,6 +805,17 @@ refreshStripeElement("full");
 
 document.querySelectorAll('input[name="bundle"]').forEach((el) => {
 el.addEventListener("change", () => refreshStripeElement());
+});
+
+const warrantyCheckboxEl = document.getElementById("warrantyOptIn");
+if (warrantyCheckboxEl) warrantyCheckboxEl.addEventListener("change", () => refreshStripeElement());
+
+// Contact/shipping fields feed the PaymentIntent's metadata and shipping
+// details - refresh (before the customer reaches the card fields) so the
+// order record reflects what they typed.
+["fFirstName", "fLastName", "fPhone", "fEmail", "fAddress1", "fAddress2", "fCity", "fState", "fZip", "fMessage"].forEach((id) => {
+const el = document.getElementById(id);
+if (el) el.addEventListener("change", () => refreshStripeElement());
 });
 
 function closeModal() {
