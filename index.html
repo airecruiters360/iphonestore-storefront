@@ -1,377 +1,446 @@
 <!DOCTYPE html>
-  <html lang="en">
-  <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>iPhoneStore.io — Unlocked & Certified Devices</title>
-  <meta name="description" content="Shop unlocked and certified phones. Retail pricing, ready to ship." />
-  <style>
-    :root {
-      --ink: #0f172a;
-    --ink-soft: #475569;
-    --line: #e2e8f0;
-          --bg: #f8fafc;
-          --card: #ffffff;
-          --accent: #0f172a;
-    --accent-soft: #eef2ff;
-          --good: #15803d;
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>iPhoneStore.io — Unlocked & Certified Devices</title>
+<meta name="description" content="Shop unlocked and certified phones. Retail pricing, ready to ship." />
+<style>
+:root {
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --line: #e2e8f0;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --accent: #0f172a;
+  --accent-soft: #eef2ff;
+  --good: #15803d;
 }
-  * { box-sizing: border-box; }
-  body {
-        margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    background: var(--bg);
-    color: var(--ink);
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
 }
-  header {
-        background: var(--card);
-    border-bottom: 1px solid var(--line);
-    position: sticky;
-    top: 0;
-    z-index: 10;
+header {
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
-  .header-inner {
-        max-width: 1120px;
-    margin: 0 auto;
-    padding: 18px 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
+.header-inner {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 18px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
-  .logo { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; }
-  .logo span { color: var(--ink-soft); font-weight: 500; }
-  .hero {
-        max-width: 1120px;
-    margin: 0 auto;
-    padding: 40px 20px 16px;
+.logo { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; }
+.logo span { color: var(--ink-soft); font-weight: 500; }
+.hero {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 40px 20px 16px;
 }
-  .hero h1 { font-size: 32px; margin: 0 0 8px; letter-spacing: -0.02em; }
-  .hero p { color: var(--ink-soft); margin: 0; font-size: 16px; max-width: 620px; }
-  .controls {
-        max-width: 1120px;
-    margin: 24px auto 0;
-    padding: 0 20px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    align-items: center;
+.hero h1 { font-size: 32px; margin: 0 0 8px; letter-spacing: -0.02em; }
+.hero p { color: var(--ink-soft); margin: 0; font-size: 16px; max-width: 620px; }
+.controls {
+  max-width: 1120px;
+  margin: 24px auto 0;
+  padding: 0 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
 }
-  .search {
-        flex: 1;
-    min-width: 220px;
-    padding: 10px 14px;
-    border: 1px solid var(--line);
-    border-radius: 10px;
-    font-size: 14px;
-    background: var(--card);
+.search {
+  flex: 1;
+  min-width: 220px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 14px;
+  background: var(--card);
 }
-    .grid {
-          max-width: 1120px;
-    margin: 24px auto 80px;
-    padding: 0 20px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 16px;
-    }
-  .card {
-        background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 18px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  .card-top { display: flex; justify-content: flex-end; align-items: flex-start; gap: 8px; }
-  .badge {
-        font-size: 11px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-    padding: 3px 8px;
-    border-radius: 999px;
-    background: var(--accent-soft);
-    color: #3730a3;
-    white-space: nowrap;
+.grid {
+  max-width: 1120px;
+  margin: 24px auto 80px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
 }
-  .card h3 { margin: 0; font-size: 17px; letter-spacing: -0.01em; }
-  .meta { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
-  .price-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: auto; }
-  .price { font-size: 22px; font-weight: 800; }
-  .stock { font-size: 12px; color: var(--good); font-weight: 600; }
-  .stock.low { color: #b45309; }
-    .cta {
-          margin-top: 4px;
-    padding: 10px 14px;
-    background: var(--accent);
-    color: #fff;
-        border: none;
-    border-radius: 10px;
-    font-weight: 700;
-    font-size: 14px;
-    cursor: pointer;
-             }
-  .empty, .loading {
-        max-width: 1120px;
-    margin: 60px auto;
-    text-align: center;
-    color: var(--ink-soft);
-    padding: 0 20px;
+.card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
-  .modal-overlay {
-        display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(15,23,42,0.5);
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    z-index: 100;
+.card-top { display: flex; justify-content: flex-end; align-items: flex-start; gap: 8px; }
+.badge {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #3730a3;
+  white-space: nowrap;
 }
-  .modal-overlay.open { display: flex; }
-  .modal {
-        background: #fff;
-            border-radius: 16px;
-    padding: 28px;
-    max-width: 420px;
-    width: 100%;
-  }
-  .modal h2 { margin: 0 0 4px; font-size: 20px; }
-  .modal p.sub { margin: 0 0 18px; color: var(--ink-soft); font-size: 14px; }
-  .field { margin-bottom: 12px; }
-  .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
-  .field input, .field textarea {
-        width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--line);
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: inherit;
+.card h3 { margin: 0; font-size: 17px; letter-spacing: -0.01em; }
+.meta { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
+.price-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: auto; }
+.price { font-size: 22px; font-weight: 800; }
+.stock { font-size: 12px; color: var(--good); font-weight: 600; }
+.stock.low { color: #b45309; }
+.cta {
+  margin-top: 4px;
+  padding: 10px 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
 }
-  .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
-  .btn-secondary {
-        flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid var(--line);
-    background: #fff;
-        font-weight: 600;
-    cursor: pointer;
+.empty, .loading {
+  max-width: 1120px;
+  margin: 60px auto;
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 0 20px;
 }
-  .btn-primary {
-        flex: 1;
-    padding: 10px;
-    border-radius: 10px;
-    border: none;
-    background: var(--accent);
-    color: #fff;
-        font-weight: 700;
-    cursor: pointer;
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.5);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
 }
-  .success-msg { text-align: center; padding: 10px 0; }
-  footer {
-        text-align: center;
-    padding: 30px 20px;
-    color: var(--ink-soft);
-    font-size: 13px;
+.modal-overlay.open { display: flex; }
+.modal {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 420px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.modal h2 { margin: 0 0 4px; font-size: 20px; }
+.modal p.sub { margin: 0 0 18px; color: var(--ink-soft); font-size: 14px; }
+.field { margin-bottom: 12px; }
+.field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+.field input, .field textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+}
+.bundles { margin: 4px 0 16px; display: flex; flex-direction: column; gap: 8px; }
+.bundle-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+}
+.bundle-option:has(input:checked) { border-color: var(--ink); background: #f8fafc; }
+.bundle-option input { width: auto; margin-top: 3px; }
+.bundle-option .bundle-text { flex: 1; }
+.bundle-option .bundle-name { font-size: 13px; font-weight: 600; }
+.bundle-option .bundle-desc { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
+.bundle-option .bundle-price { font-size: 13px; font-weight: 700; white-space: nowrap; }
+.bundle-tag {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 6px;
+}
+.modal-actions { display: flex; gap: 10px; margin-top: 18px; }
+.btn-secondary {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-primary {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+}
+.success-msg { text-align: center; padding: 10px 0; }
+footer {
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--ink-soft);
+  font-size: 13px;
 }
 </style>
-  </head>
-  <body>
+</head>
+<body>
 
-  <header>
-    <div class="header-inner">
-      <div class="logo">iPhoneStore<span>.io</span></div>
-    </div>
-  </header>
+<header>
+<div class="header-inner">
+<div class="logo">iPhoneStore<span>.io</span></div>
+</div>
+</header>
 
-  <div class="hero">
-    <h1>Unlocked & certified devices, ready to ship.</h1>
-  <p>Live inventory, updated in real time. Retail pricing shown below — no hidden fees. Checkout online is coming soon; for now, tap a device to reserve it and we'll follow up.</p>
-  </div>
+<div class="hero">
+<h1>Unlocked & certified devices, ready to ship.</h1>
+<p>Live inventory, updated in real time. Retail pricing shown below — no hidden fees. Checkout online is coming soon; for now, tap a device to reserve it and we'll follow up.</p>
+</div>
 
-  <div class="controls">
-    <input class="search" id="search" type="text" placeholder="Search by model, e.g. iPhone 13, Galaxy S24…" />
-  </div>
+<div class="controls">
+<input class="search" id="search" type="text" placeholder="Search by model, e.g. iPhone 13, Galaxy S24…" />
+</div>
 
-  <div id="content">
-    <div class="loading">Loading current inventory…</div>
+<div id="content">
+<div class="loading">Loading current inventory…</div>
 </div>
 
 <footer>&copy; <span id="year"></span> iPhoneStore.io. Prices and availability subject to change.</footer>
 
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal">
-      <div id="modalForm">
-        <h2 id="modalTitle">Reserve this device</h2>
-        <p class="sub" id="modalSub"></p>
-        <div class="field">
-          <label>Your name</label>
-          <input id="fName" type="text" placeholder="Jane Doe" />
-        </div>
-        <div class="field">
-          <label>Phone number</label>
-          <input id="fPhone" type="tel" placeholder="(555) 123-4567" />
-        </div>
-        <div class="field">
-          <label>Email (optional)</label>
-          <input id="fEmail" type="email" placeholder="jane@email.com" />
-        </div>
-        <div class="field">
-          <label>Note (optional)</label>
-          <textarea id="fMessage" rows="2" placeholder="Best time to reach you, questions, etc."></textarea>
-        </div>
-        <div class="modal-actions">
-          <button class="btn-secondary" id="cancelBtn">Cancel</button>
-          <button class="btn-primary" id="submitBtn">Submit</button>
-        </div>
-      </div>
-      <div id="modalSuccess" style="display:none;">
-        <div class="success-msg">
-          <h2>Thanks!</h2>
-          <p class="sub">We got your request and will reach out shortly to complete your purchase.</p>
-        <button class="btn-primary" id="closeSuccessBtn" style="width:100%;">Close</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="modal-overlay" id="modalOverlay">
+<div class="modal">
+<div id="modalForm">
+<h2 id="modalTitle">Reserve this device</h2>
+<p class="sub" id="modalSub"></p>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-  <script>
-    const SUPABASE_URL = "https://xggkxvecfrdtiakkwdgp.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnZ2t4dmVjZnJkdGlha2t3ZGdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwOTMxMjAsImV4cCI6MjA5ODY2OTEyMH0.s9ERsiEJJTTeXUJHQ6CL9hHSbtJ5FpqgXLu_Hjku-_g";
-  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+<div class="bundles" id="bundleOptions">
+<label class="bundle-option">
+<input type="radio" name="bundle" value="none" checked />
+<div class="bundle-text">
+<div class="bundle-name">No accessories</div>
+</div>
+</label>
+<label class="bundle-option">
+<input type="radio" name="bundle" value="case_screen" data-price="24.99" />
+<div class="bundle-text">
+<div class="bundle-name">Case + screen protector bundle</div>
+<div class="bundle-desc">Fitted case and tempered glass screen protector for this device.</div>
+</div>
+<div class="bundle-price">$24.99</div>
+</label>
+<label class="bundle-option">
+<input type="radio" name="bundle" value="case_screen_charger" data-price="39.99" />
+<div class="bundle-text">
+<div class="bundle-name">Case + screen + 20W charging block<span class="bundle-tag">Online exclusive</span></div>
+<div class="bundle-desc">Fitted case, tempered glass screen protector, and a 20W USB-C fast charging block.</div>
+</div>
+<div class="bundle-price">$39.99</div>
+</label>
+</div>
 
-  document.getElementById("year").textContent = new Date().getFullYear();
+<div class="field">
+<label>Your name</label>
+<input id="fName" type="text" placeholder="Jane Doe" />
+</div>
+<div class="field">
+<label>Phone number</label>
+<input id="fPhone" type="tel" placeholder="(555) 123-4567" />
+</div>
+<div class="field">
+<label>Email (optional)</label>
+<input id="fEmail" type="email" placeholder="jane@email.com" />
+</div>
+<div class="field">
+<label>Note (optional)</label>
+<textarea id="fMessage" rows="2" placeholder="Best time to reach you, questions, etc."></textarea>
+</div>
+<div class="modal-actions">
+<button class="btn-secondary" id="cancelBtn">Cancel</button>
+<button class="btn-primary" id="submitBtn">Submit</button>
+</div>
+</div>
+<div id="modalSuccess" style="display:none;">
+<div class="success-msg">
+<h2>Thanks!</h2>
+<p class="sub">We got your request and will reach out shortly to complete your purchase.</p>
+<button class="btn-primary" id="closeSuccessBtn" style="width:100%;">Close</button>
+</div>
+</div>
+</div>
+</div>
 
-  let allListings = [];
-  let selectedListing = null;
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+const SUPABASE_URL = "https://xggkxvecfrdtiakkwdgp.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnZ2t4dmVjZnJkdGlha2t3ZGdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwOTMxMjAsImV4cCI6MjA5ODY2OTEyMH0.s9ERsiEJJTTeXUJHQ6CL9hHSbtJ5FpqgXLu_Hjku-_g";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-  const money = (n) => Number(n).toLocaleString("en-US", { style: "currency", currency: "USD" });
+document.getElementById("year").textContent = new Date().getFullYear();
 
-  async function loadListings() {
-    const { data, error } = await sb.from("storefront_catalog_view").select("*").order("product_name");
-    if (error) {
-      document.getElementById("content").innerHTML = `<div class="empty">Couldn't load inventory right now. Please check back soon.</div>`;
-              console.error(error);
-      return;
-    }
-    allListings = data || [];
-    render();
+let allListings = [];
+let selectedListing = null;
+
+const money = (n) => Number(n).toLocaleString("en-US", { style: "currency", currency: "USD" });
+
+async function loadListings() {
+  const { data, error } = await sb.from("storefront_catalog_view").select("*").order("product_name");
+  if (error) {
+    document.getElementById("content").innerHTML = `<div class="empty">Couldn't load inventory right now. Please check back soon.</div>`;
+    console.error(error);
+    return;
+  }
+  allListings = data || [];
+  render();
+}
+
+function render() {
+  const term = document.getElementById("search").value.trim().toLowerCase();
+  const filtered = allListings.filter((l) => {
+    const matchesTerm = !term || l.product_name.toLowerCase().includes(term);
+    return matchesTerm;
+  });
+
+  const content = document.getElementById("content");
+  if (filtered.length === 0) {
+    content.innerHTML = `<div class="empty">No devices match right now — try a different search or check back soon.</div>`;
+    return;
   }
 
-  function render() {
-        const term = document.getElementById("search").value.trim().toLowerCase();
-    const filtered = allListings.filter((l) => {
-      const matchesTerm = !term || l.product_name.toLowerCase().includes(term);
-      return matchesTerm;
-});
+  content.innerHTML = `<div class="grid">${filtered.map(cardHtml).join("")}</div>`;
 
-    const content = document.getElementById("content");
-    if (filtered.length === 0) {
-      content.innerHTML = `<div class="empty">No devices match right now — try a different search or check back soon.</div>`;
-      return;
+  content.querySelectorAll(".cta").forEach((btn) => {
+    btn.addEventListener("click", () => openModal(btn.dataset.listingId));
+  });
 }
 
-    content.innerHTML = `<div class="grid">${filtered.map(cardHtml).join("")}</div>`;
-
-    content.querySelectorAll(".cta").forEach((btn) => {
-      btn.addEventListener("click", () => openModal(btn.dataset.listingId));
-});
-}
-
-  function cardHtml(l) {
-    const cleanStorage = l.storage ? String(l.storage).replace(/gb/i, "").trim() : null;
-        const carrierText = !l.carrier_lock || l.carrier_lock.toLowerCase() === "unlocked" ? "Unlocked" : `${l.carrier_lock} Locked`;
-        const specs = [cleanStorage ? `${cleanStorage}GB` : null, l.color, carrierText]
-      .filter(Boolean)
-      .join(" · ");
-    const lowStock = l.quantity_available <= 2;
-    return `
-      <div class="card">
-        <div class="card-top">
-          <span class="badge" style="background:#f1f5f9;color:#334155;">${l.condition_grade || "Used"}</span>
-        </div>
-        <h3>${l.product_name}</h3>
-        <div class="meta">${specs || "&nbsp;"}</div>
-        <div class="price-row">
-          <div class="price">${money(l.retail_price)}</div>
-          <div class="stock ${lowStock ? "low" : ""}">${lowStock ? `Only ${l.quantity_available} left` : "In stock"}</div>
-        </div>
-        <button class="cta" data-listing-id="${l.listing_id}">Reserve This Device</button>
+function cardHtml(l) {
+  const cleanStorage = l.storage ? String(l.storage).replace(/gb/i, "").trim() : null;
+  const carrierText = !l.carrier_lock || l.carrier_lock.toLowerCase() === "unlocked" ? "Unlocked" : `${l.carrier_lock} Locked`;
+  const specs = [cleanStorage ? `${cleanStorage}GB` : null, l.color, carrierText]
+    .filter(Boolean)
+    .join(" · ");
+  const lowStock = l.quantity_available <= 2;
+  return `
+    <div class="card">
+      <div class="card-top">
+        <span class="badge" style="background:#f1f5f9;color:#334155;">${l.condition_grade || "Used"}</span>
       </div>
-    `;
+      <h3>${l.product_name}</h3>
+      <div class="meta">${specs || "&nbsp;"}</div>
+      <div class="price-row">
+        <div class="price">${money(l.retail_price)}</div>
+        <div class="stock ${lowStock ? "low" : ""}">${lowStock ? `Only ${l.quantity_available} left` : "In stock"}</div>
+      </div>
+      <button class="cta" data-listing-id="${l.listing_id}">Reserve This Device</button>
+    </div>
+  `;
 }
 
-  function openModal(listingId) {
-    selectedListing = allListings.find((l) => l.listing_id === listingId);
-    if (!selectedListing) return;
-    document.getElementById("modalSub").textContent = `${selectedListing.product_name} — ${money(selectedListing.retail_price)}`;
-    document.getElementById("modalForm").style.display = "block";
-    document.getElementById("modalSuccess").style.display = "none";
-    document.getElementById("fName").value = "";
-    document.getElementById("fPhone").value = "";
-    document.getElementById("fEmail").value = "";
-    document.getElementById("fMessage").value = "";
-    document.getElementById("modalOverlay").classList.add("open");
+function openModal(listingId) {
+  selectedListing = allListings.find((l) => l.listing_id === listingId);
+  if (!selectedListing) return;
+  document.getElementById("modalSub").textContent = `${selectedListing.product_name} — ${money(selectedListing.retail_price)}`;
+  document.getElementById("modalForm").style.display = "block";
+  document.getElementById("modalSuccess").style.display = "none";
+  document.getElementById("fName").value = "";
+  document.getElementById("fPhone").value = "";
+  document.getElementById("fEmail").value = "";
+  document.getElementById("fMessage").value = "";
+  const noneOption = document.querySelector('input[name="bundle"][value="none"]');
+  if (noneOption) noneOption.checked = true;
+  document.getElementById("modalOverlay").classList.add("open");
 }
 
-  function closeModal() {
-    document.getElementById("modalOverlay").classList.remove("open");
+function closeModal() {
+  document.getElementById("modalOverlay").classList.remove("open");
 }
 
-  document.getElementById("cancelBtn").addEventListener("click", closeModal);
-  document.getElementById("closeSuccessBtn").addEventListener("click", closeModal);
-  document.getElementById("modalOverlay").addEventListener("click", (e) => {
-    if (e.target.id === "modalOverlay") closeModal();
+document.getElementById("cancelBtn").addEventListener("click", closeModal);
+document.getElementById("closeSuccessBtn").addEventListener("click", closeModal);
+document.getElementById("modalOverlay").addEventListener("click", (e) => {
+  if (e.target.id === "modalOverlay") closeModal();
 });
 
-  document.getElementById("submitBtn").addEventListener("click", async () => {
-    const name = document.getElementById("fName").value.trim();
-    const phone = document.getElementById("fPhone").value.trim();
-    const email = document.getElementById("fEmail").value.trim();
-    const message = document.getElementById("fMessage").value.trim();
+document.getElementById("submitBtn").addEventListener("click", async () => {
+  const name = document.getElementById("fName").value.trim();
+  const phone = document.getElementById("fPhone").value.trim();
+  const email = document.getElementById("fEmail").value.trim();
+  const message = document.getElementById("fMessage").value.trim();
+  const bundleInput = document.querySelector('input[name="bundle"]:checked');
+  const bundleValue = bundleInput ? bundleInput.value : "none";
+  const bundleLabels = {
+    none: null,
+    case_screen: "Case + screen protector bundle",
+    case_screen_charger: "Case + screen + 20W charging block (online exclusive)",
+  };
+  const accessoryBundle = bundleLabels[bundleValue] || null;
+  const accessoryBundlePrice = bundleInput && bundleInput.dataset.price ? Number(bundleInput.dataset.price) : null;
 
-    if (!name || !phone) {
-      alert("Please enter your name and phone number so we can reach you.");
-      return;
-}
+  if (!name || !phone) {
+    alert("Please enter your name and phone number so we can reach you.");
+    return;
+  }
 
-    const submitBtn = document.getElementById("submitBtn");
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Submitting…";
+  const submitBtn = document.getElementById("submitBtn");
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting…";
 
-    const { error } = await sb.from("storefront_inquiries").insert({
-      listing_id: selectedListing.listing_id,
-      device_catalog_id: selectedListing.device_catalog_id,
-      product_name: selectedListing.product_name,
-      color: selectedListing.color,
-      storage: selectedListing.storage,
-      condition_grade: selectedListing.condition_grade,
-      retail_price: selectedListing.retail_price,
-      customer_name: name,
-      customer_phone: phone,
-      customer_email: email || null,
-      message: message || null,
+  const { error } = await sb.from("storefront_inquiries").insert({
+    listing_id: selectedListing.listing_id,
+    device_catalog_id: selectedListing.device_catalog_id,
+    product_name: selectedListing.product_name,
+    color: selectedListing.color,
+    storage: selectedListing.storage,
+    condition_grade: selectedListing.condition_grade,
+    retail_price: selectedListing.retail_price,
+    customer_name: name,
+    customer_phone: phone,
+    customer_email: email || null,
+    message: message || null,
+    accessory_bundle: accessoryBundle,
+    accessory_bundle_price: accessoryBundlePrice,
+  });
+
+  submitBtn.disabled = false;
+  submitBtn.textContent = "Submit";
+
+  if (error) {
+    console.error(error);
+    alert("Something went wrong submitting your request. Please try again.");
+    return;
+  }
+
+  document.getElementById("modalForm").style.display = "none";
+  document.getElementById("modalSuccess").style.display = "block";
 });
 
-    submitBtn.disabled = false;
-    submitBtn.textContent = "Submit";
+document.getElementById("search").addEventListener("input", render);
 
-    if (error) {
-      console.error(error);
-      alert("Something went wrong submitting your request. Please try again.");
-      return;
-}
-
-    document.getElementById("modalForm").style.display = "none";
-    document.getElementById("modalSuccess").style.display = "block";
-});
-
-  document.getElementById("search").addEventListener("input", render);
-
-  loadListings();
+loadListings();
 </script>
 
 </body>
