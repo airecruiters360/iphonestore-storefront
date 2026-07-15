@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>iPhoneStore.io — Unlocked & Certified Devices</title>
+<title>iPhoneStore.io - Unlocked & Certified Devices</title>
 <meta name="description" content="Shop unlocked and certified phones. Retail pricing, ready to ship." />
 <style>
 :root {
@@ -252,7 +252,7 @@ footer {
 
 <div class="hero">
 <h1>Unlocked & certified devices, ready to ship.</h1>
-<p>Live inventory, updated in real time. Retail pricing shown below — no hidden fees. Checkout online is coming soon; for now, tap a device to reserve it and we'll follow up.</p>
+<p>Live inventory, updated in real time. Retail pricing shown below - no hidden fees. Checkout online is coming soon; for now, tap a device to reserve it and we'll follow up.</p>
 </div>
 
 <div class="controls">
@@ -296,7 +296,7 @@ footer {
 </label>
 </div>
 
-<div class="pay-divider">Pay now — card, Klarna, Afterpay, or Cash App Pay</div>
+<div class="pay-divider">Pay now - card, Klarna, Afterpay, or Cash App Pay</div>
 <div id="payment-element"></div>
 <button class="btn-pay" id="stripePayBtn" type="button">Pay</button>
 <p class="payment-message" id="paymentMessage"></p>
@@ -335,7 +335,7 @@ footer {
 </div>
 
 <!--
-  Stripe.js — same script URL for both test mode and live mode; which
+  Stripe.js - same script URL for both test mode and live mode; which
   mode runs is controlled entirely by which publishable/secret key pair
   is in use. To go live: swap STRIPE_PUBLISHABLE_KEY below to the
   pk_live_... key, and update STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET
@@ -379,7 +379,7 @@ function render() {
 
   const content = document.getElementById("content");
   if (filtered.length === 0) {
-    content.innerHTML = `<div class="empty">No devices match right now — try a different search or check back soon.</div>`;
+    content.innerHTML = `<div class="empty">No devices match right now - try a different search or check back soon.</div>`;
     return;
   }
 
@@ -471,7 +471,7 @@ async function refreshStripeElement() {
     const data = await resp.json();
     if (!resp.ok || !data.clientSecret) {
       console.error("create-payment-intent failed", data);
-      if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable — you can still reserve below.";
+      if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable - you can still reserve below.";
       if (payBtn) payBtn.disabled = true;
       return;
     }
@@ -488,7 +488,7 @@ async function refreshStripeElement() {
     if (payBtn) payBtn.disabled = false;
   } catch (err) {
     console.error("Stripe element init failed", err);
-    if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable — you can still reserve below.";
+    if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable - you can still reserve below.";
     if (payBtn) payBtn.disabled = true;
   }
 }
@@ -505,7 +505,7 @@ document.getElementById("stripePayBtn").addEventListener("click", async () => {
     confirmParams: { return_url: window.location.href },
   });
 
-  // Klarna/Afterpay/Cash App Pay redirect the browser away to authorize —
+  // Klarna/Afterpay/Cash App Pay redirect the browser away to authorize -
   // if we're still here, either it's a method that doesn't redirect and
   // failed, or something went wrong before the redirect.
   if (error) {
@@ -524,7 +524,7 @@ document.getElementById("stripePayBtn").addEventListener("click", async () => {
   const redirectStatus = params.get("redirect_status");
   if (!redirectStatus) return;
   if (redirectStatus === "succeeded" || redirectStatus === "processing") {
-    alert("Thanks! Your payment is being processed — you'll get confirmation shortly.");
+    alert("Thanks! Your payment is being processed - you'll get confirmation shortly.");
   } else if (redirectStatus === "failed") {
     alert("That payment didn't go through. Please try again or reserve without paying now.");
   }
@@ -534,7 +534,7 @@ document.getElementById("stripePayBtn").addEventListener("click", async () => {
 function openModal(listingId) {
   selectedListing = allListings.find((l) => l.listing_id === listingId);
   if (!selectedListing) return;
-  document.getElementById("modalSub").textContent = `${selectedListing.product_name} — ${money(selectedListing.retail_price)}`;
+  document.getElementById("modalSub").textContent = `${selectedListing.product_name} - ${money(selectedListing.retail_price)}`;
   document.getElementById("modalForm").style.display = "block";
   document.getElementById("modalSuccess").style.display = "none";
   document.getElementById("fName").value = "";
