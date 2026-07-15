@@ -7,159 +7,160 @@
 <meta name="description" content="Shop unlocked and certified phones. Retail pricing, ready to ship." />
 <style>
 :root {
-  --ink: #0f172a;
-  --ink-soft: #475569;
-  --line: #e2e8f0;
-  --bg: #f8fafc;
-  --card: #ffffff;
-  --accent: #0f172a;
-  --accent-soft: #eef2ff;
-  --good: #15803d;
+--ink: #0f172a;
+--ink-soft: #475569;
+--line: #e2e8f0;
+--bg: #f8fafc;
+--card: #ffffff;
+--accent: #0f172a;
+--accent-soft: #eef2ff;
+--good: #15803d;
 }
 * { box-sizing: border-box; }
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  background: var(--bg);
-  color: var(--ink);
+margin: 0;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+background: var(--bg);
+color: var(--ink);
 }
 header {
-  background: var(--card);
-  border-bottom: 1px solid var(--line);
-  position: sticky;
-  top: 0;
-  z-index: 10;
+background: var(--card);
+border-bottom: 1px solid var(--line);
+position: sticky;
+top: 0;
+z-index: 10;
 }
 .header-inner {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 18px 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
+max-width: 1120px;
+margin: 0 auto;
+padding: 18px 20px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+gap: 16px;
 }
 .logo { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; }
 .logo span { color: var(--ink-soft); font-weight: 500; }
 .hero {
-  max-width: 1120px;
-  margin: 0 auto;
-  padding: 40px 20px 16px;
+max-width: 1120px;
+margin: 0 auto;
+padding: 40px 20px 16px;
 }
 .hero h1 { font-size: 32px; margin: 0 0 8px; letter-spacing: -0.02em; }
 .hero p { color: var(--ink-soft); margin: 0; font-size: 16px; max-width: 620px; }
 .controls {
-  max-width: 1120px;
-  margin: 24px auto 0;
-  padding: 0 20px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  align-items: center;
+max-width: 1120px;
+margin: 24px auto 0;
+padding: 0 20px;
+display: flex;
+flex-wrap: wrap;
+gap: 10px;
+align-items: center;
 }
 .search {
-  flex: 1;
-  min-width: 220px;
-  padding: 10px 14px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  font-size: 14px;
-  background: var(--card);
+flex: 1;
+min-width: 220px;
+padding: 10px 14px;
+border: 1px solid var(--line);
+border-radius: 10px;
+font-size: 14px;
+background: var(--card);
 }
 .grid {
-  max-width: 1120px;
-  margin: 24px auto 80px;
-  padding: 0 20px;
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 16px;
+max-width: 1120px;
+margin: 24px auto 80px;
+padding: 0 20px;
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+gap: 16px;
 }
 .card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  padding: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+background: var(--card);
+border: 1px solid var(--line);
+border-radius: 14px;
+padding: 18px;
+display: flex;
+flex-direction: column;
+gap: 10px;
 }
 .card-top { display: flex; justify-content: flex-end; align-items: flex-start; gap: 8px; }
 .badge {
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  padding: 3px 8px;
-  border-radius: 999px;
-  background: var(--accent-soft);
-  color: #3730a3;
-  white-space: nowrap;
+font-size: 11px;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.04em;
+padding: 3px 8px;
+border-radius: 999px;
+background: var(--accent-soft);
+color: #3730a3;
+white-space: nowrap;
 }
 .card h3 { margin: 0; font-size: 17px; letter-spacing: -0.01em; }
 .meta { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
 .price-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: auto; }
 .price { font-size: 22px; font-weight: 800; }
+.price-note { font-size: 11px; color: var(--ink-soft); font-weight: 500; margin-top: 2px; }
 .stock { font-size: 12px; color: var(--good); font-weight: 600; }
 .stock.low { color: #b45309; }
 .cta {
-  margin-top: 4px;
-  padding: 10px 14px;
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
+margin-top: 4px;
+padding: 10px 14px;
+background: var(--accent);
+color: #fff;
+border: none;
+border-radius: 10px;
+font-weight: 700;
+font-size: 14px;
+cursor: pointer;
 }
 .empty, .loading {
-  max-width: 1120px;
-  margin: 60px auto;
-  text-align: center;
-  color: var(--ink-soft);
-  padding: 0 20px;
+max-width: 1120px;
+margin: 60px auto;
+text-align: center;
+color: var(--ink-soft);
+padding: 0 20px;
 }
 .modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(15,23,42,0.5);
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-  z-index: 100;
+display: none;
+position: fixed;
+inset: 0;
+background: rgba(15,23,42,0.5);
+align-items: center;
+justify-content: center;
+padding: 20px;
+z-index: 100;
 }
 .modal-overlay.open { display: flex; }
 .modal {
-  background: #fff;
-  border-radius: 16px;
-  padding: 28px;
-  max-width: 420px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
+background: #fff;
+border-radius: 16px;
+padding: 28px;
+max-width: 420px;
+width: 100%;
+max-height: 90vh;
+overflow-y: auto;
 }
 .modal h2 { margin: 0 0 4px; font-size: 20px; }
 .modal p.sub { margin: 0 0 18px; color: var(--ink-soft); font-size: 14px; }
 .field { margin-bottom: 12px; }
 .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
 .field input, .field textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  font-size: 14px;
-  font-family: inherit;
+width: 100%;
+padding: 10px 12px;
+border: 1px solid var(--line);
+border-radius: 8px;
+font-size: 14px;
+font-family: inherit;
 }
 .bundles { margin: 4px 0 16px; display: flex; flex-direction: column; gap: 8px; }
 .bundle-option {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  padding: 10px 12px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  cursor: pointer;
+display: flex;
+align-items: flex-start;
+gap: 10px;
+padding: 10px 12px;
+border: 1px solid var(--line);
+border-radius: 10px;
+cursor: pointer;
 }
 .bundle-option:has(input:checked) { border-color: var(--ink); background: #f8fafc; }
 .bundle-option input { width: auto; margin-top: 3px; }
@@ -168,77 +169,96 @@ header {
 .bundle-option .bundle-desc { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
 .bundle-option .bundle-price { font-size: 13px; font-weight: 700; white-space: nowrap; }
 .bundle-tag {
-  display: inline-block;
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
-  color: #b45309;
-  background: #fef3c7;
-  padding: 1px 6px;
-  border-radius: 999px;
-  margin-left: 6px;
+display: inline-block;
+font-size: 10px;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.03em;
+color: #b45309;
+background: #fef3c7;
+padding: 1px 6px;
+border-radius: 999px;
+margin-left: 6px;
 }
 .pay-divider {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 16px 0;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-  color: var(--ink-soft);
+display: flex;
+align-items: center;
+gap: 10px;
+margin: 16px 0;
+font-size: 11px;
+font-weight: 700;
+text-transform: uppercase;
+letter-spacing: 0.04em;
+color: var(--ink-soft);
 }
 .pay-divider::before, .pay-divider::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background: var(--line);
+content: "";
+flex: 1;
+height: 1px;
+background: var(--line);
 }
+.pay-mode-toggle {
+display: flex;
+gap: 8px;
+margin-bottom: 14px;
+}
+.pay-mode-btn {
+flex: 1;
+text-align: left;
+padding: 10px 12px;
+border: 2px solid var(--line);
+border-radius: 10px;
+background: #fff;
+cursor: pointer;
+font-family: inherit;
+}
+.pay-mode-btn.active { border-color: var(--ink); background: #f8fafc; }
+.pay-mode-name { font-size: 12px; font-weight: 700; }
+.pay-mode-amount { font-size: 16px; font-weight: 800; margin-top: 2px; }
+.pay-mode-sub { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
 .pay-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
 .pay-option-label { font-size: 12px; color: var(--ink-soft); margin-bottom: 2px; }
 #payment-element { min-height: 40px; margin-bottom: 10px; }
 .payment-message { font-size: 12px; color: #b45309; margin: 6px 0 0; min-height: 16px; }
 .btn-pay {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: none;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 700;
-  font-size: 14px;
-  cursor: pointer;
-  margin-top: 4px;
+width: 100%;
+padding: 12px;
+border-radius: 10px;
+border: none;
+background: var(--accent);
+color: #fff;
+font-weight: 700;
+font-size: 14px;
+cursor: pointer;
+margin-top: 4px;
 }
 .btn-pay:disabled { opacity: 0.6; cursor: default; }
 .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
 .btn-secondary {
-  flex: 1;
-  padding: 10px;
-  border-radius: 10px;
-  border: 1px solid var(--line);
-  background: #fff;
-  font-weight: 600;
-  cursor: pointer;
+flex: 1;
+padding: 10px;
+border-radius: 10px;
+border: 1px solid var(--line);
+background: #fff;
+font-weight: 600;
+cursor: pointer;
 }
 .btn-primary {
-  flex: 1;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-  background: var(--accent);
-  color: #fff;
-  font-weight: 700;
-  cursor: pointer;
+flex: 1;
+padding: 10px;
+border-radius: 10px;
+border: none;
+background: var(--accent);
+color: #fff;
+font-weight: 700;
+cursor: pointer;
 }
 .success-msg { text-align: center; padding: 10px 0; }
 footer {
-  text-align: center;
-  padding: 30px 20px;
-  color: var(--ink-soft);
-  font-size: 13px;
+text-align: center;
+padding: 30px 20px;
+color: var(--ink-soft);
+font-size: 13px;
 }
 </style>
 </head>
@@ -252,15 +272,15 @@ footer {
 
 <div class="hero">
 <h1>Unlocked & certified devices, ready to ship.</h1>
-<p>Live inventory, updated in real time. Retail pricing shown below - no hidden fees. Checkout online is coming soon; for now, tap a device to reserve it and we'll follow up.</p>
+<p>Live inventory, updated in real time. Prices below reflect financing-eligible pricing - pay in full with card or Cash App Pay and save 7% at checkout.</p>
 </div>
 
 <div class="controls">
-<input class="search" id="search" type="text" placeholder="Search by model, e.g. iPhone 13, Galaxy S24…" />
+<input class="search" id="search" type="text" placeholder="Search by model, e.g. iPhone 13, Galaxy S24..." />
 </div>
 
 <div id="content">
-<div class="loading">Loading current inventory…</div>
+<div class="loading">Loading current inventory...</div>
 </div>
 
 <footer>&copy; <span id="year"></span> iPhoneStore.io. Prices and availability subject to change.</footer>
@@ -296,7 +316,19 @@ footer {
 </label>
 </div>
 
-<div class="pay-divider">Pay now - card, Klarna, Afterpay, or Cash App Pay</div>
+<div class="pay-divider">Choose how to pay</div>
+<div class="pay-mode-toggle" id="payModeToggle">
+<button type="button" class="pay-mode-btn active" data-mode="full">
+<div class="pay-mode-name">Pay in full - save 7%</div>
+<div class="pay-mode-amount" id="payModeFullAmount">$0.00</div>
+<div class="pay-mode-sub">Card or Cash App Pay</div>
+</button>
+<button type="button" class="pay-mode-btn" data-mode="financing">
+<div class="pay-mode-name">Pay over time</div>
+<div class="pay-mode-amount" id="payModeFinancingAmount">$0.00</div>
+<div class="pay-mode-sub">Klarna, Afterpay, or Affirm</div>
+</button>
+</div>
 <div id="payment-element"></div>
 <button class="btn-pay" id="stripePayBtn" type="button">Pay</button>
 <p class="payment-message" id="paymentMessage"></p>
@@ -335,11 +367,23 @@ footer {
 </div>
 
 <!--
-  Stripe.js - same script URL for both test mode and live mode; which
-  mode runs is controlled entirely by which publishable/secret key pair
-  is in use. To go live: swap STRIPE_PUBLISHABLE_KEY below to the
-  pk_live_... key, and update STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET
-  in Vercel to their live-mode equivalents.
+Stripe.js - same script URL for both test mode and live mode; which
+mode runs is controlled entirely by which publishable/secret key pair
+is in use. To go live: swap STRIPE_PUBLISHABLE_KEY below to the
+pk_live_... key, and update STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET
+in Vercel to their live-mode equivalents.
+
+Pricing model: the "list" price shown on this site already includes a
+10% markup over the underlying catalog retail_price. Customers who pay
+in full with card or Cash App Pay get a 7% discount off that list price
+at checkout (roughly netting back to the original retail_price).
+Customers who finance with Klarna, Afterpay, or Affirm pay the full
+list price - this covers the processing fees those providers charge,
+which run well above standard card-processing rates on higher-ticket
+purchases. Klarna/Afterpay/Affirm's own merchant terms prohibit adding
+a surcharge specifically for using their service, so this is
+implemented as a pay-in-full discount rather than a financing
+surcharge.
 -->
 <script src="https://js.stripe.com/v3/"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -359,251 +403,309 @@ let selectedListing = null;
 
 const money = (n) => Number(n).toLocaleString("en-US", { style: "currency", currency: "USD" });
 
+// --- Pricing: 10% list-price markup, 7% pay-in-full discount ---
+const FINANCING_MARKUP = 1.10;
+const PAY_IN_FULL_DISCOUNT = 0.93;
+
+function round2(n) {
+return Math.round(n * 100) / 100;
+}
+
+function deviceListPrice(l) {
+return round2(Number(l.retail_price) * FINANCING_MARKUP);
+}
+
 async function loadListings() {
-  const { data, error } = await sb.from("storefront_catalog_view").select("*").order("product_name");
-  if (error) {
-    document.getElementById("content").innerHTML = `<div class="empty">Couldn't load inventory right now. Please check back soon.</div>`;
-    console.error(error);
-    return;
-  }
-  allListings = data || [];
-  render();
+const { data, error } = await sb.from("storefront_catalog_view").select("*").order("product_name");
+if (error) {
+document.getElementById("content").innerHTML = `<div class="empty">Couldn't load inventory right now. Please check back soon.</div>`;
+console.error(error);
+return;
+}
+allListings = data || [];
+render();
 }
 
 function render() {
-  const term = document.getElementById("search").value.trim().toLowerCase();
-  const filtered = allListings.filter((l) => {
-    const matchesTerm = !term || l.product_name.toLowerCase().includes(term);
-    return matchesTerm;
-  });
+const term = document.getElementById("search").value.trim().toLowerCase();
+const filtered = allListings.filter((l) => {
+const matchesTerm = !term || l.product_name.toLowerCase().includes(term);
+return matchesTerm;
+});
 
-  const content = document.getElementById("content");
-  if (filtered.length === 0) {
-    content.innerHTML = `<div class="empty">No devices match right now - try a different search or check back soon.</div>`;
-    return;
-  }
+const content = document.getElementById("content");
+if (filtered.length === 0) {
+content.innerHTML = `<div class="empty">No devices match right now - try a different search or check back soon.</div>`;
+return;
+}
 
-  content.innerHTML = `<div class="grid">${filtered.map(cardHtml).join("")}</div>`;
+content.innerHTML = `<div class="grid">${filtered.map(cardHtml).join("")}</div>`;
 
-  content.querySelectorAll(".cta").forEach((btn) => {
-    btn.addEventListener("click", () => openModal(btn.dataset.listingId));
-  });
+content.querySelectorAll(".cta").forEach((btn) => {
+btn.addEventListener("click", () => openModal(btn.dataset.listingId));
+});
 }
 
 function cardHtml(l) {
-  const cleanStorage = l.storage ? String(l.storage).replace(/gb/i, "").trim() : null;
-  const carrierText = !l.carrier_lock || l.carrier_lock.toLowerCase() === "unlocked" ? "Unlocked" : `${l.carrier_lock} Locked`;
-  const specs = [cleanStorage ? `${cleanStorage}GB` : null, l.color, carrierText]
-    .filter(Boolean)
-    .join(" · ");
-  const lowStock = l.quantity_available <= 2;
-  return `
-    <div class="card">
-      <div class="card-top">
-        <span class="badge" style="background:#f1f5f9;color:#334155;">${l.condition_grade || "Used"}</span>
-      </div>
-      <h3>${l.product_name}</h3>
-      <div class="meta">${specs || "&nbsp;"}</div>
-      <div class="price-row">
-        <div class="price">${money(l.retail_price)}</div>
-        <div class="stock ${lowStock ? "low" : ""}">${lowStock ? `Only ${l.quantity_available} left` : "In stock"}</div>
-      </div>
-      <button class="cta" data-listing-id="${l.listing_id}">Reserve This Device</button>
-    </div>
-  `;
+const cleanStorage = l.storage ? String(l.storage).replace(/gb/i, "").trim() : null;
+const carrierText = !l.carrier_lock || l.carrier_lock.toLowerCase() === "unlocked" ? "Unlocked" : `${l.carrier_lock} Locked`;
+const specs = [cleanStorage ? `${cleanStorage}GB` : null, l.color, carrierText]
+.filter(Boolean)
+.join(" - ");
+const lowStock = l.quantity_available <= 2;
+const listPrice = deviceListPrice(l);
+const fullPayPrice = round2(listPrice * PAY_IN_FULL_DISCOUNT);
+return `
+<div class="card">
+<div class="card-top">
+<span class="badge" style="background:#f1f5f9;color:#334155;">${l.condition_grade || "Used"}</span>
+</div>
+<h3>${l.product_name}</h3>
+<div class="meta">${specs || "&nbsp;"}</div>
+<div class="price-row">
+<div>
+<div class="price">${money(listPrice)}</div>
+<div class="price-note">or ${money(fullPayPrice)} paying in full</div>
+</div>
+<div class="stock ${lowStock ? "low" : ""}">${lowStock ? `Only ${l.quantity_available} left` : "In stock"}</div>
+</div>
+<button class="cta" data-listing-id="${l.listing_id}">Reserve This Device</button>
+</div>
+`;
 }
 
 // --- Shared bundle-selection helper (used by both Stripe pay and reserve flows) ---
 const BUNDLE_LABELS = {
-  none: null,
-  case_screen: "Case + screen protector bundle",
-  case_screen_charger: "Case + screen + 20W charging block (online exclusive)",
+none: null,
+case_screen: "Case + screen protector bundle",
+case_screen_charger: "Case + screen + 20W charging block (online exclusive)",
 };
 
 function getBundleSelection() {
-  const bundleInput = document.querySelector('input[name="bundle"]:checked');
-  const bundleValue = bundleInput ? bundleInput.value : "none";
-  return {
-    label: BUNDLE_LABELS[bundleValue] || null,
-    price: bundleInput && bundleInput.dataset.price ? Number(bundleInput.dataset.price) : null,
-  };
+const bundleInput = document.querySelector('input[name="bundle"]:checked');
+const bundleValue = bundleInput ? bundleInput.value : "none";
+return {
+label: BUNDLE_LABELS[bundleValue] || null,
+price: bundleInput && bundleInput.dataset.price ? Number(bundleInput.dataset.price) : null,
+};
+}
+
+// Computes both the "pay over time" (list) total and the "pay in full"
+// (discounted) total for the currently selected device + bundle.
+function computeTotals() {
+if (!selectedListing) return { listTotal: 0, fullTotal: 0 };
+const { price: bundlePrice } = getBundleSelection();
+const listTotal = round2(deviceListPrice(selectedListing) + (bundlePrice || 0));
+const fullTotal = round2(listTotal * PAY_IN_FULL_DISCOUNT);
+return { listTotal, fullTotal };
 }
 
 function currentTotal() {
-  if (!selectedListing) return 0;
-  const { price } = getBundleSelection();
-  return Number(selectedListing.retail_price) + (price || 0);
+const { listTotal, fullTotal } = computeTotals();
+return currentPayMode === "financing" ? listTotal : fullTotal;
 }
 
-// --- Stripe Payment Element: card, Klarna, Afterpay, Cash App Pay ---
+function updatePayModeUI() {
+const { listTotal, fullTotal } = computeTotals();
+const fullEl = document.getElementById("payModeFullAmount");
+const financingEl = document.getElementById("payModeFinancingAmount");
+if (fullEl) fullEl.textContent = money(fullTotal);
+if (financingEl) financingEl.textContent = money(listTotal);
+}
+
+// --- Stripe Payment Element: card, Klarna, Afterpay, Cash App Pay, Affirm ---
 let stripeElements = null;
 let currentClientSecret = null;
+let currentPayMode = "full";
 
-async function refreshStripeElement() {
-  const paymentMessage = document.getElementById("paymentMessage");
-  const payBtn = document.getElementById("stripePayBtn");
-  if (paymentMessage) paymentMessage.textContent = "";
-  if (!stripe || !selectedListing) return;
+const PAYMENT_METHODS_BY_MODE = {
+full: ["card", "cashapp"],
+financing: ["klarna", "afterpay_clearpay", "affirm"],
+};
 
-  const amount = currentTotal();
-  const bundle = getBundleSelection();
+async function refreshStripeElement(mode) {
+if (mode) currentPayMode = mode;
+updatePayModeUI();
 
-  try {
-    const resp = await fetch("/api/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        amount,
-        listingId: selectedListing.listing_id,
-        deviceCatalogId: selectedListing.device_catalog_id,
-        productName: selectedListing.product_name,
-        color: selectedListing.color,
-        storage: selectedListing.storage,
-        conditionGrade: selectedListing.condition_grade,
-        customerName: document.getElementById("fName").value.trim(),
-        customerPhone: document.getElementById("fPhone").value.trim(),
-        customerEmail: document.getElementById("fEmail").value.trim(),
-        message: document.getElementById("fMessage").value.trim(),
-        accessoryBundle: bundle.label,
-        accessoryBundlePrice: bundle.price,
-      }),
-    });
-    const data = await resp.json();
-    if (!resp.ok || !data.clientSecret) {
-      console.error("create-payment-intent failed", data);
-      if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable - you can still reserve below.";
-      if (payBtn) payBtn.disabled = true;
-      return;
-    }
+const paymentMessage = document.getElementById("paymentMessage");
+const payBtn = document.getElementById("stripePayBtn");
+if (paymentMessage) paymentMessage.textContent = "";
+if (!stripe || !selectedListing) return;
 
-    currentClientSecret = data.clientSecret;
-    stripeElements = stripe.elements({
-      clientSecret: currentClientSecret,
-      paymentMethodOrder: ["klarna", "afterpay_clearpay", "cashapp", "card"],
-    });
-    const paymentElementContainer = document.getElementById("payment-element");
-    paymentElementContainer.innerHTML = "";
-    const paymentElement = stripeElements.create("payment");
-    paymentElement.mount("#payment-element");
-    if (payBtn) payBtn.disabled = false;
-  } catch (err) {
-    console.error("Stripe element init failed", err);
-    if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable - you can still reserve below.";
-    if (payBtn) payBtn.disabled = true;
-  }
+const amount = currentTotal();
+const bundle = getBundleSelection();
+const methods = PAYMENT_METHODS_BY_MODE[currentPayMode] || PAYMENT_METHODS_BY_MODE.full;
+
+try {
+const resp = await fetch("/api/create-payment-intent", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+amount,
+paymentMode: currentPayMode,
+listingId: selectedListing.listing_id,
+deviceCatalogId: selectedListing.device_catalog_id,
+productName: selectedListing.product_name,
+color: selectedListing.color,
+storage: selectedListing.storage,
+conditionGrade: selectedListing.condition_grade,
+customerName: document.getElementById("fName").value.trim(),
+customerPhone: document.getElementById("fPhone").value.trim(),
+customerEmail: document.getElementById("fEmail").value.trim(),
+message: document.getElementById("fMessage").value.trim(),
+accessoryBundle: bundle.label,
+accessoryBundlePrice: bundle.price,
+}),
+});
+const data = await resp.json();
+if (!resp.ok || !data.clientSecret) {
+console.error("create-payment-intent failed", data);
+if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable - you can still reserve below.";
+if (payBtn) payBtn.disabled = true;
+return;
 }
 
+currentClientSecret = data.clientSecret;
+stripeElements = stripe.elements({
+clientSecret: currentClientSecret,
+paymentMethodOrder: methods,
+});
+const paymentElementContainer = document.getElementById("payment-element");
+paymentElementContainer.innerHTML = "";
+const paymentElement = stripeElements.create("payment");
+paymentElement.mount("#payment-element");
+if (payBtn) payBtn.disabled = false;
+} catch (err) {
+console.error("Stripe element init failed", err);
+if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable - you can still reserve below.";
+if (payBtn) payBtn.disabled = true;
+}
+}
+
+document.querySelectorAll(".pay-mode-btn").forEach((btn) => {
+btn.addEventListener("click", () => {
+document.querySelectorAll(".pay-mode-btn").forEach((b) => b.classList.remove("active"));
+btn.classList.add("active");
+refreshStripeElement(btn.dataset.mode);
+});
+});
+
 document.getElementById("stripePayBtn").addEventListener("click", async () => {
-  if (!stripe || !stripeElements || !currentClientSecret) return;
-  const payBtn = document.getElementById("stripePayBtn");
-  const paymentMessage = document.getElementById("paymentMessage");
-  payBtn.disabled = true;
-  payBtn.textContent = "Processing…";
+if (!stripe || !stripeElements || !currentClientSecret) return;
+const payBtn = document.getElementById("stripePayBtn");
+const paymentMessage = document.getElementById("paymentMessage");
+payBtn.disabled = true;
+payBtn.textContent = "Processing...";
 
-  const { error } = await stripe.confirmPayment({
-    elements: stripeElements,
-    confirmParams: { return_url: window.location.href },
-  });
+const { error } = await stripe.confirmPayment({
+elements: stripeElements,
+confirmParams: { return_url: window.location.href },
+});
 
-  // Klarna/Afterpay/Cash App Pay redirect the browser away to authorize -
-  // if we're still here, either it's a method that doesn't redirect and
-  // failed, or something went wrong before the redirect.
-  if (error) {
-    console.error("Stripe confirmPayment error", error);
-    if (paymentMessage) paymentMessage.textContent = error.message || "Payment couldn't be completed.";
-    payBtn.disabled = false;
-    payBtn.textContent = "Pay";
-  }
+// Klarna/Afterpay/Affirm/Cash App Pay redirect the browser away to
+// authorize - if we're still here, either it's a method that doesn't
+// redirect and failed, or something went wrong before the redirect.
+if (error) {
+console.error("Stripe confirmPayment error", error);
+if (paymentMessage) paymentMessage.textContent = error.message || "Payment couldn't be completed.";
+payBtn.disabled = false;
+payBtn.textContent = "Pay";
+}
 });
 
 // Completed orders are logged server-side via the Stripe webhook (the
-// source of truth for async methods like Klarna/Afterpay). This just
-// gives the customer a friendly message when they land back here.
+// source of truth for async methods like Klarna/Afterpay/Affirm). This
+// just gives the customer a friendly message when they land back here.
 (function handleStripeRedirectReturn() {
-  const params = new URLSearchParams(window.location.search);
-  const redirectStatus = params.get("redirect_status");
-  if (!redirectStatus) return;
-  if (redirectStatus === "succeeded" || redirectStatus === "processing") {
-    alert("Thanks! Your payment is being processed - you'll get confirmation shortly.");
-  } else if (redirectStatus === "failed") {
-    alert("That payment didn't go through. Please try again or reserve without paying now.");
-  }
-  window.history.replaceState({}, document.title, window.location.pathname);
+const params = new URLSearchParams(window.location.search);
+const redirectStatus = params.get("redirect_status");
+if (!redirectStatus) return;
+if (redirectStatus === "succeeded" || redirectStatus === "processing") {
+alert("Thanks! Your payment is being processed - you'll get confirmation shortly.");
+} else if (redirectStatus === "failed") {
+alert("That payment didn't go through. Please try again or reserve without paying now.");
+}
+window.history.replaceState({}, document.title, window.location.pathname);
 })();
 
 function openModal(listingId) {
-  selectedListing = allListings.find((l) => l.listing_id === listingId);
-  if (!selectedListing) return;
-  document.getElementById("modalSub").textContent = `${selectedListing.product_name} - ${money(selectedListing.retail_price)}`;
-  document.getElementById("modalForm").style.display = "block";
-  document.getElementById("modalSuccess").style.display = "none";
-  document.getElementById("fName").value = "";
-  document.getElementById("fPhone").value = "";
-  document.getElementById("fEmail").value = "";
-  document.getElementById("fMessage").value = "";
-  const noneOption = document.querySelector('input[name="bundle"][value="none"]');
-  if (noneOption) noneOption.checked = true;
-  document.getElementById("modalOverlay").classList.add("open");
-  refreshStripeElement();
+selectedListing = allListings.find((l) => l.listing_id === listingId);
+if (!selectedListing) return;
+document.getElementById("modalSub").textContent = `${selectedListing.product_name} - ${money(deviceListPrice(selectedListing))}`;
+document.getElementById("modalForm").style.display = "block";
+document.getElementById("modalSuccess").style.display = "none";
+document.getElementById("fName").value = "";
+document.getElementById("fPhone").value = "";
+document.getElementById("fEmail").value = "";
+document.getElementById("fMessage").value = "";
+const noneOption = document.querySelector('input[name="bundle"][value="none"]');
+if (noneOption) noneOption.checked = true;
+currentPayMode = "full";
+document.querySelectorAll(".pay-mode-btn").forEach((b) => {
+b.classList.toggle("active", b.dataset.mode === "full");
+});
+document.getElementById("modalOverlay").classList.add("open");
+refreshStripeElement("full");
 }
 
 document.querySelectorAll('input[name="bundle"]').forEach((el) => {
-  el.addEventListener("change", refreshStripeElement);
+el.addEventListener("change", () => refreshStripeElement());
 });
 
 function closeModal() {
-  document.getElementById("modalOverlay").classList.remove("open");
+document.getElementById("modalOverlay").classList.remove("open");
 }
 
 document.getElementById("cancelBtn").addEventListener("click", closeModal);
 document.getElementById("closeSuccessBtn").addEventListener("click", closeModal);
 document.getElementById("modalOverlay").addEventListener("click", (e) => {
-  if (e.target.id === "modalOverlay") closeModal();
+if (e.target.id === "modalOverlay") closeModal();
 });
 
 document.getElementById("submitBtn").addEventListener("click", async () => {
-  const name = document.getElementById("fName").value.trim();
-  const phone = document.getElementById("fPhone").value.trim();
-  const email = document.getElementById("fEmail").value.trim();
-  const message = document.getElementById("fMessage").value.trim();
-  const { label: accessoryBundle, price: accessoryBundlePrice } = getBundleSelection();
+const name = document.getElementById("fName").value.trim();
+const phone = document.getElementById("fPhone").value.trim();
+const email = document.getElementById("fEmail").value.trim();
+const message = document.getElementById("fMessage").value.trim();
+const { label: accessoryBundle, price: accessoryBundlePrice } = getBundleSelection();
+const { listTotal } = computeTotals();
 
-  if (!name || !phone) {
-    alert("Please enter your name and phone number so we can reach you.");
-    return;
-  }
+if (!name || !phone) {
+alert("Please enter your name and phone number so we can reach you.");
+return;
+}
 
-  const submitBtn = document.getElementById("submitBtn");
-  submitBtn.disabled = true;
-  submitBtn.textContent = "Submitting…";
+const submitBtn = document.getElementById("submitBtn");
+submitBtn.disabled = true;
+submitBtn.textContent = "Submitting...";
 
-  const { error } = await sb.from("storefront_inquiries").insert({
-    listing_id: selectedListing.listing_id,
-    device_catalog_id: selectedListing.device_catalog_id,
-    product_name: selectedListing.product_name,
-    color: selectedListing.color,
-    storage: selectedListing.storage,
-    condition_grade: selectedListing.condition_grade,
-    retail_price: selectedListing.retail_price,
-    customer_name: name,
-    customer_phone: phone,
-    customer_email: email || null,
-    message: message || null,
-    accessory_bundle: accessoryBundle,
-    accessory_bundle_price: accessoryBundlePrice,
-  });
+const { error } = await sb.from("storefront_inquiries").insert({
+listing_id: selectedListing.listing_id,
+device_catalog_id: selectedListing.device_catalog_id,
+product_name: selectedListing.product_name,
+color: selectedListing.color,
+storage: selectedListing.storage,
+condition_grade: selectedListing.condition_grade,
+retail_price: listTotal,
+customer_name: name,
+customer_phone: phone,
+customer_email: email || null,
+message: message || null,
+accessory_bundle: accessoryBundle,
+accessory_bundle_price: accessoryBundlePrice,
+});
 
-  submitBtn.disabled = false;
-  submitBtn.textContent = "Submit";
+submitBtn.disabled = false;
+submitBtn.textContent = "Submit";
 
-  if (error) {
-    console.error(error);
-    alert("Something went wrong submitting your request. Please try again.");
-    return;
-  }
+if (error) {
+console.error(error);
+alert("Something went wrong submitting your request. Please try again.");
+return;
+}
 
-  document.getElementById("modalForm").style.display = "none";
-  document.getElementById("modalSuccess").style.display = "block";
+document.getElementById("modalForm").style.display = "none";
+document.getElementById("modalSuccess").style.display = "block";
 });
 
 document.getElementById("search").addEventListener("input", render);
