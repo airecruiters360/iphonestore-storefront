@@ -179,6 +179,40 @@ header {
   border-radius: 999px;
   margin-left: 6px;
 }
+.pay-divider {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+.pay-divider::before, .pay-divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.pay-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+.pay-option-label { font-size: 12px; color: var(--ink-soft); margin-bottom: 2px; }
+#payment-element { min-height: 40px; margin-bottom: 10px; }
+.payment-message { font-size: 12px; color: #b45309; margin: 6px 0 0; min-height: 16px; }
+.btn-pay {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
+  margin-top: 4px;
+}
+.btn-pay:disabled { opacity: 0.6; cursor: default; }
 .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
 .btn-secondary {
   flex: 1;
@@ -262,6 +296,13 @@ footer {
 </label>
 </div>
 
+<div class="pay-divider">Pay now — card, Klarna, Afterpay, or Cash App Pay</div>
+<div id="payment-element"></div>
+<button class="btn-pay" id="stripePayBtn" type="button">Pay</button>
+<p class="payment-message" id="paymentMessage"></p>
+
+<div class="pay-divider">Or reserve without paying now</div>
+
 <div class="field">
 <label>Your name</label>
 <input id="fName" type="text" placeholder="Jane Doe" />
@@ -293,8 +334,20 @@ footer {
 </div>
 </div>
 
+<!--
+  Stripe.js — same script URL for both test mode and live mode; which
+  mode runs is controlled entirely by which publishable/secret key pair
+  is in use. To go live: swap STRIPE_PUBLISHABLE_KEY below to the
+  pk_live_... key, and update STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET
+  in Vercel to their live-mode equivalents.
+-->
+<script src="https://js.stripe.com/v3/"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
+// --- Stripe config (test mode) ---
+const STRIPE_PUBLISHABLE_KEY = "pk_test_51Mett4JcRVwZPDF59b82S5nllZS98kCd4KF4CvAgc8vGPIGEc389QtJer5cLsadOctdAJIgQCuwM0Nh09Qiqpgro00b9ua4lwh";
+const stripe = window.Stripe ? window.Stripe(STRIPE_PUBLISHABLE_KEY) : null;
+
 const SUPABASE_URL = "https://xggkxvecfrdtiakkwdgp.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnZ2t4dmVjZnJkdGlha2t3ZGdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwOTMxMjAsImV4cCI6MjA5ODY2OTEyMH0.s9ERsiEJJTTeXUJHQ6CL9hHSbtJ5FpqgXLu_Hjku-_g";
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -360,6 +413,124 @@ function cardHtml(l) {
   `;
 }
 
+// --- Shared bundle-selection helper (used by both Stripe pay and reserve flows) ---
+const BUNDLE_LABELS = {
+  none: null,
+  case_screen: "Case + screen protector bundle",
+  case_screen_charger: "Case + screen + 20W charging block (online exclusive)",
+};
+
+function getBundleSelection() {
+  const bundleInput = document.querySelector('input[name="bundle"]:checked');
+  const bundleValue = bundleInput ? bundleInput.value : "none";
+  return {
+    label: BUNDLE_LABELS[bundleValue] || null,
+    price: bundleInput && bundleInput.dataset.price ? Number(bundleInput.dataset.price) : null,
+  };
+}
+
+function currentTotal() {
+  if (!selectedListing) return 0;
+  const { price } = getBundleSelection();
+  return Number(selectedListing.retail_price) + (price || 0);
+}
+
+// --- Stripe Payment Element: card, Klarna, Afterpay, Cash App Pay ---
+let stripeElements = null;
+let currentClientSecret = null;
+
+async function refreshStripeElement() {
+  const paymentMessage = document.getElementById("paymentMessage");
+  const payBtn = document.getElementById("stripePayBtn");
+  if (paymentMessage) paymentMessage.textContent = "";
+  if (!stripe || !selectedListing) return;
+
+  const amount = currentTotal();
+  const bundle = getBundleSelection();
+
+  try {
+    const resp = await fetch("/api/create-payment-intent", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        amount,
+        listingId: selectedListing.listing_id,
+        deviceCatalogId: selectedListing.device_catalog_id,
+        productName: selectedListing.product_name,
+        color: selectedListing.color,
+        storage: selectedListing.storage,
+        conditionGrade: selectedListing.condition_grade,
+        customerName: document.getElementById("fName").value.trim(),
+        customerPhone: document.getElementById("fPhone").value.trim(),
+        customerEmail: document.getElementById("fEmail").value.trim(),
+        message: document.getElementById("fMessage").value.trim(),
+        accessoryBundle: bundle.label,
+        accessoryBundlePrice: bundle.price,
+      }),
+    });
+    const data = await resp.json();
+    if (!resp.ok || !data.clientSecret) {
+      console.error("create-payment-intent failed", data);
+      if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable — you can still reserve below.";
+      if (payBtn) payBtn.disabled = true;
+      return;
+    }
+
+    currentClientSecret = data.clientSecret;
+    stripeElements = stripe.elements({
+      clientSecret: currentClientSecret,
+      paymentMethodOrder: ["klarna", "afterpay_clearpay", "cashapp", "card"],
+    });
+    const paymentElementContainer = document.getElementById("payment-element");
+    paymentElementContainer.innerHTML = "";
+    const paymentElement = stripeElements.create("payment");
+    paymentElement.mount("#payment-element");
+    if (payBtn) payBtn.disabled = false;
+  } catch (err) {
+    console.error("Stripe element init failed", err);
+    if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable — you can still reserve below.";
+    if (payBtn) payBtn.disabled = true;
+  }
+}
+
+document.getElementById("stripePayBtn").addEventListener("click", async () => {
+  if (!stripe || !stripeElements || !currentClientSecret) return;
+  const payBtn = document.getElementById("stripePayBtn");
+  const paymentMessage = document.getElementById("paymentMessage");
+  payBtn.disabled = true;
+  payBtn.textContent = "Processing…";
+
+  const { error } = await stripe.confirmPayment({
+    elements: stripeElements,
+    confirmParams: { return_url: window.location.href },
+  });
+
+  // Klarna/Afterpay/Cash App Pay redirect the browser away to authorize —
+  // if we're still here, either it's a method that doesn't redirect and
+  // failed, or something went wrong before the redirect.
+  if (error) {
+    console.error("Stripe confirmPayment error", error);
+    if (paymentMessage) paymentMessage.textContent = error.message || "Payment couldn't be completed.";
+    payBtn.disabled = false;
+    payBtn.textContent = "Pay";
+  }
+});
+
+// Completed orders are logged server-side via the Stripe webhook (the
+// source of truth for async methods like Klarna/Afterpay). This just
+// gives the customer a friendly message when they land back here.
+(function handleStripeRedirectReturn() {
+  const params = new URLSearchParams(window.location.search);
+  const redirectStatus = params.get("redirect_status");
+  if (!redirectStatus) return;
+  if (redirectStatus === "succeeded" || redirectStatus === "processing") {
+    alert("Thanks! Your payment is being processed — you'll get confirmation shortly.");
+  } else if (redirectStatus === "failed") {
+    alert("That payment didn't go through. Please try again or reserve without paying now.");
+  }
+  window.history.replaceState({}, document.title, window.location.pathname);
+})();
+
 function openModal(listingId) {
   selectedListing = allListings.find((l) => l.listing_id === listingId);
   if (!selectedListing) return;
@@ -373,7 +544,12 @@ function openModal(listingId) {
   const noneOption = document.querySelector('input[name="bundle"][value="none"]');
   if (noneOption) noneOption.checked = true;
   document.getElementById("modalOverlay").classList.add("open");
+  refreshStripeElement();
 }
+
+document.querySelectorAll('input[name="bundle"]').forEach((el) => {
+  el.addEventListener("change", refreshStripeElement);
+});
 
 function closeModal() {
   document.getElementById("modalOverlay").classList.remove("open");
@@ -390,15 +566,7 @@ document.getElementById("submitBtn").addEventListener("click", async () => {
   const phone = document.getElementById("fPhone").value.trim();
   const email = document.getElementById("fEmail").value.trim();
   const message = document.getElementById("fMessage").value.trim();
-  const bundleInput = document.querySelector('input[name="bundle"]:checked');
-  const bundleValue = bundleInput ? bundleInput.value : "none";
-  const bundleLabels = {
-    none: null,
-    case_screen: "Case + screen protector bundle",
-    case_screen_charger: "Case + screen + 20W charging block (online exclusive)",
-  };
-  const accessoryBundle = bundleLabels[bundleValue] || null;
-  const accessoryBundlePrice = bundleInput && bundleInput.dataset.price ? Number(bundleInput.dataset.price) : null;
+  const { label: accessoryBundle, price: accessoryBundlePrice } = getBundleSelection();
 
   if (!name || !phone) {
     alert("Please enter your name and phone number so we can reach you.");
