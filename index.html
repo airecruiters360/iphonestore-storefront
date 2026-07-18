@@ -229,23 +229,9 @@ font-family: inherit;
 .pay-mode-name { font-size: 12px; font-weight: 700; }
 .pay-mode-amount { font-size: 16px; font-weight: 800; margin-top: 2px; }
 .pay-mode-sub { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
-.pay-options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
-.pay-option-label { font-size: 12px; color: var(--ink-soft); margin-bottom: 2px; }
-#payment-element { min-height: 40px; margin-bottom: 10px; }
+#paypal-buttons { margin-bottom: 6px; min-height: 45px; }
+#paylater-message { margin: 4px 0 8px; }
 .payment-message { font-size: 12px; color: #b45309; margin: 6px 0 0; min-height: 16px; }
-.btn-pay {
-width: 100%;
-padding: 12px;
-border-radius: 10px;
-border: none;
-background: var(--accent);
-color: #fff;
-font-weight: 700;
-font-size: 14px;
-cursor: pointer;
-margin-top: 4px;
-}
-.btn-pay:disabled { opacity: 0.6; cursor: default; }
 .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
 .btn-secondary {
 flex: 1;
@@ -285,7 +271,7 @@ font-size: 13px;
 
 <div class="hero">
 <h1>Unlocked & certified devices, ready to ship.</h1>
-<p>Live inventory, updated in real time. Prices below reflect financing-eligible pricing - pay in full with card or Cash App Pay and save 7% at checkout.</p>
+<p>Live inventory, updated in real time. Pay in full and save 7% - or split it into payments with PayPal Pay Later.</p>
 </div>
 
 <div class="controls">
@@ -391,51 +377,54 @@ font-size: 13px;
 <button type="button" class="pay-mode-btn active" data-mode="full">
 <div class="pay-mode-name">Pay in full - save 7%</div>
 <div class="pay-mode-amount" id="payModeFullAmount">$0.00</div>
-<div class="pay-mode-sub">Card or Cash App Pay</div>
+<div class="pay-mode-sub">Card, PayPal, or Venmo</div>
 </button>
 <button type="button" class="pay-mode-btn" data-mode="financing">
 <div class="pay-mode-name">Pay over time</div>
 <div class="pay-mode-amount" id="payModeFinancingAmount">$0.00</div>
-<div class="pay-mode-sub">Klarna, Afterpay, or Affirm</div>
+<div class="pay-mode-sub">PayPal Pay Later - 4 payments or monthly</div>
 </button>
 </div>
-<div id="payment-element"></div>
-<button class="btn-pay" id="stripePayBtn" type="button">Pay</button>
+<div id="paylater-message"></div>
+<div id="paypal-buttons"></div>
 <p class="payment-message" id="paymentMessage"></p>
 
 <div class="modal-actions">
 <button class="btn-secondary" id="cancelBtn">Cancel</button>
 </div>
 </div>
+<div id="modalSuccess" style="display:none;">
+<div class="success-msg">
+<h2>Payment complete!</h2>
+<p class="sub" id="successDetail">Thanks for your order - you'll get a confirmation email shortly, and we'll follow up with shipping details.</p>
+<button class="btn-primary" id="closeSuccessBtn" style="width:100%;">Close</button>
+</div>
+</div>
 </div>
 </div>
 
 <!--
-Stripe.js - same script URL for both test mode and live mode; which
-mode runs is controlled entirely by which publishable/secret key pair
-is in use. To go live: swap STRIPE_PUBLISHABLE_KEY below to the
-pk_live_... key, and update STRIPE_SECRET_KEY / STRIPE_WEBHOOK_SECRET
-in Vercel to their live-mode equivalents.
+Checkout runs on PayPal (Orders v2). The old Stripe integration was removed
+2026-07-18 after Stripe deactivated the account.
 
-Pricing model: the "list" price shown on this site already includes a
-10% markup over the underlying catalog retail_price. Customers who pay
-in full with card or Cash App Pay get a 7% discount off that list price
-at checkout (roughly netting back to the original retail_price).
-Customers who finance with Klarna, Afterpay, or Affirm pay the full
-list price - this covers the processing fees those providers charge,
-which run well above standard card-processing rates on higher-ticket
-purchases. Klarna/Afterpay/Affirm's own merchant terms prohibit adding
-a surcharge specifically for using their service, so this is
-implemented as a pay-in-full discount rather than a financing
-surcharge.
+- PayPal Buttons render for: PayPal, Venmo, Debit/Credit card (guest
+  checkout), and - in "Pay over time" mode - PayPal Pay Later (Pay in 4 /
+  Pay Monthly). The merchant is paid in full up front on Pay Later.
+- The PUBLIC client id comes from /api/paypal-config (reads the
+  PAYPAL_CLIENT_ID env var in Vercel), so nothing is hardcoded here.
+- Orders are created and captured server-side (/api/paypal-create-order,
+  /api/paypal-capture-order); the capture endpoint logs the completed order
+  to Supabase, replacing the old Stripe webhook.
+
+Pricing model (unchanged): the "list" price shown already includes a 10%
+markup over the underlying catalog retail_price. Customers who pay in full
+get a 7% discount off list (netting roughly back to retail). Customers who
+use Pay Later pay list price - Pay Later's merchant fee (4.99% + $0.49) runs
+above standard card rates, and PayPal's terms prohibit surcharging Pay Later
+specifically, so it's implemented as a pay-in-full discount instead.
 -->
-<script src="https://js.stripe.com/v3/"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-// --- Stripe config (live mode) ---
-const STRIPE_PUBLISHABLE_KEY = "pk_live_51Mett4JcRVwZPDF5qpwIF8Oj3IuIBlKknSdCw78lBmODzhsEyYyGaHPxUaZMFv2pyofXjFAHwNZ0FgSPOTvPz5MB00BeFILKbf";
-const stripe = window.Stripe ? window.Stripe(STRIPE_PUBLISHABLE_KEY) : null;
-
 const SUPABASE_URL = "https://xggkxvecfrdtiakkwdgp.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnZ2t4dmVjZnJkdGlha2t3ZGdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwOTMxMjAsImV4cCI6MjA5ODY2OTEyMH0.s9ERsiEJJTTeXUJHQ6CL9hHSbtJ5FpqgXLu_Hjku-_g";
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -545,7 +534,7 @@ return `
 `;
 }
 
-// --- Shared bundle-selection helper (used by both Stripe pay and reserve flows) ---
+// --- Shared bundle-selection helper ---
 const BUNDLE_LABELS = {
 none: null,
 case_screen: "Case + screen protector bundle",
@@ -561,8 +550,7 @@ price: bundleInput && bundleInput.dataset.price ? Number(bundleInput.dataset.pri
 };
 }
 
-// --- Contact + shipping fields: read current values (used both for the
-// Stripe metadata refresh and for pre-payment validation). ---
+// --- Contact + shipping fields ---
 function getContactFields() {
 const val = (id) => (document.getElementById(id) ? document.getElementById(id).value.trim() : "");
 const firstName = val("fFirstName");
@@ -582,8 +570,6 @@ message: val("fMessage"),
 };
 }
 
-// Returns null if everything required is valid, otherwise a user-facing
-// error message describing the first problem found.
 function validateContactFields() {
 const c = getContactFields();
 if (!c.firstName) return "Please enter your first name.";
@@ -598,8 +584,6 @@ if (!c.zip) return "Please enter your shipping ZIP code.";
 return null;
 }
 
-// Computes both the "pay over time" (list) total and the "pay in full"
-// (discounted) total for the currently selected device + bundle.
 function computeTotals() {
 if (!selectedListing) return { listTotal: 0, fullTotal: 0 };
 const { price: bundlePrice } = getBundleSelection();
@@ -612,6 +596,8 @@ const fullTotal = round2(deviceAndBundleFullTotal + (warrantyPrice || 0));
 return { listTotal, fullTotal };
 }
 
+let currentPayMode = "full";
+
 function currentTotal() {
 const { listTotal, fullTotal } = computeTotals();
 return currentPayMode === "financing" ? listTotal : fullTotal;
@@ -623,83 +609,178 @@ const fullEl = document.getElementById("payModeFullAmount");
 const financingEl = document.getElementById("payModeFinancingAmount");
 if (fullEl) fullEl.textContent = money(fullTotal);
 if (financingEl) financingEl.textContent = money(listTotal);
+updatePayLaterMessage();
 }
 
-// --- Stripe Payment Element: card, Klarna, Afterpay, Cash App Pay, Affirm ---
-let stripeElements = null;
-let currentClientSecret = null;
-let currentPayMode = "full";
+// --- PayPal checkout ---
+// The SDK is loaded dynamically with the client id served by
+// /api/paypal-config, so no keys live in this file.
+let paypalReady = false;
+let paypalConfigured = null; // null = unknown yet
 
-const PAYMENT_METHODS_BY_MODE = {
-full: ["card", "cashapp"],
-financing: ["klarna", "afterpay_clearpay", "affirm"],
-};
+function setPaymentMessage(text) {
+const el = document.getElementById("paymentMessage");
+if (el) el.textContent = text || "";
+}
 
-async function refreshStripeElement(mode) {
-if (mode) currentPayMode = mode;
-updatePayModeUI();
+async function initPayPal() {
+try {
+const resp = await fetch("/api/paypal-config");
+const cfg = await resp.json();
+if (!cfg.configured) {
+paypalConfigured = false;
+return;
+}
+paypalConfigured = true;
+await new Promise((resolve, reject) => {
+const s = document.createElement("script");
+s.src =
+"https://www.paypal.com/sdk/js?client-id=" +
+encodeURIComponent(cfg.clientId) +
+"&currency=USD&intent=capture&components=buttons,messages&enable-funding=venmo,paylater";
+s.onload = resolve;
+s.onerror = () => reject(new Error("PayPal SDK failed to load"));
+document.head.appendChild(s);
+});
+paypalReady = true;
+} catch (err) {
+console.error("PayPal init failed", err);
+paypalConfigured = false;
+}
+}
+const paypalInitPromise = initPayPal();
 
-const paymentMessage = document.getElementById("paymentMessage");
-const payBtn = document.getElementById("stripePayBtn");
-if (paymentMessage) paymentMessage.textContent = "";
-if (!stripe || !selectedListing) return;
+function updatePayLaterMessage() {
+const container = document.getElementById("paylater-message");
+if (!container || !window.paypal || !window.paypal.Messages || !selectedListing) return;
+const { listTotal } = computeTotals();
+container.innerHTML = "";
+try {
+window.paypal
+.Messages({ amount: listTotal, placement: "payment", style: { layout: "text", logo: { type: "inline" } } })
+.render("#paylater-message");
+} catch (e) {
+/* messaging is a nice-to-have - never block checkout on it */
+}
+}
 
-const amount = currentTotal();
+function buildOrderMeta(fundingSource) {
+const contact = getContactFields();
 const bundle = getBundleSelection();
 const warranty = getWarrantySelection();
-const contact = getContactFields();
-const methods = PAYMENT_METHODS_BY_MODE[currentPayMode] || PAYMENT_METHODS_BY_MODE.full;
+return {
+listing_id: selectedListing ? selectedListing.listing_id : "",
+device_catalog_id: selectedListing ? selectedListing.device_catalog_id : "",
+product_name: selectedListing ? selectedListing.product_name : "",
+color: selectedListing ? selectedListing.color : "",
+storage: selectedListing ? selectedListing.storage : "",
+condition_grade: selectedListing ? selectedListing.condition_grade : "",
+customer_name: contact.fullName,
+customer_phone: contact.phone,
+customer_email: contact.email,
+message: contact.message,
+shipping_address1: contact.address1,
+shipping_address2: contact.address2,
+shipping_city: contact.city,
+shipping_state: contact.state,
+shipping_zip: contact.zip,
+accessory_bundle: bundle.label,
+accessory_bundle_price: bundle.price,
+warranty_label: warranty.label,
+pay_mode: currentPayMode,
+funding_source: fundingSource || "",
+};
+}
 
-try {
-const resp = await fetch("/api/create-payment-intent", {
+function showSuccess() {
+document.getElementById("modalForm").style.display = "none";
+document.getElementById("modalSuccess").style.display = "block";
+}
+
+async function renderPayPalButtons() {
+await paypalInitPromise;
+const container = document.getElementById("paypal-buttons");
+if (!container) return;
+container.innerHTML = "";
+
+if (paypalConfigured === false || !window.paypal) {
+setPaymentMessage("Online payment is temporarily unavailable - please call or visit a store to complete your purchase.");
+return;
+}
+setPaymentMessage("");
+
+const FUNDING_BY_MODE = {
+full: [window.paypal.FUNDING.PAYPAL, window.paypal.FUNDING.VENMO, window.paypal.FUNDING.CARD],
+financing: [window.paypal.FUNDING.PAYLATER],
+};
+const sources = FUNDING_BY_MODE[currentPayMode] || FUNDING_BY_MODE.full;
+
+let renderedAny = false;
+sources.forEach((fundingSource) => {
+const buttons = window.paypal.Buttons({
+fundingSource,
+style: { layout: "vertical", label: "pay" },
+createOrder: async () => {
+const validationError = validateContactFields();
+if (validationError) {
+setPaymentMessage(validationError);
+throw new Error(validationError);
+}
+setPaymentMessage("");
+const resp = await fetch("/api/paypal-create-order", {
 method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
-amount,
-paymentMode: currentPayMode,
-listingId: selectedListing.listing_id,
-deviceCatalogId: selectedListing.device_catalog_id,
-productName: selectedListing.product_name,
-color: selectedListing.color,
-storage: selectedListing.storage,
-conditionGrade: selectedListing.condition_grade,
-customerName: contact.fullName,
-customerPhone: contact.phone,
-customerEmail: contact.email,
-message: contact.message,
-shippingAddress1: contact.address1,
-shippingAddress2: contact.address2,
-shippingCity: contact.city,
-shippingState: contact.state,
-shippingZip: contact.zip,
-accessoryBundle: bundle.label,
-accessoryBundlePrice: bundle.price,
-warrantyLabel: warranty.label,
-warrantyPrice: warranty.price,
+amount: currentTotal(),
+productName: selectedListing ? selectedListing.product_name : "",
+listingId: selectedListing ? selectedListing.listing_id : "",
 }),
 });
 const data = await resp.json();
-if (!resp.ok || !data.clientSecret) {
-console.error("create-payment-intent failed", data);
-if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable - you can still reserve below.";
-if (payBtn) payBtn.disabled = true;
+if (!resp.ok || !data.id) {
+console.error("paypal-create-order failed", data);
+const msg = (data && data.error) || "Could not start payment.";
+setPaymentMessage(msg);
+throw new Error(msg);
+}
+return data.id;
+},
+onApprove: async (data) => {
+setPaymentMessage("Finishing your payment...");
+const resp = await fetch("/api/paypal-capture-order", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({ orderID: data.orderID, meta: buildOrderMeta(fundingSource) }),
+});
+const result = await resp.json();
+if (!resp.ok || !result.ok) {
+console.error("paypal-capture-order failed", result);
+setPaymentMessage((result && result.error) || "Payment couldn't be completed. You have not been charged.");
 return;
 }
-
-currentClientSecret = data.clientSecret;
-stripeElements = stripe.elements({
-clientSecret: currentClientSecret,
-paymentMethodOrder: methods,
+setPaymentMessage("");
+showSuccess();
+},
+onCancel: () => {
+setPaymentMessage("Payment canceled - no charge was made.");
+},
+onError: (err) => {
+console.error("PayPal button error", err);
+setPaymentMessage("Something went wrong with the payment. Please try again.");
+},
 });
-const paymentElementContainer = document.getElementById("payment-element");
-paymentElementContainer.innerHTML = "";
-const paymentElement = stripeElements.create("payment");
-paymentElement.mount("#payment-element");
-if (payBtn) payBtn.disabled = false;
-} catch (err) {
-console.error("Stripe element init failed", err);
-if (paymentMessage) paymentMessage.textContent = "Online payment is temporarily unavailable - you can still reserve below.";
-if (payBtn) payBtn.disabled = true;
+if (buttons.isEligible()) {
+buttons.render("#paypal-buttons");
+renderedAny = true;
+}
+});
+
+if (!renderedAny) {
+setPaymentMessage(
+currentPayMode === "financing"
+? "Pay Later isn't available on this device/browser - switch to Pay in full, or try in another browser."
+: "No payment methods available in this browser - please try another device.",
+);
 }
 }
 
@@ -707,54 +788,11 @@ document.querySelectorAll(".pay-mode-btn").forEach((btn) => {
 btn.addEventListener("click", () => {
 document.querySelectorAll(".pay-mode-btn").forEach((b) => b.classList.remove("active"));
 btn.classList.add("active");
-refreshStripeElement(btn.dataset.mode);
+currentPayMode = btn.dataset.mode;
+updatePayModeUI();
+renderPayPalButtons();
 });
 });
-
-document.getElementById("stripePayBtn").addEventListener("click", async () => {
-if (!stripe || !stripeElements || !currentClientSecret) return;
-const payBtn = document.getElementById("stripePayBtn");
-const paymentMessage = document.getElementById("paymentMessage");
-
-const validationError = validateContactFields();
-if (validationError) {
-if (paymentMessage) paymentMessage.textContent = validationError;
-return;
-}
-
-payBtn.disabled = true;
-payBtn.textContent = "Processing...";
-
-const { error } = await stripe.confirmPayment({
-elements: stripeElements,
-confirmParams: { return_url: window.location.href },
-});
-
-// Klarna/Afterpay/Affirm/Cash App Pay redirect the browser away to
-// authorize - if we're still here, either it's a method that doesn't
-// redirect and failed, or something went wrong before the redirect.
-if (error) {
-console.error("Stripe confirmPayment error", error);
-if (paymentMessage) paymentMessage.textContent = error.message || "Payment couldn't be completed.";
-payBtn.disabled = false;
-payBtn.textContent = "Pay";
-}
-});
-
-// Completed orders are logged server-side via the Stripe webhook (the
-// source of truth for async methods like Klarna/Afterpay/Affirm). This
-// just gives the customer a friendly message when they land back here.
-(function handleStripeRedirectReturn() {
-const params = new URLSearchParams(window.location.search);
-const redirectStatus = params.get("redirect_status");
-if (!redirectStatus) return;
-if (redirectStatus === "succeeded" || redirectStatus === "processing") {
-alert("Thanks! Your payment is being processed - you'll get confirmation shortly.");
-} else if (redirectStatus === "failed") {
-alert("That payment didn't go through. Please try again or contact us for help.");
-}
-window.history.replaceState({}, document.title, window.location.pathname);
-})();
 
 function openModal(listingId) {
 selectedListing = allListings.find((l) => l.listing_id === listingId);
@@ -774,6 +812,7 @@ document.getElementById("modalSpecs").innerHTML = specChips;
 document.getElementById("modalDescription").textContent = descriptionForGrade(selectedListing.condition_grade);
 
 document.getElementById("modalForm").style.display = "block";
+document.getElementById("modalSuccess").style.display = "none";
 document.getElementById("fFirstName").value = "";
 document.getElementById("fLastName").value = "";
 document.getElementById("fPhone").value = "";
@@ -784,8 +823,7 @@ document.getElementById("fCity").value = "";
 document.getElementById("fState").value = "";
 document.getElementById("fZip").value = "";
 document.getElementById("fMessage").value = "";
-const paymentMessage = document.getElementById("paymentMessage");
-if (paymentMessage) paymentMessage.textContent = "";
+setPaymentMessage("");
 
 const defaultBundle = document.querySelector('input[name="bundle"][value="case_screen_charger"]');
 if (defaultBundle) defaultBundle.checked = true;
@@ -800,29 +838,24 @@ document.querySelectorAll(".pay-mode-btn").forEach((b) => {
 b.classList.toggle("active", b.dataset.mode === "full");
 });
 document.getElementById("modalOverlay").classList.add("open");
-refreshStripeElement("full");
+updatePayModeUI();
+renderPayPalButtons();
 }
 
+// Bundle / warranty changes only affect the totals - the amount is read live
+// in createOrder, so no button re-render is needed, just the price labels.
 document.querySelectorAll('input[name="bundle"]').forEach((el) => {
-el.addEventListener("change", () => refreshStripeElement());
+el.addEventListener("change", updatePayModeUI);
 });
-
 const warrantyCheckboxEl = document.getElementById("warrantyOptIn");
-if (warrantyCheckboxEl) warrantyCheckboxEl.addEventListener("change", () => refreshStripeElement());
-
-// Contact/shipping fields feed the PaymentIntent's metadata and shipping
-// details - refresh (before the customer reaches the card fields) so the
-// order record reflects what they typed.
-["fFirstName", "fLastName", "fPhone", "fEmail", "fAddress1", "fAddress2", "fCity", "fState", "fZip", "fMessage"].forEach((id) => {
-const el = document.getElementById(id);
-if (el) el.addEventListener("change", () => refreshStripeElement());
-});
+if (warrantyCheckboxEl) warrantyCheckboxEl.addEventListener("change", updatePayModeUI);
 
 function closeModal() {
 document.getElementById("modalOverlay").classList.remove("open");
 }
 
 document.getElementById("cancelBtn").addEventListener("click", closeModal);
+document.getElementById("closeSuccessBtn").addEventListener("click", closeModal);
 document.getElementById("modalOverlay").addEventListener("click", (e) => {
 if (e.target.id === "modalOverlay") closeModal();
 });
