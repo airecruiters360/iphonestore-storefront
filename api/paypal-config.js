@@ -1,21 +1,22 @@
 // Vercel serverless function: /api/paypal-config
 //
-// Returns the PUBLIC PayPal client id so the storefront can load the
-// PayPal JS SDK without hardcoding the id into the HTML. The client id
-// is public by design (it ships to every browser); the secret never
-// leaves the server.
+// Returns the PUBLIC keys the storefront needs to render checkout: the
+// PayPal client id and (if configured) the Affirm public key. Both are
+// public by design - they ship to every browser. Secrets never leave the
+// server-side /api/*-capture endpoints.
 //
-// Required environment variables (Vercel Project Settings):
-//   PAYPAL_CLIENT_ID     - from developer.paypal.com -> Apps & Credentials (Live)
-//   PAYPAL_CLIENT_SECRET - same page (used by the other /api/paypal-* functions)
-// Optional:
-//   PAYPAL_ENV           - "sandbox" for test mode; defaults to live.
+// Environment variables (Vercel Project Settings):
+//   PAYPAL_CLIENT_ID / PAYPAL_CLIENT_SECRET  - PayPal (required for checkout)
+//   AFFIRM_PUBLIC_KEY / AFFIRM_PRIVATE_KEY   - Affirm financing (optional)
+//   PAYPAL_ENV / AFFIRM_ENV = "sandbox"      - test modes (default live)
 
 module.exports = async function handler(req, res) {
   const clientId = process.env.PAYPAL_CLIENT_ID;
-  if (!clientId) {
-    res.status(200).json({ configured: false });
-    return;
-  }
-  res.status(200).json({ configured: true, clientId, env: process.env.PAYPAL_ENV === "sandbox" ? "sandbox" : "live" });
+  res.status(200).json({
+    configured: !!clientId,
+    clientId: clientId || null,
+    env: process.env.PAYPAL_ENV === "sandbox" ? "sandbox" : "live",
+    affirmPublicKey: process.env.AFFIRM_PUBLIC_KEY || null,
+    affirmEnv: process.env.AFFIRM_ENV === "sandbox" ? "sandbox" : "live",
+  });
 };

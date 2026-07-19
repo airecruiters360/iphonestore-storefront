@@ -1,25 +1,25 @@
 // Vercel serverless function: /api/paypal-capture-order
 //
-// Captures an approved PayPal Order server-side and, on success, writes the
-// completed order into Supabase (storefront_inquiries) - the same record the
-// old Stripe webhook used to write. Capture is synchronous, so unlike the
-// Stripe flow no webhook is needed: if this returns COMPLETED, the money is
-// captured and the order is logged in one round trip.
+// Captures an approved PayPal Order server-side, then hands the completed
+// order to the shared fulfillment module (api/_fulfill.js) which pulls sold
+// devices out of inventory (recording their IMEIs) and logs one order row per
+// item - including PayPal's exact fee and net payout from the capture's
+// seller_receivable_breakdown.
 //
 // Required environment variables (Vercel Project Settings):
 //   PAYPAL_CLIENT_ID
 //   PAYPAL_CLIENT_SECRET
+//   SUPABASE_SERVICE_ROLE_KEY  (for inventory auto-adjustment; orders still
+//                               complete + log without it)
 // Optional:
 //   PAYPAL_ENV = "sandbox" for test mode (defaults to live)
+
+const { fulfillAndLogOrder } = require("./_fulfill");
 
 const PAYPAL_BASE =
   process.env.PAYPAL_ENV === "sandbox"
     ? "https://api-m.sandbox.paypal.com"
     : "https://api-m.paypal.com";
-
-const SUPABASE_URL = "https://xggkxvecfrdtiakkwdgp.supabase.co";
-const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnZ2t4dmVjZnJkdGlha2t3ZGdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwOTMxMjAsImV4cCI6MjA5ODY2OTEyMH0.s9ERsiEJJTTeXUJHQ6CL9hHSbtJ5FpqgXLu_Hjku-_g";
 
 async function paypalAccessToken() {
   const id = process.env.PAYPAL_CLIENT_ID;
@@ -80,61 +80,22 @@ module.exports = async function handler(req, res) {
       return;
     }
 
-    const amountCharged = Number(capture.amount && capture.amount.value) || null;
+    // PayPal's own numbers - the same gross/fee/net the dashboard shows.
+    const brk = capture.seller_receivable_breakdown || {};
+    const gross = Number((brk.gross_amount && brk.gross_amount.value) || (capture.amount && capture.amount.value) || 0);
+    const fee = brk.paypal_fee && brk.paypal_fee.value != null ? Number(brk.paypal_fee.value) : null;
+    const net = brk.net_amount && brk.net_amount.value != null ? Number(brk.net_amount.value) : null;
 
-    // Same folding trick the Stripe webhook used: shipping + warranty ride in
-    // the free-text message field so no database schema change is needed.
-    const shippingLine = [m.shipping_address1, m.shipping_address2, m.shipping_city, m.shipping_state, m.shipping_zip]
-      .filter(Boolean)
-      .join(", ");
-    const extraNotes = [
-      shippingLine ? `Ship to: ${shippingLine}` : null,
-      m.warranty_label ? `Warranty: ${m.warranty_label}` : null,
-      m.pay_mode ? `Pay mode: ${m.pay_mode}` : null,
-    ]
-      .filter(Boolean)
-      .join(" | ");
-    const combinedMessage = [m.message, extraNotes].filter(Boolean).join(" || ") || null;
-
-    try {
-      const insertResp = await fetch(`${SUPABASE_URL}/rest/v1/storefront_inquiries`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          apikey: SUPABASE_ANON_KEY,
-          Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-          Prefer: "return=minimal",
-        },
-        body: JSON.stringify({
-          listing_id: m.listing_id || null,
-          device_catalog_id: m.device_catalog_id || null,
-          product_name: m.product_name || null,
-          color: m.color || null,
-          storage: m.storage || null,
-          condition_grade: m.condition_grade || null,
-          retail_price: amountCharged,
-          customer_name: m.customer_name || "PayPal checkout",
-          customer_phone: m.customer_phone || null,
-          customer_email: m.customer_email || null,
-          message: combinedMessage,
-          accessory_bundle: m.accessory_bundle || null,
-          accessory_bundle_price: m.accessory_bundle_price != null && m.accessory_bundle_price !== ""
-            ? Number(m.accessory_bundle_price)
-            : null,
-          payment_method: m.funding_source ? `paypal_${m.funding_source}` : "paypal",
-          payment_status: "succeeded",
-          amount_charged: amountCharged,
-          // Existing column reused so no schema change is needed - prefixed so
-          // PayPal capture ids are never mistaken for Stripe intent ids.
-          stripe_payment_intent_id: `paypal_${capture.id}`,
-        }),
-      });
-      if (!insertResp.ok) {
-        console.error("Supabase insert failed", await insertResp.text());
-      }
-    } catch (err) {
-      console.error("Supabase insert error", err);
-    }
+    await fulfillAndLogOrder(
+      {
+        id: `paypal_${capture.id}`,
+        method: m.funding_source ? `paypal_${m.funding_source}` : "paypal",
+        gross,
+        fee,
+        net,
+      },
+      m,
+    );
 
     res.status(200).json({ ok: true, captureId: capture.id, status: capture.status });
   } catch (err) {
