@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Help & Contact - iPhoneStore.io</title>
+<meta name="description" content="Contact iPhoneStore.io - store phone, address, and customer service email." />
+<style>
+:root {
+--ink: #0f172a;
+--ink-soft: #475569;
+--line: #e2e8f0;
+--bg: #f8fafc;
+--card: #ffffff;
+--accent: #0f172a;
+}
+* { box-sizing: border-box; }
+body {
+margin: 0;
+font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+background: var(--bg);
+color: var(--ink);
+}
+header { background: var(--card); border-bottom: 1px solid var(--line); }
+.header-inner {
+max-width: 1120px;
+margin: 0 auto;
+padding: 14px 20px;
+display: flex;
+align-items: center;
+justify-content: space-between;
+}
+.logo-img { height: 26px; width: auto; display: block; }
+.back-link { font-size: 13px; font-weight: 600; color: var(--ink-soft); text-decoration: none; }
+main { max-width: 640px; margin: 0 auto; padding: 40px 20px 80px; }
+h1 { font-size: 28px; margin: 0 0 6px; letter-spacing: -0.02em; }
+.sub { color: var(--ink-soft); margin: 0 0 28px; font-size: 15px; }
+.card {
+background: var(--card);
+border: 1px solid var(--line);
+border-radius: 14px;
+padding: 20px;
+margin-bottom: 14px;
+}
+.card h2 { margin: 0 0 6px; font-size: 15px; }
+.card p { margin: 0; font-size: 15px; color: var(--ink-soft); line-height: 1.6; }
+.card a { color: var(--ink); font-weight: 700; text-decoration: none; }
+footer { text-align: center; padding: 30px 20px; color: var(--ink-soft); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<header>
+<div class="header-inner">
+<a href="/"><img src="/logo.svg" alt="iPhoneStore.io" class="logo-img" /></a>
+<a class="back-link" href="/">&larr; Back to shop</a>
+</div>
+</header>
+
+<main>
+<h1>Help & Contact</h1>
+<p class="sub">Questions about an order, a device, or a payment? Reach us any of these ways.</p>
+
+<div class="card">
+<h2>Call or text the store</h2>
+<p><a href="tel:+19289236882">(928) 923-6882</a></p>
+</div>
+
+<div class="card">
+<h2>Email customer service</h2>
+<p><a href="mailto:admin@dmwirelessaz.com">admin@dmwirelessaz.com</a></p>
+</div>
+
+<div class="card">
+<h2>Visit us</h2>
+<p>588 N Main Street, Suite B<br />San Luis, AZ 85349</p>
+</div>
+
+<div class="card">
+<h2>Returns & warranty</h2>
+<p>Every device includes a 90-day warranty. A-grade devices come with a 30-day exchange guarantee - exchange for the same model or receive store credit toward another device (you pay return shipping).</p>
+</div>
+</main>
+
+<footer>&copy; <span id="year"></span> iPhoneStore.io</footer>
+<script>document.getElementById("year").textContent = new Date().getFullYear();</script>
+
+</body>
+</html>

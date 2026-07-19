@@ -33,25 +33,47 @@ z-index: 10;
 .header-inner {
 max-width: 1120px;
 margin: 0 auto;
-padding: 18px 20px;
+padding: 14px 20px;
 display: flex;
 align-items: center;
 justify-content: space-between;
 gap: 16px;
 }
-.logo { font-weight: 800; font-size: 20px; letter-spacing: -0.02em; }
-.logo span { color: var(--ink-soft); font-weight: 500; }
 .logo-img { height: 26px; width: auto; display: block; }
+.header-links { display: flex; align-items: center; gap: 10px; }
+.help-link { font-size: 13px; font-weight: 600; color: var(--ink-soft); text-decoration: none; padding: 8px 10px; }
+.cart-btn {
+position: relative;
+padding: 9px 16px;
+background: var(--accent);
+color: #fff;
+border: none;
+border-radius: 10px;
+font-weight: 700;
+font-size: 13px;
+cursor: pointer;
+}
+.cart-count {
+display: inline-block;
+min-width: 18px;
+padding: 1px 5px;
+margin-left: 7px;
+background: #fff;
+color: var(--ink);
+border-radius: 999px;
+font-size: 11px;
+font-weight: 800;
+}
 .hero {
 max-width: 1120px;
 margin: 0 auto;
-padding: 40px 20px 16px;
+padding: 36px 20px 12px;
 }
 .hero h1 { font-size: 32px; margin: 0 0 8px; letter-spacing: -0.02em; }
 .hero p { color: var(--ink-soft); margin: 0; font-size: 16px; max-width: 620px; }
 .controls {
 max-width: 1120px;
-margin: 24px auto 0;
+margin: 22px auto 0;
 padding: 0 20px;
 display: flex;
 flex-wrap: wrap;
@@ -60,16 +82,33 @@ align-items: center;
 }
 .search {
 flex: 1;
-min-width: 220px;
+min-width: 200px;
 padding: 10px 14px;
 border: 1px solid var(--line);
 border-radius: 10px;
 font-size: 14px;
 background: var(--card);
 }
+.filter-select {
+padding: 10px 12px;
+border: 1px solid var(--line);
+border-radius: 10px;
+font-size: 14px;
+background: var(--card);
+color: var(--ink);
+min-width: 150px;
+}
+.section-title {
+max-width: 1120px;
+margin: 30px auto 0;
+padding: 0 20px;
+font-size: 20px;
+font-weight: 800;
+letter-spacing: -0.01em;
+}
 .grid {
 max-width: 1120px;
-margin: 24px auto 80px;
+margin: 16px auto 30px;
 padding: 0 20px;
 display: grid;
 grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -114,9 +153,10 @@ font-weight: 700;
 font-size: 14px;
 cursor: pointer;
 }
+.cta:disabled { opacity: 0.5; cursor: default; }
 .empty, .loading {
 max-width: 1120px;
-margin: 60px auto;
+margin: 40px auto;
 text-align: center;
 color: var(--ink-soft);
 padding: 0 20px;
@@ -136,7 +176,7 @@ z-index: 100;
 background: #fff;
 border-radius: 16px;
 padding: 28px;
-max-width: 420px;
+max-width: 440px;
 width: 100%;
 max-height: 90vh;
 overflow-y: auto;
@@ -210,11 +250,7 @@ flex: 1;
 height: 1px;
 background: var(--line);
 }
-.pay-mode-toggle {
-display: flex;
-gap: 8px;
-margin-bottom: 14px;
-}
+.pay-mode-toggle { display: flex; gap: 8px; margin-bottom: 14px; }
 .pay-mode-btn {
 flex: 1;
 text-align: left;
@@ -231,7 +267,42 @@ font-family: inherit;
 .pay-mode-sub { font-size: 11px; color: var(--ink-soft); margin-top: 2px; }
 #paypal-buttons { margin-bottom: 6px; min-height: 45px; }
 #paylater-message { margin: 4px 0 8px; }
+.affirm-btn {
+width: 100%;
+padding: 12px;
+border-radius: 10px;
+border: 2px solid #4a4af4;
+background: #fff;
+color: #4a4af4;
+font-weight: 800;
+font-size: 14px;
+cursor: pointer;
+margin: 4px 0 6px;
+}
+.affirm-btn:disabled { opacity: 0.6; cursor: default; }
 .payment-message { font-size: 12px; color: #b45309; margin: 6px 0 0; min-height: 16px; }
+.cart-items { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
+.cart-item {
+display: flex;
+align-items: flex-start;
+justify-content: space-between;
+gap: 10px;
+padding: 10px 12px;
+border: 1px solid var(--line);
+border-radius: 10px;
+}
+.cart-item .ci-name { font-size: 13px; font-weight: 700; }
+.cart-item .ci-detail { font-size: 12px; color: var(--ink-soft); margin-top: 2px; line-height: 1.4; }
+.cart-item .ci-price { font-size: 13px; font-weight: 700; white-space: nowrap; }
+.ci-remove {
+border: none;
+background: none;
+color: #b91c1c;
+font-size: 12px;
+font-weight: 700;
+cursor: pointer;
+padding: 2px 4px;
+}
 .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
 .btn-secondary {
 flex: 1;
@@ -259,6 +330,7 @@ padding: 30px 20px;
 color: var(--ink-soft);
 font-size: 13px;
 }
+footer a { color: var(--ink-soft); }
 </style>
 </head>
 <body>
@@ -266,33 +338,45 @@ font-size: 13px;
 <header>
 <div class="header-inner">
 <img src="/logo.svg" alt="iPhoneStore.io" class="logo-img" />
+<div class="header-links">
+<a class="help-link" href="/help.html">Help</a>
+<button class="cart-btn" id="cartBtn" type="button">Cart<span class="cart-count" id="cartCount">0</span></button>
+</div>
 </div>
 </header>
 
 <div class="hero">
 <h1>Unlocked & certified devices, ready to ship.</h1>
-<p>Live inventory, updated in real time. Pay in full and save 7% - or split it into payments with PayPal Pay Later.</p>
+<p>Live inventory, updated in real time. Pay in full and save 7% - or split it into payments with PayPal Pay Later or Affirm.</p>
 </div>
 
 <div class="controls">
 <input class="search" id="search" type="text" placeholder="Search by model, e.g. iPhone 13, Galaxy S24..." />
+<select class="filter-select" id="carrierFilter">
+<option value="all">All carriers</option>
+</select>
 </div>
 
 <div id="content">
 <div class="loading">Loading current inventory...</div>
 </div>
 
-<footer>&copy; <span id="year"></span> iPhoneStore.io. Prices and availability subject to change.</footer>
+<div class="section-title" id="accessoriesTitle" style="display:none;">Accessories & Services</div>
+<div class="grid" id="accessoriesGrid" style="display:none;"></div>
 
-<div class="modal-overlay" id="modalOverlay">
+<footer>
+&copy; <span id="year"></span> iPhoneStore.io. Prices and availability subject to change. · <a href="/help.html">Help & Contact</a>
+</footer>
+
+<!-- Device options modal: pick bundle/warranty, then add to cart -->
+<div class="modal-overlay" id="optionsOverlay">
 <div class="modal">
-<div id="modalForm">
-<h2 id="modalTitle">Buy this device</h2>
-<p class="sub" id="modalSub"></p>
-<div class="modal-specs" id="modalSpecs"></div>
-<p class="modal-desc" id="modalDescription"></p>
+<h2>Add to cart</h2>
+<p class="sub" id="optSub"></p>
+<div class="modal-specs" id="optSpecs"></div>
+<p class="modal-desc" id="optDescription"></p>
 
-<div class="bundles" id="bundleOptions">
+<div class="bundles">
 <label class="bundle-option">
 <input type="radio" name="bundle" value="case_screen_charger" data-price="39.99" checked />
 <div class="bundle-text">
@@ -317,7 +401,7 @@ font-size: 13px;
 </label>
 </div>
 
-<label class="bundle-option" id="warrantyOption">
+<label class="bundle-option">
 <input type="checkbox" id="warrantyOptIn" />
 <div class="bundle-text">
 <div class="bundle-name">12-Month Extended Warranty</div>
@@ -326,6 +410,22 @@ font-size: 13px;
 <div class="bundle-price" id="warrantyPriceLabel">$0.00</div>
 </label>
 
+<div class="modal-actions">
+<button class="btn-secondary" id="optCancelBtn">Cancel</button>
+<button class="btn-primary" id="optAddBtn">Add to Cart</button>
+</div>
+</div>
+</div>
+
+<!-- Cart + checkout modal -->
+<div class="modal-overlay" id="cartOverlay">
+<div class="modal">
+<div id="cartForm">
+<h2>Your cart</h2>
+<p class="sub" id="cartEmptyNote" style="display:none;">Your cart is empty - add a device or accessory to get started.</p>
+<div class="cart-items" id="cartItems"></div>
+
+<div id="checkoutSection">
 <div class="pay-divider">Your info & shipping</div>
 
 <div class="field-row">
@@ -373,7 +473,7 @@ font-size: 13px;
 </div>
 
 <div class="pay-divider">Choose how to pay</div>
-<div class="pay-mode-toggle" id="payModeToggle">
+<div class="pay-mode-toggle">
 <button type="button" class="pay-mode-btn active" data-mode="full">
 <div class="pay-mode-name">Pay in full - save 7%</div>
 <div class="pay-mode-amount" id="payModeFullAmount">$0.00</div>
@@ -382,21 +482,23 @@ font-size: 13px;
 <button type="button" class="pay-mode-btn" data-mode="financing">
 <div class="pay-mode-name">Pay over time</div>
 <div class="pay-mode-amount" id="payModeFinancingAmount">$0.00</div>
-<div class="pay-mode-sub">PayPal Pay Later - 4 payments or monthly</div>
+<div class="pay-mode-sub">PayPal Pay Later or Affirm</div>
 </button>
 </div>
 <div id="paylater-message"></div>
 <div id="paypal-buttons"></div>
+<button class="affirm-btn" id="affirmBtn" type="button" style="display:none;">Pay over time with Affirm</button>
 <p class="payment-message" id="paymentMessage"></p>
+</div>
 
 <div class="modal-actions">
-<button class="btn-secondary" id="cancelBtn">Cancel</button>
+<button class="btn-secondary" id="cartCloseBtn">Keep shopping</button>
 </div>
 </div>
-<div id="modalSuccess" style="display:none;">
+<div id="cartSuccess" style="display:none;">
 <div class="success-msg">
 <h2>Payment complete!</h2>
-<p class="sub" id="successDetail">Thanks for your order - you'll get a confirmation email shortly, and we'll follow up with shipping details.</p>
+<p class="sub">Thanks for your order - you'll get a confirmation email shortly, and we'll follow up with shipping details.</p>
 <button class="btn-primary" id="closeSuccessBtn" style="width:100%;">Close</button>
 </div>
 </div>
@@ -404,24 +506,21 @@ font-size: 13px;
 </div>
 
 <!--
-Checkout runs on PayPal (Orders v2). The old Stripe integration was removed
-2026-07-18 after Stripe deactivated the account.
+Checkout runs on PayPal (Orders v2) + direct Affirm. Stripe was removed
+2026-07-18 after the account was deactivated.
 
-- PayPal Buttons render for: PayPal, Venmo, Debit/Credit card (guest
-  checkout), and - in "Pay over time" mode - PayPal Pay Later (Pay in 4 /
-  Pay Monthly). The merchant is paid in full up front on Pay Later.
-- The PUBLIC client id comes from /api/paypal-config (reads the
-  PAYPAL_CLIENT_ID env var in Vercel), so nothing is hardcoded here.
-- Orders are created and captured server-side (/api/paypal-create-order,
-  /api/paypal-capture-order); the capture endpoint logs the completed order
-  to Supabase, replacing the old Stripe webhook.
+- Cart supports multiple devices + accessories in one payment.
+- "Pay in full" = 7% off list (card / PayPal / Venmo).
+- "Pay over time" = list price via PayPal Pay Later or Affirm.
+- Public keys come from /api/paypal-config (env vars in Vercel).
+- Capture endpoints (/api/paypal-capture-order, /api/affirm-capture) pull the
+  sold devices out of inventory (recording IMEIs) and log each order with the
+  processor fee + net payout. Requires SUPABASE_SERVICE_ROLE_KEY for the
+  inventory part.
 
-Pricing model (unchanged): the "list" price shown already includes a 10%
-markup over the underlying catalog retail_price. Customers who pay in full
-get a 7% discount off list (netting roughly back to retail). Customers who
-use Pay Later pay list price - Pay Later's merchant fee (4.99% + $0.49) runs
-above standard card rates, and PayPal's terms prohibit surcharging Pay Later
-specifically, so it's implemented as a pay-in-full discount instead.
+Pricing model: list price = catalog retail_price x 1.10; pay-in-full = list
+x 0.93. BNPL providers prohibit surcharging their service specifically, so
+this is a pay-in-full DISCOUNT, not a financing surcharge.
 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
@@ -431,24 +530,24 @@ const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
-let allListings = [];
-let selectedListing = null;
-
 const money = (n) => Number(n).toLocaleString("en-US", { style: "currency", currency: "USD" });
+function round2(n) { return Math.round(n * 100) / 100; }
 
-// --- Pricing: 10% list-price markup, 7% pay-in-full discount ---
+// --- Pricing: 10% list-price markup on devices, 7% pay-in-full discount ---
 const FINANCING_MARKUP = 1.10;
 const PAY_IN_FULL_DISCOUNT = 0.93;
+function deviceListPrice(l) { return round2(Number(l.retail_price) * FINANCING_MARKUP); }
 
-function round2(n) {
-return Math.round(n * 100) / 100;
-}
+// --- Accessories & services sold on the site (UPCs match the store system) ---
+const ACCESSORY_PRODUCTS = [
+{ upc: "devsetup", name: "Device Setup", price: 49.99, desc: "We set up your new device - data transfer, accounts, and updates handled for you." },
+{ upc: "ADVdevsetup", name: "Advanced Device Setup", price: 99.99, desc: "Complete setup plus email, apps, security, and personalization - ready to use out of the box." },
+{ upc: "WEARABLES AUDIO", name: "Wearables Audio", price: 49.99, desc: "Wireless audio wearable - certified and ready to pair." },
+{ upc: "AUDIO SPEAKER", name: "Audio Speaker", price: 49.99, desc: "Portable audio speaker with room-filling sound." },
+{ upc: "audio speaker elite", name: "Audio Speaker Elite", price: 199.99, desc: "Premium high-output speaker for serious sound." },
+];
 
-function deviceListPrice(l) {
-return round2(Number(l.retail_price) * FINANCING_MARKUP);
-}
-
-// --- Grade / condition descriptions shown in the checkout modal ---
+// --- Grade / condition descriptions ---
 const GRADE_DESCRIPTIONS = {
 new: "New device in original box. Device may be open box.",
 a: "Devices are fully inspected and certified for functionality. A grade is the best condition with few blemishes and will show minor use. Comes with a 30-day exchange guarantee - exchange for the same model or receive store credit toward another device (you pay return shipping). All devices include a 90-day warranty.",
@@ -459,20 +558,19 @@ if (GRADE_DESCRIPTIONS[key]) return GRADE_DESCRIPTIONS[key];
 return "Devices are fully inspected and tested for functionality prior to shipping. All devices include a 90-day warranty.";
 }
 
-// --- Extended warranty add-on: face-value only, no markup/discount, tier
-// depends on the device's list price. ---
+// --- Extended warranty tiers (face value, keyed off device list price) ---
 function warrantyPriceForDevice(l) {
-if (!l) return 0;
 const price = deviceListPrice(l);
 if (price < 400) return 40;
 if (price < 600) return 50;
 return 80;
 }
-function getWarrantySelection() {
-const checkbox = document.getElementById("warrantyOptIn");
-if (!checkbox || !checkbox.checked || !selectedListing) return { price: 0, label: null };
-const price = warrantyPriceForDevice(selectedListing);
-return { price, label: `12-Month Extended Warranty ($${price})` };
+
+// ============================== Catalog ==============================
+let allListings = [];
+
+function carrierLabel(l) {
+return !l.carrier_lock || String(l.carrier_lock).toLowerCase() === "unlocked" ? "Unlocked" : l.carrier_lock;
 }
 
 async function loadListings() {
@@ -483,36 +581,46 @@ console.error(error);
 return;
 }
 allListings = data || [];
+buildCarrierFilter();
 render();
+renderAccessories();
+}
+
+function buildCarrierFilter() {
+const carriers = Array.from(new Set(allListings.map(carrierLabel))).sort();
+const sel = document.getElementById("carrierFilter");
+sel.innerHTML = `<option value="all">All carriers</option>` +
+carriers.map((c) => `<option value="${c}">${c}</option>`).join("");
 }
 
 function render() {
 const term = document.getElementById("search").value.trim().toLowerCase();
+const carrier = document.getElementById("carrierFilter").value;
 const filtered = allListings.filter((l) => {
 const matchesTerm = !term || l.product_name.toLowerCase().includes(term);
-return matchesTerm;
+const matchesCarrier = carrier === "all" || carrierLabel(l) === carrier;
+return matchesTerm && matchesCarrier;
 });
 
 const content = document.getElementById("content");
 if (filtered.length === 0) {
-content.innerHTML = `<div class="empty">No devices match right now - try a different search or check back soon.</div>`;
+content.innerHTML = `<div class="empty">No devices match right now - try a different search or carrier.</div>`;
 return;
 }
 
 content.innerHTML = `<div class="grid">${filtered.map(cardHtml).join("")}</div>`;
-
 content.querySelectorAll(".cta").forEach((btn) => {
-btn.addEventListener("click", () => openModal(btn.dataset.listingId));
+btn.addEventListener("click", () => openOptions(btn.dataset.listingId));
 });
 }
 
 function cardHtml(l) {
 const cleanStorage = l.storage ? String(l.storage).replace(/gb/i, "").trim() : null;
-const carrierText = !l.carrier_lock || l.carrier_lock.toLowerCase() === "unlocked" ? "Unlocked" : `${l.carrier_lock} Locked`;
-const specs = [cleanStorage ? `${cleanStorage}GB` : null, l.color, carrierText]
-.filter(Boolean)
-.join(" - ");
-const lowStock = l.quantity_available <= 2;
+const carrierText = carrierLabel(l) === "Unlocked" ? "Unlocked" : `${carrierLabel(l)} Locked`;
+const specs = [cleanStorage ? `${cleanStorage}GB` : null, l.color, carrierText].filter(Boolean).join(" - ");
+const inCart = cartCountForListing(l.listing_id);
+const remaining = Number(l.quantity_available) - inCart;
+const lowStock = Number(l.quantity_available) <= 2;
 const listPrice = deviceListPrice(l);
 const fullPayPrice = round2(listPrice * PAY_IN_FULL_DISCOUNT);
 return `
@@ -529,49 +637,261 @@ return `
 </div>
 <div class="stock ${lowStock ? "low" : ""}">${lowStock ? `Only ${l.quantity_available} left` : "In stock"}</div>
 </div>
-<button class="cta" data-listing-id="${l.listing_id}">Buy Now</button>
+<button class="cta" data-listing-id="${l.listing_id}" ${remaining <= 0 ? "disabled" : ""}>${remaining <= 0 ? "All in cart" : "Add to Cart"}</button>
 </div>
 `;
 }
 
-// --- Shared bundle-selection helper ---
+function renderAccessories() {
+const grid = document.getElementById("accessoriesGrid");
+const title = document.getElementById("accessoriesTitle");
+grid.style.display = "grid";
+title.style.display = "block";
+grid.innerHTML = ACCESSORY_PRODUCTS.map((a, i) => {
+const fullPay = round2(a.price * PAY_IN_FULL_DISCOUNT);
+return `
+<div class="card">
+<div class="card-top"><span class="badge">Accessory</span></div>
+<h3>${a.name}</h3>
+<div class="meta">${a.desc}</div>
+<div class="price-row">
+<div>
+<div class="price">${money(a.price)}</div>
+<div class="price-note">or ${money(fullPay)} paying in full</div>
+</div>
+</div>
+<button class="cta" data-acc-index="${i}">Add to Cart</button>
+</div>
+`;
+}).join("");
+grid.querySelectorAll(".cta").forEach((btn) => {
+btn.addEventListener("click", () => addAccessoryToCart(Number(btn.dataset.accIndex)));
+});
+}
+
+document.getElementById("search").addEventListener("input", render);
+document.getElementById("carrierFilter").addEventListener("change", render);
+
+// ============================== Cart ==============================
+// entries: {kind:'device', listing, bundle:{label,price}, warranty:{label,price}}
+//          {kind:'accessory', upc, name, price, qty}
+let cart = [];
+
+function cartCountForListing(listingId) {
+return cart.filter((e) => e.kind === "device" && e.listing.listing_id === listingId).length;
+}
+function cartUnitCount() {
+return cart.reduce((s, e) => s + (e.kind === "accessory" ? e.qty : 1), 0);
+}
+function updateCartBadge() {
+document.getElementById("cartCount").textContent = String(cartUnitCount());
+}
+
+// Per-entry totals for each pay mode. The 7% discount applies to devices,
+// bundles, and accessories; the extended warranty is always face value.
+function entryTotals(e) {
+if (e.kind === "device") {
+const base = round2(deviceListPrice(e.listing) + (e.bundle ? e.bundle.price : 0));
+return {
+list: round2(base + (e.warranty ? e.warranty.price : 0)),
+full: round2(round2(base * PAY_IN_FULL_DISCOUNT) + (e.warranty ? e.warranty.price : 0)),
+};
+}
+const list = round2(e.price * e.qty);
+return { list, full: round2(round2(e.price * PAY_IN_FULL_DISCOUNT) * e.qty) };
+}
+function cartTotals() {
+return cart.reduce(
+(acc, e) => {
+const t = entryTotals(e);
+acc.list = round2(acc.list + t.list);
+acc.full = round2(acc.full + t.full);
+return acc;
+},
+{ list: 0, full: 0 },
+);
+}
+
+function addAccessoryToCart(index) {
+const a = ACCESSORY_PRODUCTS[index];
+if (!a) return;
+const existing = cart.find((e) => e.kind === "accessory" && e.upc === a.upc);
+if (existing) existing.qty += 1;
+else cart.push({ kind: "accessory", upc: a.upc, name: a.name, price: a.price, qty: 1 });
+updateCartBadge();
+openCart();
+}
+
+function removeCartEntry(i) {
+cart.splice(i, 1);
+updateCartBadge();
+renderCart();
+render();
+}
+
+// ====================== Device options modal ======================
+let optionsListing = null;
+
+function openOptions(listingId) {
+optionsListing = allListings.find((l) => l.listing_id === listingId);
+if (!optionsListing) return;
+document.getElementById("optSub").textContent = `${optionsListing.product_name} - ${money(deviceListPrice(optionsListing))}`;
+const cleanStorage = optionsListing.storage ? String(optionsListing.storage).replace(/gb/i, "").trim() : null;
+const carrierText = carrierLabel(optionsListing) === "Unlocked" ? "Unlocked" : `${carrierLabel(optionsListing)} Locked`;
+const chips = [optionsListing.condition_grade || "Used", cleanStorage ? `${cleanStorage}GB` : null, optionsListing.color, carrierText]
+.filter(Boolean).map((s) => `<span>${s}</span>`).join("");
+document.getElementById("optSpecs").innerHTML = chips;
+document.getElementById("optDescription").textContent = descriptionForGrade(optionsListing.condition_grade);
+const defaultBundle = document.querySelector('input[name="bundle"][value="case_screen_charger"]');
+if (defaultBundle) defaultBundle.checked = true;
+document.getElementById("warrantyOptIn").checked = false;
+document.getElementById("warrantyPriceLabel").textContent = money(warrantyPriceForDevice(optionsListing));
+document.getElementById("optionsOverlay").classList.add("open");
+}
+
 const BUNDLE_LABELS = {
 none: null,
 case_screen: "Case + screen protector bundle",
 case_screen_charger: "Case + screen + 20W charging block (online exclusive)",
 };
 
-function getBundleSelection() {
+document.getElementById("optAddBtn").addEventListener("click", () => {
+if (!optionsListing) return;
 const bundleInput = document.querySelector('input[name="bundle"]:checked');
 const bundleValue = bundleInput ? bundleInput.value : "none";
-return {
-label: BUNDLE_LABELS[bundleValue] || null,
-price: bundleInput && bundleInput.dataset.price ? Number(bundleInput.dataset.price) : null,
-};
+const bundle = BUNDLE_LABELS[bundleValue]
+? { label: BUNDLE_LABELS[bundleValue], price: Number(bundleInput.dataset.price) }
+: null;
+const warranty = document.getElementById("warrantyOptIn").checked
+? { label: `12-Month Extended Warranty ($${warrantyPriceForDevice(optionsListing)})`, price: warrantyPriceForDevice(optionsListing) }
+: null;
+cart.push({ kind: "device", listing: optionsListing, bundle, warranty });
+document.getElementById("optionsOverlay").classList.remove("open");
+updateCartBadge();
+render();
+openCart();
+});
+document.getElementById("optCancelBtn").addEventListener("click", () => {
+document.getElementById("optionsOverlay").classList.remove("open");
+});
+document.getElementById("optionsOverlay").addEventListener("click", (e) => {
+if (e.target.id === "optionsOverlay") e.target.classList.remove("open");
+});
+
+// ========================= Cart modal =========================
+let currentPayMode = "full";
+
+function openCart() {
+document.getElementById("cartForm").style.display = "block";
+document.getElementById("cartSuccess").style.display = "none";
+document.getElementById("cartOverlay").classList.add("open");
+renderCart();
+}
+function closeCart() {
+document.getElementById("cartOverlay").classList.remove("open");
+}
+document.getElementById("cartBtn").addEventListener("click", openCart);
+document.getElementById("cartCloseBtn").addEventListener("click", closeCart);
+document.getElementById("closeSuccessBtn").addEventListener("click", closeCart);
+document.getElementById("cartOverlay").addEventListener("click", (e) => {
+if (e.target.id === "cartOverlay") closeCart();
+});
+
+function renderCart() {
+const itemsEl = document.getElementById("cartItems");
+const emptyNote = document.getElementById("cartEmptyNote");
+const checkoutSection = document.getElementById("checkoutSection");
+if (cart.length === 0) {
+itemsEl.innerHTML = "";
+emptyNote.style.display = "block";
+checkoutSection.style.display = "none";
+return;
+}
+emptyNote.style.display = "none";
+checkoutSection.style.display = "block";
+
+itemsEl.innerHTML = cart.map((e, i) => {
+const t = entryTotals(e);
+if (e.kind === "device") {
+const l = e.listing;
+const cleanStorage = l.storage ? String(l.storage).replace(/gb/i, "").trim() : null;
+const detail = [
+[cleanStorage ? `${cleanStorage}GB` : null, l.color, carrierLabel(l), l.condition_grade].filter(Boolean).join(" - "),
+e.bundle ? e.bundle.label : null,
+e.warranty ? e.warranty.label : null,
+].filter(Boolean).join("<br>");
+return `
+<div class="cart-item">
+<div style="flex:1;">
+<div class="ci-name">${l.product_name}</div>
+<div class="ci-detail">${detail}</div>
+</div>
+<div style="text-align:right;">
+<div class="ci-price">${money(currentPayMode === "financing" ? t.list : t.full)}</div>
+<button class="ci-remove" data-idx="${i}">Remove</button>
+</div>
+</div>`;
+}
+return `
+<div class="cart-item">
+<div style="flex:1;">
+<div class="ci-name">${e.name}${e.qty > 1 ? ` × ${e.qty}` : ""}</div>
+<div class="ci-detail">Accessory</div>
+</div>
+<div style="text-align:right;">
+<div class="ci-price">${money(currentPayMode === "financing" ? t.list : t.full)}</div>
+<button class="ci-remove" data-idx="${i}">Remove</button>
+</div>
+</div>`;
+}).join("");
+
+itemsEl.querySelectorAll(".ci-remove").forEach((btn) => {
+btn.addEventListener("click", () => removeCartEntry(Number(btn.dataset.idx)));
+});
+
+updatePayModeUI();
+renderPayPalButtons();
 }
 
-// --- Contact + shipping fields ---
+function updatePayModeUI() {
+const { list, full } = cartTotals();
+document.getElementById("payModeFullAmount").textContent = money(full);
+document.getElementById("payModeFinancingAmount").textContent = money(list);
+updatePayLaterMessage();
+updateAffirmButton();
+}
+
+document.querySelectorAll(".pay-mode-btn").forEach((btn) => {
+btn.addEventListener("click", () => {
+document.querySelectorAll(".pay-mode-btn").forEach((b) => b.classList.remove("active"));
+btn.classList.add("active");
+currentPayMode = btn.dataset.mode;
+renderCart();
+});
+});
+
+function currentTotal() {
+const { list, full } = cartTotals();
+return currentPayMode === "financing" ? list : full;
+}
+
+// =================== Contact + shipping fields ===================
 function getContactFields() {
 const val = (id) => (document.getElementById(id) ? document.getElementById(id).value.trim() : "");
 const firstName = val("fFirstName");
 const lastName = val("fLastName");
 return {
-firstName,
-lastName,
+firstName, lastName,
 fullName: [firstName, lastName].filter(Boolean).join(" "),
-phone: val("fPhone"),
-email: val("fEmail"),
-address1: val("fAddress1"),
-address2: val("fAddress2"),
-city: val("fCity"),
-state: val("fState"),
-zip: val("fZip"),
+phone: val("fPhone"), email: val("fEmail"),
+address1: val("fAddress1"), address2: val("fAddress2"),
+city: val("fCity"), state: val("fState"), zip: val("fZip"),
 message: val("fMessage"),
 };
 }
-
 function validateContactFields() {
 const c = getContactFields();
+if (cart.length === 0) return "Your cart is empty.";
 if (!c.firstName) return "Please enter your first name.";
 if (!c.lastName) return "Please enter your last name.";
 const digits = c.phone.replace(/\D/g, "");
@@ -584,130 +904,143 @@ if (!c.zip) return "Please enter your shipping ZIP code.";
 return null;
 }
 
-function computeTotals() {
-if (!selectedListing) return { listTotal: 0, fullTotal: 0 };
-const { price: bundlePrice } = getBundleSelection();
-const { price: warrantyPrice } = getWarrantySelection();
-const deviceAndBundleListTotal = round2(deviceListPrice(selectedListing) + (bundlePrice || 0));
-const deviceAndBundleFullTotal = round2(deviceAndBundleListTotal * PAY_IN_FULL_DISCOUNT);
-// Warranty is always added at face value - never marked up or discounted.
-const listTotal = round2(deviceAndBundleListTotal + (warrantyPrice || 0));
-const fullTotal = round2(deviceAndBundleFullTotal + (warrantyPrice || 0));
-return { listTotal, fullTotal };
-}
-
-let currentPayMode = "full";
-
-function currentTotal() {
-const { listTotal, fullTotal } = computeTotals();
-return currentPayMode === "financing" ? listTotal : fullTotal;
-}
-
-function updatePayModeUI() {
-const { listTotal, fullTotal } = computeTotals();
-const fullEl = document.getElementById("payModeFullAmount");
-const financingEl = document.getElementById("payModeFinancingAmount");
-if (fullEl) fullEl.textContent = money(fullTotal);
-if (financingEl) financingEl.textContent = money(listTotal);
-updatePayLaterMessage();
-}
-
-// --- PayPal checkout ---
-// The SDK is loaded dynamically with the client id served by
-// /api/paypal-config, so no keys live in this file.
-let paypalReady = false;
-let paypalConfigured = null; // null = unknown yet
-
-function setPaymentMessage(text) {
-const el = document.getElementById("paymentMessage");
-if (el) el.textContent = text || "";
-}
-
-async function initPayPal() {
-try {
-const resp = await fetch("/api/paypal-config");
-const cfg = await resp.json();
-if (!cfg.configured) {
-paypalConfigured = false;
-return;
-}
-paypalConfigured = true;
-await new Promise((resolve, reject) => {
-const s = document.createElement("script");
-s.src =
-"https://www.paypal.com/sdk/js?client-id=" +
-encodeURIComponent(cfg.clientId) +
-"&currency=USD&intent=capture&components=buttons,messages&enable-funding=venmo,paylater";
-s.onload = resolve;
-s.onerror = () => reject(new Error("PayPal SDK failed to load"));
-document.head.appendChild(s);
-});
-paypalReady = true;
-} catch (err) {
-console.error("PayPal init failed", err);
-paypalConfigured = false;
-}
-}
-const paypalInitPromise = initPayPal();
-
-function updatePayLaterMessage() {
-const container = document.getElementById("paylater-message");
-if (!container || !window.paypal || !window.paypal.Messages || !selectedListing) return;
-const { listTotal } = computeTotals();
-container.innerHTML = "";
-try {
-window.paypal
-.Messages({ amount: listTotal, placement: "payment", style: { layout: "text", logo: { type: "inline" } } })
-.render("#paylater-message");
-} catch (e) {
-/* messaging is a nice-to-have - never block checkout on it */
-}
-}
-
+// Items payload for the capture endpoints - per-item charged amount reflects
+// the selected pay mode so the hub's records match what was actually paid.
 function buildOrderMeta(fundingSource) {
-const contact = getContactFields();
-const bundle = getBundleSelection();
-const warranty = getWarrantySelection();
+const c = getContactFields();
+const items = cart.map((e) => {
+const t = entryTotals(e);
+const charged = currentPayMode === "financing" ? t.list : t.full;
+if (e.kind === "device") {
+const l = e.listing;
 return {
-listing_id: selectedListing ? selectedListing.listing_id : "",
-device_catalog_id: selectedListing ? selectedListing.device_catalog_id : "",
-product_name: selectedListing ? selectedListing.product_name : "",
-color: selectedListing ? selectedListing.color : "",
-storage: selectedListing ? selectedListing.storage : "",
-condition_grade: selectedListing ? selectedListing.condition_grade : "",
-customer_name: contact.fullName,
-customer_phone: contact.phone,
-customer_email: contact.email,
-message: contact.message,
-shipping_address1: contact.address1,
-shipping_address2: contact.address2,
-shipping_city: contact.city,
-shipping_state: contact.state,
-shipping_zip: contact.zip,
-accessory_bundle: bundle.label,
-accessory_bundle_price: bundle.price,
-warranty_label: warranty.label,
+type: "device",
+listing_id: l.listing_id,
+device_catalog_id: l.device_catalog_id,
+product_name: l.product_name,
+color: l.color,
+storage: l.storage,
+condition_grade: l.condition_grade,
+charged,
+bundle_label: e.bundle ? e.bundle.label : null,
+bundle_price: e.bundle ? e.bundle.price : null,
+warranty_label: e.warranty ? e.warranty.label : null,
+};
+}
+return {
+type: "accessory",
+upc: e.upc,
+name: e.name,
+qty: e.qty,
+charged: round2(charged / e.qty),
+};
+});
+return {
+items,
+customer_name: c.fullName,
+customer_phone: c.phone,
+customer_email: c.email,
+message: c.message,
+shipping_address1: c.address1,
+shipping_address2: c.address2,
+shipping_city: c.city,
+shipping_state: c.state,
+shipping_zip: c.zip,
 pay_mode: currentPayMode,
 funding_source: fundingSource || "",
 };
 }
 
+function setPaymentMessage(text) {
+const el = document.getElementById("paymentMessage");
+if (el) el.textContent = text || "";
+}
 function showSuccess() {
-document.getElementById("modalForm").style.display = "none";
-document.getElementById("modalSuccess").style.display = "block";
+cart = [];
+updateCartBadge();
+render();
+document.getElementById("cartForm").style.display = "none";
+document.getElementById("cartSuccess").style.display = "block";
+}
+
+// ======================= PayPal + Affirm =======================
+let paypalConfigured = null;
+let affirmConfigured = false;
+let checkoutCfg = null;
+
+async function initCheckout() {
+try {
+const resp = await fetch("/api/paypal-config");
+checkoutCfg = await resp.json();
+if (checkoutCfg.configured) {
+await new Promise((resolve, reject) => {
+const s = document.createElement("script");
+s.src = "https://www.paypal.com/sdk/js?client-id=" + encodeURIComponent(checkoutCfg.clientId) +
+"&currency=USD&intent=capture&components=buttons,messages&enable-funding=venmo,paylater";
+s.onload = resolve;
+s.onerror = () => reject(new Error("PayPal SDK failed to load"));
+document.head.appendChild(s);
+});
+paypalConfigured = true;
+} else {
+paypalConfigured = false;
+}
+if (checkoutCfg.affirmPublicKey) {
+window._affirm_config = {
+public_api_key: checkoutCfg.affirmPublicKey,
+script: checkoutCfg.affirmEnv === "sandbox"
+? "https://cdn1-sandbox.affirm.com/js/v2/affirm.js"
+: "https://cdn1.affirm.com/js/v2/affirm.js",
+};
+await new Promise((resolve) => {
+const s = document.createElement("script");
+s.src = window._affirm_config.script;
+s.onload = resolve;
+s.onerror = resolve; // Affirm is optional - never block checkout on it
+document.head.appendChild(s);
+});
+affirmConfigured = !!window.affirm;
+}
+} catch (err) {
+console.error("checkout init failed", err);
+if (paypalConfigured === null) paypalConfigured = false;
+}
+}
+const checkoutInitPromise = initCheckout();
+
+function updatePayLaterMessage() {
+const container = document.getElementById("paylater-message");
+if (!container || !window.paypal || !window.paypal.Messages) return;
+const { list } = cartTotals();
+container.innerHTML = "";
+if (list <= 0) return;
+try {
+window.paypal.Messages({ amount: list, placement: "payment", style: { layout: "text", logo: { type: "inline" } } })
+.render("#paylater-message");
+} catch (e) { /* non-blocking */ }
+}
+
+function updateAffirmButton() {
+const btn = document.getElementById("affirmBtn");
+if (!btn) return;
+btn.style.display = currentPayMode === "financing" && affirmConfigured ? "block" : "none";
 }
 
 async function renderPayPalButtons() {
-await paypalInitPromise;
+await checkoutInitPromise;
+updateAffirmButton();
 const container = document.getElementById("paypal-buttons");
 if (!container) return;
 container.innerHTML = "";
 
 if (paypalConfigured === false || !window.paypal) {
-setPaymentMessage("Online payment is temporarily unavailable - please call or visit a store to complete your purchase.");
+setPaymentMessage(affirmConfigured
+? "Card/PayPal checkout is unavailable right now - Affirm financing below still works."
+: "Online payment is temporarily unavailable - please call or visit a store to complete your purchase.");
 return;
 }
 setPaymentMessage("");
+if (cart.length === 0) return;
 
 const FUNDING_BY_MODE = {
 full: [window.paypal.FUNDING.PAYPAL, window.paypal.FUNDING.VENMO, window.paypal.FUNDING.CARD],
@@ -715,7 +1048,6 @@ financing: [window.paypal.FUNDING.PAYLATER],
 };
 const sources = FUNDING_BY_MODE[currentPayMode] || FUNDING_BY_MODE.full;
 
-let renderedAny = false;
 sources.forEach((fundingSource) => {
 const buttons = window.paypal.Buttons({
 fundingSource,
@@ -727,13 +1059,14 @@ setPaymentMessage(validationError);
 throw new Error(validationError);
 }
 setPaymentMessage("");
+const summary = cart.map((e) => (e.kind === "device" ? e.listing.product_name : e.name)).join(", ").slice(0, 120);
 const resp = await fetch("/api/paypal-create-order", {
 method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({
 amount: currentTotal(),
-productName: selectedListing ? selectedListing.product_name : "",
-listingId: selectedListing ? selectedListing.listing_id : "",
+productName: summary,
+listingId: "",
 }),
 });
 const data = await resp.json();
@@ -761,108 +1094,99 @@ return;
 setPaymentMessage("");
 showSuccess();
 },
-onCancel: () => {
-setPaymentMessage("Payment canceled - no charge was made.");
-},
+onCancel: () => setPaymentMessage("Payment canceled - no charge was made."),
 onError: (err) => {
 console.error("PayPal button error", err);
 setPaymentMessage("Something went wrong with the payment. Please try again.");
 },
 });
-if (buttons.isEligible()) {
-buttons.render("#paypal-buttons");
-renderedAny = true;
-}
+if (buttons.isEligible()) buttons.render("#paypal-buttons");
 });
-
-if (!renderedAny) {
-setPaymentMessage(
-currentPayMode === "financing"
-? "Pay Later isn't available on this device/browser - switch to Pay in full, or try in another browser."
-: "No payment methods available in this browser - please try another device.",
-);
-}
 }
 
-document.querySelectorAll(".pay-mode-btn").forEach((btn) => {
-btn.addEventListener("click", () => {
-document.querySelectorAll(".pay-mode-btn").forEach((b) => b.classList.remove("active"));
-btn.classList.add("active");
-currentPayMode = btn.dataset.mode;
-updatePayModeUI();
-renderPayPalButtons();
-});
-});
-
-function openModal(listingId) {
-selectedListing = allListings.find((l) => l.listing_id === listingId);
-if (!selectedListing) return;
-document.getElementById("modalSub").textContent = `${selectedListing.product_name} - ${money(deviceListPrice(selectedListing))}`;
-
-const cleanStorage = selectedListing.storage ? String(selectedListing.storage).replace(/gb/i, "").trim() : null;
-const carrierText = !selectedListing.carrier_lock || selectedListing.carrier_lock.toLowerCase() === "unlocked"
-? "Unlocked"
-: `${selectedListing.carrier_lock} Locked`;
-const gradeText = selectedListing.condition_grade || "Used";
-const specChips = [gradeText, cleanStorage ? `${cleanStorage}GB` : null, selectedListing.color, carrierText]
-.filter(Boolean)
-.map((s) => `<span>${s}</span>`)
-.join("");
-document.getElementById("modalSpecs").innerHTML = specChips;
-document.getElementById("modalDescription").textContent = descriptionForGrade(selectedListing.condition_grade);
-
-document.getElementById("modalForm").style.display = "block";
-document.getElementById("modalSuccess").style.display = "none";
-document.getElementById("fFirstName").value = "";
-document.getElementById("fLastName").value = "";
-document.getElementById("fPhone").value = "";
-document.getElementById("fEmail").value = "";
-document.getElementById("fAddress1").value = "";
-document.getElementById("fAddress2").value = "";
-document.getElementById("fCity").value = "";
-document.getElementById("fState").value = "";
-document.getElementById("fZip").value = "";
-document.getElementById("fMessage").value = "";
+// --------------------------- Affirm ---------------------------
+document.getElementById("affirmBtn").addEventListener("click", async () => {
+if (!window.affirm) return;
+const validationError = validateContactFields();
+if (validationError) { setPaymentMessage(validationError); return; }
 setPaymentMessage("");
 
-const defaultBundle = document.querySelector('input[name="bundle"][value="case_screen_charger"]');
-if (defaultBundle) defaultBundle.checked = true;
+const c = getContactFields();
+const { list } = cartTotals();
+const cents = (n) => Math.round(Number(n) * 100);
 
-const warrantyCheckbox = document.getElementById("warrantyOptIn");
-if (warrantyCheckbox) warrantyCheckbox.checked = false;
-const warrantyPriceLabel = document.getElementById("warrantyPriceLabel");
-if (warrantyPriceLabel) warrantyPriceLabel.textContent = money(warrantyPriceForDevice(selectedListing));
-
-currentPayMode = "full";
-document.querySelectorAll(".pay-mode-btn").forEach((b) => {
-b.classList.toggle("active", b.dataset.mode === "full");
+const affirmItems = [];
+cart.forEach((e) => {
+const t = entryTotals(e);
+if (e.kind === "device") {
+affirmItems.push({
+display_name: e.listing.product_name,
+sku: String(e.listing.listing_id || e.listing.device_catalog_id || "device"),
+unit_price: cents(t.list),
+qty: 1,
+item_url: window.location.origin,
 });
-document.getElementById("modalOverlay").classList.add("open");
-updatePayModeUI();
-renderPayPalButtons();
+} else {
+affirmItems.push({
+display_name: e.name,
+sku: e.upc,
+unit_price: cents(e.price),
+qty: e.qty,
+item_url: window.location.origin,
+});
 }
-
-// Bundle / warranty changes only affect the totals - the amount is read live
-// in createOrder, so no button re-render is needed, just the price labels.
-document.querySelectorAll('input[name="bundle"]').forEach((el) => {
-el.addEventListener("change", updatePayModeUI);
 });
-const warrantyCheckboxEl = document.getElementById("warrantyOptIn");
-if (warrantyCheckboxEl) warrantyCheckboxEl.addEventListener("change", updatePayModeUI);
 
-function closeModal() {
-document.getElementById("modalOverlay").classList.remove("open");
+const person = { first: c.firstName, last: c.lastName };
+const address = {
+line1: c.address1,
+line2: c.address2 || undefined,
+city: c.city,
+state: c.state,
+zipcode: c.zip,
+country: "USA",
+};
+
+window.affirm.checkout({
+merchant: {
+name: "iPhoneStore.io",
+user_confirmation_url: window.location.origin,
+user_cancel_url: window.location.origin,
+user_confirmation_url_action: "GET",
+use_vcn: false,
+},
+shipping: { name: person, address, phone_number: c.phone, email: c.email },
+billing: { name: person, address, phone_number: c.phone, email: c.email },
+items: affirmItems,
+order_id: "web-" + Date.now(),
+shipping_amount: 0,
+tax_amount: 0,
+total: cents(list),
+});
+
+window.affirm.checkout.open({
+onSuccess: async (result) => {
+setPaymentMessage("Finishing your Affirm payment...");
+const resp = await fetch("/api/affirm-capture", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({ checkout_token: result.checkout_token, meta: buildOrderMeta("affirm") }),
+});
+const out = await resp.json();
+if (!resp.ok || !out.ok) {
+console.error("affirm-capture failed", out);
+setPaymentMessage((out && out.error) || "Affirm payment couldn't be completed.");
+return;
 }
-
-document.getElementById("cancelBtn").addEventListener("click", closeModal);
-document.getElementById("closeSuccessBtn").addEventListener("click", closeModal);
-document.getElementById("modalOverlay").addEventListener("click", (e) => {
-if (e.target.id === "modalOverlay") closeModal();
+setPaymentMessage("");
+showSuccess();
+},
+onFail: () => setPaymentMessage("Affirm checkout was canceled - no charge was made."),
 });
-
-document.getElementById("search").addEventListener("input", render);
+});
 
 loadListings();
+updateCartBadge();
 </script>
 
 </body>
