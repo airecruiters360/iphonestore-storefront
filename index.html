@@ -7,190 +7,191 @@
 <meta name="description" content="Shop unlocked and certified phones. Retail pricing, ready to ship." />
 <style>
 :root {
---ink: #0f172a;
---ink-soft: #475569;
---line: #e2e8f0;
---bg: #f8fafc;
---card: #ffffff;
---accent: #0f172a;
---accent-soft: #eef2ff;
---good: #15803d;
+  --ink: #0f172a;
+  --ink-soft: #475569;
+  --line: #e2e8f0;
+  --bg: #f8fafc;
+  --card: #ffffff;
+  --accent: #0f172a;
+  --accent-soft: #eef2ff;
+  --good: #15803d;
 }
 * { box-sizing: border-box; }
 body {
-margin: 0;
-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-background: var(--bg);
-color: var(--ink);
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  background: var(--bg);
+  color: var(--ink);
 }
 header {
-background: var(--card);
-border-bottom: 1px solid var(--line);
-position: sticky;
-top: 0;
-z-index: 10;
+  background: var(--card);
+  border-bottom: 1px solid var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 .header-inner {
-max-width: 1120px;
-margin: 0 auto;
-padding: 14px 20px;
-display: flex;
-align-items: center;
-justify-content: space-between;
-gap: 16px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 .logo-img { height: 26px; width: auto; display: block; }
 .header-links { display: flex; align-items: center; gap: 10px; }
 .help-link { font-size: 13px; font-weight: 600; color: var(--ink-soft); text-decoration: none; padding: 8px 10px; }
 .cart-btn {
-position: relative;
-padding: 9px 16px;
-background: var(--accent);
-color: #fff;
-border: none;
-border-radius: 10px;
-font-weight: 700;
-font-size: 13px;
-cursor: pointer;
+  position: relative;
+  padding: 9px 16px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
 }
 .cart-count {
-display: inline-block;
-min-width: 18px;
-padding: 1px 5px;
-margin-left: 7px;
-background: #fff;
-color: var(--ink);
-border-radius: 999px;
-font-size: 11px;
-font-weight: 800;
+  display: inline-block;
+  min-width: 18px;
+  padding: 1px 5px;
+  margin-left: 7px;
+  background: #fff;
+  color: var(--ink);
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
 }
 .hero {
-max-width: 1120px;
-margin: 0 auto;
-padding: 36px 20px 12px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 36px 20px 12px;
 }
 .hero h1 { font-size: 32px; margin: 0 0 8px; letter-spacing: -0.02em; }
 .hero p { color: var(--ink-soft); margin: 0; font-size: 16px; max-width: 620px; }
 .controls {
-max-width: 1120px;
-margin: 22px auto 0;
-padding: 0 20px;
-display: flex;
-flex-wrap: wrap;
-gap: 10px;
-align-items: center;
+  max-width: 1120px;
+  margin: 22px auto 0;
+  padding: 0 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
 }
 .search {
-flex: 1;
-min-width: 200px;
-padding: 10px 14px;
-border: 1px solid var(--line);
-border-radius: 10px;
-font-size: 14px;
-background: var(--card);
+  flex: 1;
+  min-width: 200px;
+  padding: 10px 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 14px;
+  background: var(--card);
 }
 .filter-select {
-padding: 10px 12px;
-border: 1px solid var(--line);
-border-radius: 10px;
-font-size: 14px;
-background: var(--card);
-color: var(--ink);
-min-width: 150px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  font-size: 14px;
+  background: var(--card);
+  color: var(--ink);
+  min-width: 150px;
 }
 .section-title {
-max-width: 1120px;
-margin: 30px auto 0;
-padding: 0 20px;
-font-size: 20px;
-font-weight: 800;
-letter-spacing: -0.01em;
+  max-width: 1120px;
+  margin: 30px auto 0;
+  padding: 0 20px;
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.01em;
 }
 .grid {
-max-width: 1120px;
-margin: 16px auto 30px;
-padding: 0 20px;
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-gap: 16px;
+  max-width: 1120px;
+  margin: 16px auto 30px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
 }
 .card {
-background: var(--card);
-border: 1px solid var(--line);
-border-radius: 14px;
-padding: 18px;
-display: flex;
-flex-direction: column;
-gap: 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 .card-top { display: flex; justify-content: flex-end; align-items: flex-start; gap: 8px; }
 .badge {
-font-size: 11px;
-font-weight: 700;
-text-transform: uppercase;
-letter-spacing: 0.04em;
-padding: 3px 8px;
-border-radius: 999px;
-background: var(--accent-soft);
-color: #3730a3;
-white-space: nowrap;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #3730a3;
+  white-space: nowrap;
 }
 .card h3 { margin: 0; font-size: 17px; letter-spacing: -0.01em; }
 .meta { font-size: 13px; color: var(--ink-soft); line-height: 1.5; }
 .price-row { display: flex; align-items: baseline; justify-content: space-between; margin-top: auto; }
 .price { font-size: 22px; font-weight: 800; }
 .price-note { font-size: 11px; color: var(--ink-soft); font-weight: 500; margin-top: 2px; }
+.affirm-as-low-as { font-size: 12px; margin: 4px 0 0; }
 .stock { font-size: 12px; color: var(--good); font-weight: 600; }
 .stock.low { color: #b45309; }
 .cta {
-margin-top: 4px;
-padding: 10px 14px;
-background: var(--accent);
-color: #fff;
-border: none;
-border-radius: 10px;
-font-weight: 700;
-font-size: 14px;
-cursor: pointer;
+  margin-top: 4px;
+  padding: 10px 14px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 14px;
+  cursor: pointer;
 }
 .cta:disabled { opacity: 0.5; cursor: default; }
 .empty, .loading {
-max-width: 1120px;
-margin: 40px auto;
-text-align: center;
-color: var(--ink-soft);
-padding: 0 20px;
+  max-width: 1120px;
+  margin: 40px auto;
+  text-align: center;
+  color: var(--ink-soft);
+  padding: 0 20px;
 }
 .modal-overlay {
-display: none;
-position: fixed;
-inset: 0;
-background: rgba(15,23,42,0.5);
-align-items: center;
-justify-content: center;
-padding: 20px;
-z-index: 100;
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(15,23,42,0.5);
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 100;
 }
 .modal-overlay.open { display: flex; }
 .modal {
-background: #fff;
-border-radius: 16px;
-padding: 28px;
-max-width: 440px;
-width: 100%;
-max-height: 90vh;
-overflow-y: auto;
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px;
+  max-width: 440px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 .modal h2 { margin: 0 0 4px; font-size: 20px; }
 .modal p.sub { margin: 0 0 8px; color: var(--ink-soft); font-size: 14px; }
 .modal-specs { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 10px; }
 .modal-specs span {
-font-size: 11px;
-font-weight: 600;
-padding: 3px 8px;
-border-radius: 999px;
-background: var(--accent-soft);
-color: #3730a3;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: #3730a3;
 }
 .modal-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; margin: 0 0 16px; }
 .field { margin-bottom: 12px; flex: 1; }
@@ -198,22 +199,22 @@ color: #3730a3;
 .field-row .field { margin-bottom: 12px; }
 .field label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
 .field input, .field textarea {
-width: 100%;
-padding: 10px 12px;
-border: 1px solid var(--line);
-border-radius: 8px;
-font-size: 14px;
-font-family: inherit;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
 }
 .bundles { margin: 4px 0 16px; display: flex; flex-direction: column; gap: 8px; }
 .bundle-option {
-display: flex;
-align-items: flex-start;
-gap: 10px;
-padding: 10px 12px;
-border: 1px solid var(--line);
-border-radius: 10px;
-cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
 }
 .bundle-option:has(input:checked) { border-color: var(--ink); background: #f8fafc; }
 .bundle-option input { width: auto; margin-top: 3px; }
@@ -222,44 +223,44 @@ cursor: pointer;
 .bundle-option .bundle-desc { font-size: 12px; color: var(--ink-soft); margin-top: 2px; }
 .bundle-option .bundle-price { font-size: 13px; font-weight: 700; white-space: nowrap; }
 .bundle-tag {
-display: inline-block;
-font-size: 10px;
-font-weight: 700;
-text-transform: uppercase;
-letter-spacing: 0.03em;
-color: #b45309;
-background: #fef3c7;
-padding: 1px 6px;
-border-radius: 999px;
-margin-left: 6px;
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #b45309;
+  background: #fef3c7;
+  padding: 1px 6px;
+  border-radius: 999px;
+  margin-left: 6px;
 }
 .pay-divider {
-display: flex;
-align-items: center;
-gap: 10px;
-margin: 16px 0;
-font-size: 11px;
-font-weight: 700;
-text-transform: uppercase;
-letter-spacing: 0.04em;
-color: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 16px 0;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
 }
 .pay-divider::before, .pay-divider::after {
-content: "";
-flex: 1;
-height: 1px;
-background: var(--line);
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--line);
 }
 .pay-mode-toggle { display: flex; gap: 8px; margin-bottom: 14px; }
 .pay-mode-btn {
-flex: 1;
-text-align: left;
-padding: 10px 12px;
-border: 2px solid var(--line);
-border-radius: 10px;
-background: #fff;
-cursor: pointer;
-font-family: inherit;
+  flex: 1;
+  text-align: left;
+  padding: 10px 12px;
+  border: 2px solid var(--line);
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  font-family: inherit;
 }
 .pay-mode-btn.active { border-color: var(--ink); background: #f8fafc; }
 .pay-mode-name { font-size: 12px; font-weight: 700; }
@@ -268,67 +269,67 @@ font-family: inherit;
 #paypal-buttons { margin-bottom: 6px; min-height: 45px; }
 #paylater-message { margin: 4px 0 8px; }
 .affirm-btn {
-width: 100%;
-padding: 12px;
-border-radius: 10px;
-border: 2px solid #4a4af4;
-background: #fff;
-color: #4a4af4;
-font-weight: 800;
-font-size: 14px;
-cursor: pointer;
-margin: 4px 0 6px;
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 2px solid #4a4af4;
+  background: #fff;
+  color: #4a4af4;
+  font-weight: 800;
+  font-size: 14px;
+  cursor: pointer;
+  margin: 4px 0 6px;
 }
 .affirm-btn:disabled { opacity: 0.6; cursor: default; }
 .payment-message { font-size: 12px; color: #b45309; margin: 6px 0 0; min-height: 16px; }
 .cart-items { display: flex; flex-direction: column; gap: 8px; margin-bottom: 4px; }
 .cart-item {
-display: flex;
-align-items: flex-start;
-justify-content: space-between;
-gap: 10px;
-padding: 10px 12px;
-border: 1px solid var(--line);
-border-radius: 10px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
 }
 .cart-item .ci-name { font-size: 13px; font-weight: 700; }
 .cart-item .ci-detail { font-size: 12px; color: var(--ink-soft); margin-top: 2px; line-height: 1.4; }
 .cart-item .ci-price { font-size: 13px; font-weight: 700; white-space: nowrap; }
 .ci-remove {
-border: none;
-background: none;
-color: #b91c1c;
-font-size: 12px;
-font-weight: 700;
-cursor: pointer;
-padding: 2px 4px;
+  border: none;
+  background: none;
+  color: #b91c1c;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 2px 4px;
 }
 .modal-actions { display: flex; gap: 10px; margin-top: 18px; }
 .btn-secondary {
-flex: 1;
-padding: 10px;
-border-radius: 10px;
-border: 1px solid var(--line);
-background: #fff;
-font-weight: 600;
-cursor: pointer;
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: 1px solid var(--line);
+  background: #fff;
+  font-weight: 600;
+  cursor: pointer;
 }
 .btn-primary {
-flex: 1;
-padding: 10px;
-border-radius: 10px;
-border: none;
-background: var(--accent);
-color: #fff;
-font-weight: 700;
-cursor: pointer;
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
 }
 .success-msg { text-align: center; padding: 10px 0; }
 footer {
-text-align: center;
-padding: 30px 20px;
-color: var(--ink-soft);
-font-size: 13px;
+  text-align: center;
+  padding: 30px 20px;
+  color: var(--ink-soft);
+  font-size: 13px;
 }
 footer a { color: var(--ink-soft); }
 </style>
@@ -483,6 +484,7 @@ footer a { color: var(--ink-soft); }
 <div class="pay-mode-name">Pay over time</div>
 <div class="pay-mode-amount" id="payModeFinancingAmount">$0.00</div>
 <div class="pay-mode-sub">PayPal Pay Later or Affirm</div>
+<p class="affirm-as-low-as" data-page-type="payment" data-amount="0" id="affirmCartPromo"></p>
 </button>
 </div>
 <div id="paylater-message"></div>
@@ -521,6 +523,14 @@ Checkout runs on PayPal (Orders v2) + direct Affirm. Stripe was removed
 Pricing model: list price = catalog retail_price x 1.10; pay-in-full = list
 x 0.93. BNPL providers prohibit surcharging their service specifically, so
 this is a pay-in-full DISCOUNT, not a financing surcharge.
+
+Affirm promotional messaging (added 2026-07-23, per docs.affirm.com/platforms/docs/quickstart):
+"as low as $/mo" messaging on every device/accessory card (data-page-type="product")
+and on the "Pay over time" option in the cart (data-page-type="payment"), to
+increase click-through into financing. Reuses the same affirm.js script/public
+key already loaded for the Affirm checkout button below - no separate embed
+or new credentials needed. affirm.ui.refresh() is called any time the catalog
+re-renders or cart totals change so the messaging never goes stale.
 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
@@ -532,6 +542,16 @@ document.getElementById("year").textContent = new Date().getFullYear();
 
 const money = (n) => Number(n).toLocaleString("en-US", { style: "currency", currency: "USD" });
 function round2(n) { return Math.round(n * 100) / 100; }
+function toCents(n) { return Math.round(Number(n) * 100); }
+
+// Re-render every Affirm "as low as" element on the page with current
+// data-amount values. Safe to call before affirm.js has loaded - it's a
+// no-op until window.affirm exists.
+function refreshAffirmPromos() {
+  if (window.affirm && window.affirm.ui && typeof window.affirm.ui.refresh === "function") {
+    window.affirm.ui.refresh();
+  }
+}
 
 // --- Pricing: 10% list-price markup on devices, 7% pay-in-full discount ---
 const FINANCING_MARKUP = 1.10;
@@ -612,6 +632,7 @@ content.innerHTML = `<div class="grid">${filtered.map(cardHtml).join("")}</div>`
 content.querySelectorAll(".cta").forEach((btn) => {
 btn.addEventListener("click", () => openOptions(btn.dataset.listingId));
 });
+refreshAffirmPromos();
 }
 
 function cardHtml(l) {
@@ -634,6 +655,7 @@ return `
 <div>
 <div class="price">${money(listPrice)}</div>
 <div class="price-note">or ${money(fullPayPrice)} paying in full</div>
+<p class="affirm-as-low-as" data-page-type="product" data-amount="${toCents(listPrice)}"></p>
 </div>
 <div class="stock ${lowStock ? "low" : ""}">${lowStock ? `Only ${l.quantity_available} left` : "In stock"}</div>
 </div>
@@ -658,6 +680,7 @@ return `
 <div>
 <div class="price">${money(a.price)}</div>
 <div class="price-note">or ${money(fullPay)} paying in full</div>
+<p class="affirm-as-low-as" data-page-type="product" data-amount="${toCents(a.price)}"></p>
 </div>
 </div>
 <button class="cta" data-acc-index="${i}">Add to Cart</button>
@@ -667,6 +690,7 @@ return `
 grid.querySelectorAll(".cta").forEach((btn) => {
 btn.addEventListener("click", () => addAccessoryToCart(Number(btn.dataset.accIndex)));
 });
+refreshAffirmPromos();
 }
 
 document.getElementById("search").addEventListener("input", render);
@@ -674,7 +698,7 @@ document.getElementById("carrierFilter").addEventListener("change", render);
 
 // ============================== Cart ==============================
 // entries: {kind:'device', listing, bundle:{label,price}, warranty:{label,price}}
-//          {kind:'accessory', upc, name, price, qty}
+// {kind:'accessory', upc, name, price, qty}
 let cart = [];
 
 function cartCountForListing(listingId) {
@@ -857,8 +881,11 @@ function updatePayModeUI() {
 const { list, full } = cartTotals();
 document.getElementById("payModeFullAmount").textContent = money(full);
 document.getElementById("payModeFinancingAmount").textContent = money(list);
+const promoEl = document.getElementById("affirmCartPromo");
+if (promoEl) promoEl.setAttribute("data-amount", String(toCents(list)));
 updatePayLaterMessage();
 updateAffirmButton();
+refreshAffirmPromos();
 }
 
 document.querySelectorAll(".pay-mode-btn").forEach((btn) => {
@@ -1000,6 +1027,13 @@ s.onerror = resolve; // Affirm is optional - never block checkout on it
 document.head.appendChild(s);
 });
 affirmConfigured = !!window.affirm;
+// Catalog/cart may have already rendered "as low as" elements before
+// affirm.js finished loading - refresh now so they pick up right away.
+if (window.affirm && window.affirm.ui && typeof window.affirm.ui.ready === "function") {
+window.affirm.ui.ready(function () { refreshAffirmPromos(); });
+} else {
+refreshAffirmPromos();
+}
 }
 } catch (err) {
 console.error("checkout init failed", err);
