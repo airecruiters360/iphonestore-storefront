@@ -1130,8 +1130,17 @@ showSuccess();
 },
 onCancel: () => setPaymentMessage("Payment canceled - no charge was made."),
 onError: (err) => {
-console.error("PayPal button error", err);
+console.error("PayPal button error", err, "funding:", fundingSource);
+// The Debit/Credit Card button opens a PayPal-hosted popup that depends on
+// third-party cookies/trackers to load. Browser tracking-prevention (Edge's
+// "Tracking prevention", Safari ITP, ad blockers) commonly blocks this
+// silently, so the card form never even appears - give people something
+// they can actually act on instead of a dead-end generic message.
+if (fundingSource === window.paypal.FUNDING.CARD) {
+setPaymentMessage("Card checkout didn't load - this is usually caused by your browser blocking PayPal's card popup (Edge \"Tracking prevention\", Safari, or an ad blocker). Try turning that off for this site, use a private window, or pay with the PayPal or Venmo button above instead.");
+} else {
 setPaymentMessage("Something went wrong with the payment. Please try again.");
+}
 },
 });
 if (buttons.isEligible()) buttons.render("#paypal-buttons");
