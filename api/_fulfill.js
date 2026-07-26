@@ -16,10 +16,9 @@
 // inventory just isn't auto-adjusted (a warning is folded into the order
 // message so nothing slips through silently).
 
-const SUPABASE_URL = "https://xggkxvecfrdtiakkwdgp.supabase.co";
+const SUPABASE_URL = "https://ahdbbhizihwhzxkklpmz.supabase.co";
 const SUPABASE_ANON_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnZ2t4dmVjZnJkdGlha2t3ZGdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwOTMxMjAsImV4cCI6MjA5ODY2OTEyMH0.s9ERsiEJJTTeXUJHQ6CL9hHSbtJ5FpqgXLu_Hjku-_g";
-
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoZGJiaGl6aWh3aHp4a2tscG16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5OTUzNDAsImV4cCI6MjEwMDU3MTM0MH0.I_rNuMBirHK1HobKPxeLfKfr1LOrx3ESeBxB4eBQ5aE";
 function headersFor(key) {
   return {
     "Content-Type": "application/json",
