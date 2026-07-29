@@ -431,24 +431,24 @@ footer a { color: var(--ink-soft); }
 
 <div class="field-row">
 <div class="field">
-<label>First name</label>
+<label>First name *</label>
 <input id="fFirstName" type="text" placeholder="Jane" />
 </div>
 <div class="field">
-<label>Last name</label>
+<label>Last name *</label>
 <input id="fLastName" type="text" placeholder="Doe" />
 </div>
 </div>
 <div class="field">
-<label>Phone number</label>
+<label>Phone number *</label>
 <input id="fPhone" type="tel" placeholder="(555) 123-4567" />
 </div>
 <div class="field">
-<label>Email</label>
+<label>Email *</label>
 <input id="fEmail" type="email" placeholder="jane@email.com" />
 </div>
 <div class="field">
-<label>Shipping address</label>
+<label>Shipping address *</label>
 <input id="fAddress1" type="text" placeholder="Street address" />
 </div>
 <div class="field">
@@ -456,15 +456,15 @@ footer a { color: var(--ink-soft); }
 </div>
 <div class="field-row">
 <div class="field">
-<label>City</label>
+<label>City *</label>
 <input id="fCity" type="text" placeholder="City" />
 </div>
 <div class="field">
-<label>State</label>
+<label>State *</label>
 <input id="fState" type="text" placeholder="State" maxlength="2" />
 </div>
 <div class="field">
-<label>ZIP</label>
+<label>ZIP *</label>
 <input id="fZip" type="text" placeholder="ZIP" maxlength="10" />
 </div>
 </div>
@@ -534,8 +534,9 @@ re-renders or cart totals change so the messaging never goes stale.
 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
-const SUPABASE_URL = "https://ahdbbhizihwhzxkklpmz.supabase.co";
-  const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoZGJiaGl6aWh3aHp4a2tscG16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5OTUzNDAsImV4cCI6MjEwMDU3MTM0MH0.I_rNuMBirHK1HobKPxeLfKfr1LOrx3ESeBxB4eBQ5aE";const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+const SUPABASE_URL = "https://xggkxvecfrdtiakkwdgp.supabase.co";
+const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhnZ2t4dmVjZnJkdGlha2t3ZGdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwOTMxMjAsImV4cCI6MjA5ODY2OTEyMH0.s9ERsiEJJTTeXUJHQ6CL9hHSbtJ5FpqgXLu_Hjku-_g";
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -1059,6 +1060,12 @@ if (!btn) return;
 btn.style.display = currentPayMode === "financing" && affirmConfigured ? "block" : "none";
 }
 
+// Set right before createOrder throws on a validation failure (e.g. missing
+// required field), so onError below knows not to clobber that specific,
+// actionable message with the generic "something went wrong" text - PayPal's
+// SDK calls onError right after any createOrder throw, regardless of cause.
+let pendingValidationError = null;
+
 async function renderPayPalButtons() {
 await checkoutInitPromise;
 updateAffirmButton();
@@ -1086,8 +1093,10 @@ const buttons = window.paypal.Buttons({
 fundingSource,
 style: { layout: "vertical", label: "pay" },
 createOrder: async () => {
+pendingValidationError = null;
 const validationError = validateContactFields();
 if (validationError) {
+pendingValidationError = validationError;
 setPaymentMessage(validationError);
 throw new Error(validationError);
 }
@@ -1130,6 +1139,14 @@ showSuccess();
 onCancel: () => setPaymentMessage("Payment canceled - no charge was made."),
 onError: (err) => {
 console.error("PayPal button error", err, "funding:", fundingSource);
+// createOrder already showed a specific, actionable message (e.g. "Please
+// enter your first name") and threw to cancel the popup - PayPal's SDK
+// calls onError right after that throw. Don't clobber the real message
+// with the generic one below.
+if (pendingValidationError) {
+pendingValidationError = null;
+return;
+}
 // The Debit/Credit Card button opens a PayPal-hosted popup that depends on
 // third-party cookies/trackers to load. Browser tracking-prevention (Edge's
 // "Tracking prevention", Safari ITP, ad blockers) commonly blocks this
