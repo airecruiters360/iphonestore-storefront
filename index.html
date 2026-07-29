@@ -353,8 +353,22 @@ footer a { color: var(--ink-soft); }
 
 <div class="controls">
 <input class="search" id="search" type="text" placeholder="Search by model, e.g. iPhone 13, Galaxy S24..." />
+<select class="filter-select" id="manufacturerFilter">
+<option value="all">All manufacturers</option>
+<option value="iPhone">iPhone</option>
+<option value="Samsung">Samsung</option>
+<option value="Motorola">Motorola</option>
+<option value="TCL">TCL</option>
+<option value="Other">Other</option>
+<option value="Accessories">Accessories & Services</option>
+</select>
 <select class="filter-select" id="carrierFilter">
 <option value="all">All carriers</option>
+</select>
+<select class="filter-select" id="sortSelect">
+<option value="featured">Sort: Featured</option>
+<option value="price_asc">Price: Low to High</option>
+<option value="price_desc">Price: High to Low</option>
 </select>
 </div>
 
@@ -593,6 +607,18 @@ function carrierLabel(l) {
 return !l.carrier_lock || String(l.carrier_lock).toLowerCase() === "unlocked" ? "Unlocked" : l.carrier_lock;
 }
 
+// Manufacturer isn't a field in the inventory system - iPhones were never
+// classified as "Apple" there, so we derive it from the product name instead.
+// Anything not recognized (Google, LG, etc.) falls into "Other".
+function manufacturerLabel(l) {
+const n = String(l.product_name || "").toLowerCase();
+if (n.includes("iphone")) return "iPhone";
+if (n.includes("galaxy") || n.includes("samsung")) return "Samsung";
+if (n.includes("moto")) return "Motorola";
+if (n.includes("tcl")) return "TCL";
+return "Other";
+}
+
 async function loadListings() {
 const { data, error } = await sb.from("storefront_catalog_view").select("*").order("product_name");
 if (error) {
@@ -614,17 +640,34 @@ carriers.map((c) => `<option value="${c}">${c}</option>`).join("");
 }
 
 function render() {
+const content = document.getElementById("content");
+const manufacturer = document.getElementById("manufacturerFilter").value;
+
+// "Accessories & Services" is its own filter option - when picked, the
+// device grid steps aside entirely and only the accessories section (below)
+// shows.
+if (manufacturer === "Accessories") {
+content.innerHTML = "";
+return;
+}
+
 const term = document.getElementById("search").value.trim().toLowerCase();
 const carrier = document.getElementById("carrierFilter").value;
-const filtered = allListings.filter((l) => {
+const sort = document.getElementById("sortSelect").value;
+let filtered = allListings.filter((l) => {
 const matchesTerm = !term || l.product_name.toLowerCase().includes(term);
 const matchesCarrier = carrier === "all" || carrierLabel(l) === carrier;
-return matchesTerm && matchesCarrier;
+const matchesManufacturer = manufacturer === "all" || manufacturerLabel(l) === manufacturer;
+return matchesTerm && matchesCarrier && matchesManufacturer;
 });
+if (sort === "price_asc") {
+filtered = filtered.slice().sort((a, b) => deviceListPrice(a) - deviceListPrice(b));
+} else if (sort === "price_desc") {
+filtered = filtered.slice().sort((a, b) => deviceListPrice(b) - deviceListPrice(a));
+}
 
-const content = document.getElementById("content");
 if (filtered.length === 0) {
-content.innerHTML = `<div class="empty">No devices match right now - try a different search or carrier.</div>`;
+content.innerHTML = `<div class="empty">No devices match right now - try a different search or filter.</div>`;
 return;
 }
 
@@ -665,8 +708,19 @@ return `
 }
 
 function renderAccessories() {
+const manufacturer = document.getElementById("manufacturerFilter").value;
 const grid = document.getElementById("accessoriesGrid");
 const title = document.getElementById("accessoriesTitle");
+
+// Only show accessories when no device-manufacturer filter is narrowing the
+// page, or when "Accessories & Services" itself is the selected filter.
+if (manufacturer !== "all" && manufacturer !== "Accessories") {
+grid.style.display = "none";
+title.style.display = "none";
+grid.innerHTML = "";
+return;
+}
+
 grid.style.display = "grid";
 title.style.display = "block";
 grid.innerHTML = ACCESSORY_PRODUCTS.map((a, i) => {
@@ -693,8 +747,14 @@ btn.addEventListener("click", () => addAccessoryToCart(Number(btn.dataset.accInd
 refreshAffirmPromos();
 }
 
+function applyFilters() {
+render();
+renderAccessories();
+}
 document.getElementById("search").addEventListener("input", render);
 document.getElementById("carrierFilter").addEventListener("change", render);
+document.getElementById("sortSelect").addEventListener("change", render);
+document.getElementById("manufacturerFilter").addEventListener("change", applyFilters);
 
 // ============================== Cart ==============================
 // entries: {kind:'device', listing, bundle:{label,price}, warranty:{label,price}}
