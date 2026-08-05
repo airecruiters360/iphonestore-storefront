@@ -5,6 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>iPhoneStore.io - Unlocked & Certified Devices</title>
 <meta name="description" content="Shop unlocked and certified phones. Retail pricing, ready to ship." />
+
+<!-- Google Analytics (GA4) - conversion funnel tracking, added 2026 to diagnose checkout drop-off -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-3C6CC7KTTY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-3C6CC7KTTY');
+</script>
+
+<!-- Microsoft Clarity - heatmaps + session recordings, added 2026 to diagnose checkout drop-off -->
+<script type="text/javascript">
+  (function(c,l,a,r,i,t,y){
+    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+  })(window, document, "clarity", "script", "xxgt027mxo");
+</script>
 <style>
 :root {
   --ink: #0f172a;
@@ -802,6 +820,7 @@ if (!a) return;
 const existing = cart.find((e) => e.kind === "accessory" && e.upc === a.upc);
 if (existing) existing.qty += 1;
 else cart.push({ kind: "accessory", upc: a.upc, name: a.name, price: a.price, qty: 1 });
+gtag('event', 'add_to_cart', { currency: "USD", value: a.price, items: [{ item_name: a.name }] });
 updateCartBadge();
 openCart();
 }
@@ -850,6 +869,11 @@ const warranty = document.getElementById("warrantyOptIn").checked
 ? { label: `12-Month Extended Warranty ($${warrantyPriceForDevice(optionsListing)})`, price: warrantyPriceForDevice(optionsListing) }
 : null;
 cart.push({ kind: "device", listing: optionsListing, bundle, warranty });
+gtag('event', 'add_to_cart', {
+currency: "USD",
+value: deviceListPrice(optionsListing),
+items: [{ item_name: optionsListing.product_name }],
+});
 document.getElementById("optionsOverlay").classList.remove("open");
 updateCartBadge();
 render();
@@ -869,6 +893,9 @@ function openCart() {
 document.getElementById("cartForm").style.display = "block";
 document.getElementById("cartSuccess").style.display = "none";
 document.getElementById("cartOverlay").classList.add("open");
+if (cart.length > 0) {
+gtag('event', 'begin_checkout', { currency: "USD", value: cartTotals().full });
+}
 renderCart();
 }
 function closeCart() {
@@ -1043,6 +1070,12 @@ const el = document.getElementById("paymentMessage");
 if (el) el.textContent = text || "";
 }
 function showSuccess() {
+gtag('event', 'purchase', {
+transaction_id: "web-" + Date.now(),
+currency: "USD",
+value: currentTotal(),
+items: cart.map((e) => ({ item_name: e.kind === "device" ? e.listing.product_name : e.name })),
+});
 cart = [];
 updateCartBadge();
 render();
