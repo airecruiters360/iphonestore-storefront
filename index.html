@@ -366,7 +366,7 @@ footer a { color: var(--ink-soft); }
 
 <div class="hero">
 <h1>Unlocked & certified devices, ready to ship.</h1>
-<p>Live inventory, updated in real time. Pay in full and save 7% - or split it into payments with PayPal Pay Later or Affirm.</p>
+<p>Live inventory, updated in real time. Pay in full, or split it into payments with PayPal Pay Later or Affirm.</p>
 </div>
 
 <div class="controls">
@@ -508,7 +508,7 @@ footer a { color: var(--ink-soft); }
 <div class="pay-divider">Choose how to pay</div>
 <div class="pay-mode-toggle">
 <button type="button" class="pay-mode-btn active" data-mode="full">
-<div class="pay-mode-name">Pay in full - save 7%</div>
+<div class="pay-mode-name">Pay in full</div>
 <div class="pay-mode-amount" id="payModeFullAmount">$0.00</div>
 <div class="pay-mode-sub">Card, PayPal, or Venmo</div>
 </button>
@@ -544,17 +544,14 @@ Checkout runs on PayPal (Orders v2) + direct Affirm. Stripe was removed
 2026-07-18 after the account was deactivated.
 
 - Cart supports multiple devices + accessories in one payment.
-- "Pay in full" = 7% off list (card / PayPal / Venmo).
-- "Pay over time" = list price via PayPal Pay Later or Affirm.
+- "Pay in full" and "Pay over time" charge the same list price (card / PayPal / Venmo, or PayPal Pay Later / Affirm).
 - Public keys come from /api/paypal-config (env vars in Vercel).
 - Capture endpoints (/api/paypal-capture-order, /api/affirm-capture) pull the
   sold devices out of inventory (recording IMEIs) and log each order with the
   processor fee + net payout. Requires SUPABASE_SERVICE_ROLE_KEY for the
   inventory part.
 
-Pricing model: list price = catalog retail_price x 1.10; pay-in-full = list
-x 0.93. BNPL providers prohibit surcharging their service specifically, so
-this is a pay-in-full DISCOUNT, not a financing surcharge.
+Pricing model: single advertised list price = catalog retail_price x 1.10. Same price whether paying in full or financing - no pay-in-full discount.
 
 Affirm promotional messaging (added 2026-07-23, per docs.affirm.com/platforms/docs/quickstart):
 "as low as $/mo" messaging on every device/accessory card (data-page-type="product")
@@ -587,7 +584,7 @@ function refreshAffirmPromos() {
 
 // --- Pricing: 10% list-price markup on devices, 7% pay-in-full discount ---
 const FINANCING_MARKUP = 1.10;
-const PAY_IN_FULL_DISCOUNT = 0.93;
+const PAY_IN_FULL_DISCOUNT = 1;
 function deviceListPrice(l) { return round2(Number(l.retail_price) * FINANCING_MARKUP); }
 
 // --- Accessories & services sold on the site (UPCs match the store system) ---
@@ -704,7 +701,7 @@ const inCart = cartCountForListing(l.listing_id);
 const remaining = Number(l.quantity_available) - inCart;
 const lowStock = Number(l.quantity_available) <= 2;
 const listPrice = deviceListPrice(l);
-const fullPayPrice = round2(listPrice * PAY_IN_FULL_DISCOUNT);
+
 return `
 <div class="card">
 <div class="card-top">
@@ -715,7 +712,7 @@ return `
 <div class="price-row">
 <div>
 <div class="price">${money(listPrice)}</div>
-<div class="price-note">or ${money(fullPayPrice)} paying in full</div>
+
 <p class="affirm-as-low-as" data-page-type="product" data-amount="${toCents(listPrice)}"></p>
 </div>
 <div class="stock ${lowStock ? "low" : ""}">${lowStock ? `Only ${l.quantity_available} left` : "In stock"}</div>
@@ -742,7 +739,7 @@ return;
 grid.style.display = "grid";
 title.style.display = "block";
 grid.innerHTML = ACCESSORY_PRODUCTS.map((a, i) => {
-const fullPay = round2(a.price * PAY_IN_FULL_DISCOUNT);
+
 return `
 <div class="card">
 <div class="card-top"><span class="badge">Accessory</span></div>
@@ -751,7 +748,7 @@ return `
 <div class="price-row">
 <div>
 <div class="price">${money(a.price)}</div>
-<div class="price-note">or ${money(fullPay)} paying in full</div>
+
 <p class="affirm-as-low-as" data-page-type="product" data-amount="${toCents(a.price)}"></p>
 </div>
 </div>
