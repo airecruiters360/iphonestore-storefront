@@ -551,7 +551,7 @@ Checkout runs on PayPal (Orders v2) + direct Affirm. Stripe was removed
   processor fee + net payout. Requires SUPABASE_SERVICE_ROLE_KEY for the
   inventory part.
 
-Pricing model: single advertised list price = catalog retail_price x 1.10. Same price whether paying in full or financing - no pay-in-full discount.
+Pricing model: single advertised price = catalog retail_price, unchanged. retail_price already includes the store's markup and ends in .99, so the dashboard (in-store) and this website always show the identical number.
 
 Affirm promotional messaging (added 2026-07-23, per docs.affirm.com/platforms/docs/quickstart):
 "as low as $/mo" messaging on every device/accessory card (data-page-type="product")
@@ -582,8 +582,8 @@ function refreshAffirmPromos() {
   }
 }
 
-// --- Pricing: 10% list-price markup on devices, 7% pay-in-full discount ---
-const FINANCING_MARKUP = 1.10;
+// --- Pricing: retail_price already has the 10% markup + .99 rounding baked in (see dm-retail-hub) - displayed as-is, no further markup here ---
+const FINANCING_MARKUP = 1;
 const PAY_IN_FULL_DISCOUNT = 1;
 function deviceListPrice(l) { return round2(Number(l.retail_price) * FINANCING_MARKUP); }
 
