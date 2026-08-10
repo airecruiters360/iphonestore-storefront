@@ -585,7 +585,13 @@ function refreshAffirmPromos() {
 // --- Pricing: retail_price already has the 10% markup + .99 rounding baked in (see dm-retail-hub) - displayed as-is, no further markup here ---
 const FINANCING_MARKUP = 1.10;
 const PAY_IN_FULL_DISCOUNT = 1;
-function deviceListPrice(l) { return round2(Number(l.retail_price) * FINANCING_MARKUP); }
+function roundUpTo99(amount) {
+  const cents = Math.round(Number(amount) * 100);
+  let dollars = Math.ceil((cents - 99) / 100);
+  if (dollars * 100 + 99 < cents) dollars += 1;
+  return (dollars * 100 + 99) / 100;
+}
+function deviceListPrice(l) { return roundUpTo99(Number(l.retail_price) * FINANCING_MARKUP); }
 
 // --- Accessories & services sold on the site (UPCs match the store system) ---
 const ACCESSORY_PRODUCTS = [
