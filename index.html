@@ -30,8 +30,8 @@
   --line: #e2e8f0;
   --bg: #f8fafc;
   --card: #ffffff;
-  --accent: #0f172a;
-  --accent-soft: #eef2ff;
+  --accent: #0047ff;
+  --accent-soft: #eff3ff;
   --good: #15803d;
 }
 * { box-sizing: border-box; }
@@ -150,7 +150,7 @@ header {
   padding: 3px 8px;
   border-radius: 999px;
   background: var(--accent-soft);
-  color: #3730a3;
+  color: #0038cc;
   white-space: nowrap;
 }
 .card h3 { margin: 0; font-size: 17px; letter-spacing: -0.01em; }
@@ -209,7 +209,7 @@ header {
   padding: 3px 8px;
   border-radius: 999px;
   background: var(--accent-soft);
-  color: #3730a3;
+  color: #0038cc;
 }
 .modal-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.5; margin: 0 0 16px; }
 .field { margin-bottom: 12px; flex: 1; }
@@ -788,7 +788,7 @@ const pk = selectedColour[l.listing_id];
 const carrierOk = (value) => variants.some((v) => v.carrier === value && (!pg || v.grade === pg));
 const colourOk = (value) => variants.some((v) => v.colour === value && (!pg || v.grade === pg) && (!pc || v.carrier === pc));
 const pill = (kind, value, label, active, enabled) => enabled
-? '<button type="button" data-kind="' + kind + '" data-value="' + String(value).replace(/"/g, "&quot;") + '" style="' + (active ? "border:2px solid #4338ca;background:#eef2ff;color:#3730a3;" : "border:1px solid #e2e8f0;background:#fff;color:#0f172a;") + 'border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600;cursor:pointer;margin:0 6px 6px 0;">' + label + '</button>'
+? '<button type="button" data-kind="' + kind + '" data-value="' + String(value).replace(/"/g, "&quot;") + '" style="' + (active ? "border:2px solid #0047ff;background:#eff3ff;color:#0038cc;" : "border:1px solid #e2e8f0;background:#fff;color:#0f172a;") + 'border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600;cursor:pointer;margin:0 6px 6px 0;">' + label + '</button>'
 : '<button type="button" disabled title="Not available for the selected condition" style="border:1px solid #e2e8f0;background:#f8fafc;color:#cbd5e1;border-radius:8px;padding:6px 10px;font-size:13px;font-weight:600;cursor:not-allowed;margin:0 6px 6px 0;">' + label + '</button>';
 const group = (labelText, rowHtml) => '<div style="margin-bottom:10px;"><div style="font-size:12px;color:#64748b;margin-bottom:4px;">' + labelText + '</div><div>' + (rowHtml || '<span style="font-size:12px;color:#94a3b8;">Not available</span>') + '</div></div>';
 const gradeRow = (l.grade_options || []).map((g) => pill("grade", g.grade, g.grade + " - " + money(g.price), g.grade === pg, true)).join("");
