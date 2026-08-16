@@ -444,6 +444,11 @@ footer a { color: var(--ink-soft); }
 <div class="bundle-price" id="warrantyPriceLabel">$0.00</div>
 </label>
 
+<div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:4px;">
+<span style="font-size:13px;color:#64748b;">Total</span>
+<span style="font-size:20px;font-weight:700;" id="optTotalLabel">$0.00</span>
+</div>
+
 <div class="modal-actions">
 <button class="btn-secondary" id="optCancelBtn">Cancel</button>
 <button class="btn-primary" id="optAddBtn">Add to Cart</button>
@@ -804,12 +809,29 @@ document.getElementById("optDescription").textContent = descriptionForGrade(chos
 const wLabel = document.getElementById("warrantyPriceLabel");
 if (wLabel) wLabel.textContent = money(warrantyPriceForDevice({ retail_price: chosen.price }));
 renderOptSelectors(l);
+updateOptTotal();
 }
-function openOptions(listingId) { const base = allListings.find((l) => l.listing_id === listingId); if (!base) return; const chosen = chosenVariant(base); const gradeEntry = chosenGrade(base); optionsListing = { ...base, device_catalog_id: chosen.device_catalog_id, quantity_available: chosen.quantity, carrier: chosen.carrier, colour: chosen.colour, condition_grade: gradeEntry.grade, retail_price: chosen.price }; document.getElementById("optSub").textContent = `${optionsListing.product_name} - ${money(deviceListPrice(optionsListing))}`; const cleanStorage = optionsListing.storage ? String(optionsListing.storage).replace(/gb/i, "").trim() : null; const carrierText = chosen.carrier === "Unlocked" ? "Unlocked" : `${chosen.carrier} Locked`; const colourText = chosen.colour === "Standard" ? null : chosen.colour; renderOptSelectors(base); document.getElementById("optDescription").textContent = descriptionForGrade(optionsListing.condition_grade); const defaultBundle = document.querySelector('input[name="bundle"][value="case_screen_charger"]'); if (defaultBundle) defaultBundle.checked = true; document.getElementById("warrantyOptIn").checked = false; document.getElementById("warrantyPriceLabel").textContent = money(warrantyPriceForDevice(optionsListing)); document.getElementById("optionsOverlay").classList.add("open"); } const BUNDLE_LABELS = {
+function openOptions(listingId) { const base = allListings.find((l) => l.listing_id === listingId); if (!base) return; const chosen = chosenVariant(base); const gradeEntry = chosenGrade(base); optionsListing = { ...base, device_catalog_id: chosen.device_catalog_id, quantity_available: chosen.quantity, carrier: chosen.carrier, colour: chosen.colour, condition_grade: gradeEntry.grade, retail_price: chosen.price }; document.getElementById("optSub").textContent = `${optionsListing.product_name} - ${money(deviceListPrice(optionsListing))}`; const cleanStorage = optionsListing.storage ? String(optionsListing.storage).replace(/gb/i, "").trim() : null; const carrierText = chosen.carrier === "Unlocked" ? "Unlocked" : `${chosen.carrier} Locked`; const colourText = chosen.colour === "Standard" ? null : chosen.colour; renderOptSelectors(base); updateOptTotal(); document.getElementById("optDescription").textContent = descriptionForGrade(optionsListing.condition_grade); const defaultBundle = document.querySelector('input[name="bundle"][value="case_screen_charger"]'); if (defaultBundle) defaultBundle.checked = true; document.getElementById("warrantyOptIn").checked = false; document.getElementById("warrantyPriceLabel").textContent = money(warrantyPriceForDevice(optionsListing)); document.getElementById("optionsOverlay").classList.add("open"); } const BUNDLE_LABELS = {
 none: null,
 case_screen: "Case + screen protector bundle",
 case_screen_charger: "Case + screen + 20W charging block (online exclusive)",
 };
+function updateOptTotal() {
+if (!optionsListing) return;
+const chosen = chosenVariant(optionsListing);
+const bundleInput = document.querySelector('input[name="bundle"]:checked');
+const bundlePrices = { none: 0, case_screen: 24.99, case_screen_charger: 39.99 };
+const bundlePrice = bundleInput ? (bundlePrices[bundleInput.value] || 0) : 0;
+const warrantyEl = document.getElementById("warrantyOptIn");
+const warrantyChecked = warrantyEl ? warrantyEl.checked : false;
+const warrantyPrice = warrantyChecked ? warrantyPriceForDevice({ retail_price: chosen.price }) : 0;
+const total = Number(chosen.price) + bundlePrice + warrantyPrice;
+const label = document.getElementById("optTotalLabel");
+if (label) label.textContent = money(total);
+}
+document.querySelectorAll('input[name="bundle"]').forEach((el) => el.addEventListener("change", updateOptTotal));
+if (document.getElementById("warrantyOptIn")) document.getElementById("warrantyOptIn").addEventListener("change", updateOptTotal);
+
 
 document.getElementById("optAddBtn").addEventListener("click", () => {
 if (!optionsListing) return;
