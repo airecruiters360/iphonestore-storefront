@@ -526,6 +526,7 @@ footer a { color: var(--ink-soft); }
 </button>
 </div>
 <div id="paylater-message"></div>
+<button class="affirm-btn" id="afsCardBtn" type="button" style="display:none;">Pay with Credit/Debit Card</button>
 <div id="paypal-buttons"></div>
 <button class="affirm-btn" id="affirmBtn" type="button" style="display:none;">Pay over time with Affirm</button>
 <p class="payment-message" id="paymentMessage"></p>
@@ -568,6 +569,7 @@ or new credentials needed. affirm.ui.refresh() is called any time the catalog
 re-renders or cart totals change so the messaging never goes stale.
 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script src="https://payments.go-afs.com/token/Collect.js" data-tokenization-key="Mdq552-Auf743-24X2Ss-3XmZjs"></script>
 <script>
 const SUPABASE_URL = "https://ahdbbhizihwhzxkklpmz.supabase.co";
 const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImFoZGJiaGl6aWh3aHp4a2tscG16Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODQ5OTUzNDAsImV4cCI6MjEwMDU3MTM0MH0.I_rNuMBirHK1HobKPxeLfKfr1LOrx3ESeBxB4eBQ5aE";
@@ -1150,6 +1152,12 @@ if (!btn) return;
 btn.style.display = currentPayMode === "financing" && affirmConfigured ? "block" : "none";
 }
 
+function updateAfsCardButton() {
+const btn = document.getElementById("afsCardBtn");
+if (!btn) return;
+btn.style.display = currentPayMode === "full" ? "block" : "none";
+}
+
 // Set right before createOrder throws on a validation failure (e.g. missing
 // required field), so onError below knows not to clobber that specific,
 // actionable message with the generic "something went wrong" text - PayPal's
@@ -1159,6 +1167,7 @@ let pendingValidationError = null;
 async function renderPayPalButtons() {
 await checkoutInitPromise;
 updateAffirmButton();
+updateAfsCardButton();
 const container = document.getElementById("paypal-buttons");
 if (!container) return;
 container.innerHTML = "";
@@ -1173,7 +1182,7 @@ setPaymentMessage("");
 if (cart.length === 0) return;
 
 const FUNDING_BY_MODE = {
-full: [window.paypal.FUNDING.PAYPAL, window.paypal.FUNDING.VENMO, window.paypal.FUNDING.CARD],
+full: [window.paypal.FUNDING.PAYPAL, window.paypal.FUNDING.VENMO],
 financing: [window.paypal.FUNDING.PAYLATER],
 };
 const sources = FUNDING_BY_MODE[currentPayMode] || FUNDING_BY_MODE.full;
@@ -1332,6 +1341,54 @@ showSuccess();
 },
 onFail: () => setPaymentMessage("Affirm checkout was canceled - no charge was made."),
 });
+});
+
+function initAfsCard() {
+if (window.CollectJS && typeof window.CollectJS.configure === "function") {
+window.CollectJS.configure({
+variant: "lightbox",
+callback: (response) => { submitAfsCharge(response); },
+});
+} else {
+setTimeout(initAfsCard, 300);
+}
+}
+initAfsCard();
+
+async function submitAfsCharge(response) {
+const validationError = validateContactFields();
+if (validationError) { setPaymentMessage(validationError); return; }
+setPaymentMessage("Finishing your payment...");
+try {
+const resp = await fetch("/api/afs-charge", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+paymentToken: response.token,
+amount: currentTotal(),
+meta: buildOrderMeta("afs_card"),
+}),
+});
+const result = await resp.json();
+if (!resp.ok || !result.ok) {
+console.error("afs-charge failed", result);
+setPaymentMessage((result && result.error) || "Card could not be charged. You have not been charged.");
+return;
+}
+setPaymentMessage("");
+showSuccess();
+} catch (err) {
+console.error("afs-charge error", err);
+setPaymentMessage("Could not reach the payment processor. Please try again.");
+}
+}
+
+document.getElementById("afsCardBtn") && document.getElementById("afsCardBtn").addEventListener("click", () => {
+const validationError = validateContactFields();
+if (validationError) { setPaymentMessage(validationError); return; }
+setPaymentMessage("");
+if (!window.CollectJS) { setPaymentMessage("Card checkout is unavailable right now."); return; }
+window.CollectJS.startPaymentRequest();
 });
 
 loadListings();
