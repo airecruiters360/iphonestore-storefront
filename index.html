@@ -610,6 +610,42 @@ const ACCESSORY_PRODUCTS = [
 { upc: "audio speaker elite", name: "Audio Speaker Elite", price: 199.99, desc: "Premium high-output speaker for serious sound." },
 ];
 
+function accessoryCardHtml(a, i) {
+return `
+<div class="card">
+<div class="card-top">
+<span class="badge">${a.name}</span>
+</div>
+<div style="width:100%;aspect-ratio:1/1;background:#f1f5f9;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#94a3b8;font-size:12px;">Photo coming soon</div>
+<div class="meta">${a.desc || "&nbsp;"}</div>
+<div class="price-row">
+<div class="price">${money(a.price)}</div>
+<div class="stock">Available</div>
+</div>
+<button class="cta" data-acc-index="${i}">Add to cart</button>
+</div>
+`;
+}
+
+function renderAccessories() {
+const manufacturer = document.getElementById("manufacturerFilter").value;
+const title = document.getElementById("accessoriesTitle");
+const grid = document.getElementById("accessoriesGrid");
+if (!title || !grid) return;
+if (manufacturer !== "Accessories") {
+title.style.display = "none";
+grid.style.display = "none";
+grid.innerHTML = "";
+return;
+}
+title.style.display = "block";
+grid.style.display = "grid";
+grid.innerHTML = ACCESSORY_PRODUCTS.map((a, i) => accessoryCardHtml(a, i)).join("");
+grid.querySelectorAll("[data-acc-index]").forEach((btn) => {
+btn.addEventListener("click", () => addAccessoryToCart(Number(btn.dataset.accIndex)));
+});
+}
+
 
 
 // --- Extended warranty tiers (face value, keyed off device list price) ---
