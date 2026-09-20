@@ -477,6 +477,8 @@ footer a { color: var(--ink-soft); }
 <div class="bundle-price" id="warrantyPriceLabel">$0.00</div>
 </label>
 
+<div id="serviceAddonSlot"></div>
+
 <div style="display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid #e2e8f0;padding-top:12px;margin-top:4px;">
 <span style="font-size:13px;color:#64748b;">Total</span>
 <span style="font-size:20px;font-weight:700;" id="optTotalLabel">$0.00</span>
@@ -877,9 +879,10 @@ document.getElementById("cartCount").textContent = String(cartUnitCount());
 function entryTotals(e) {
 if (e.kind === "device") {
 const base = round2(deviceListPrice(e.listing) + (e.bundle ? e.bundle.price : 0));
+const addonTotal = e.addon ? e.addon.total : 0;
 return {
-list: round2(base + (e.warranty ? e.warranty.price : 0)),
-full: round2(round2(base * PAY_IN_FULL_DISCOUNT) + (e.warranty ? e.warranty.price : 0)),
+list: round2(base + (e.warranty ? e.warranty.price : 0) + addonTotal),
+full: round2(round2(base * PAY_IN_FULL_DISCOUNT) + (e.warranty ? e.warranty.price : 0) + addonTotal),
 };
 }
 const list = round2(e.price * e.qty);
@@ -955,12 +958,109 @@ document.getElementById("optDescription").textContent = descriptionForGrade(chos
 const wLabel = document.getElementById("warrantyPriceLabel");
 if (wLabel) wLabel.textContent = money(warrantyPriceForDevice({ retail_price: chosen.price }));
 renderOptSelectors(l);
+renderServiceAddon(l);
 updateOptTotal();
 }
 function openOptions(listingId) { const base = allListings.find((l) => l.listing_id === listingId); if (!base) return; const chosen = chosenVariant(base);
 selectedGrade[base.listing_id] = chosen.grade;
 selectedCarrier[base.listing_id] = chosen.carrier;
-selectedColour[base.listing_id] = chosen.colour; const gradeEntry = chosenGrade(base); optionsListing = { ...base, device_catalog_id: chosen.device_catalog_id, quantity_available: chosen.quantity, carrier: chosen.carrier, colour: chosen.colour, condition_grade: gradeEntry.grade, retail_price: chosen.price }; document.getElementById("optSub").textContent = `${optionsListing.product_name} - ${money(deviceListPrice(optionsListing))}`; const cleanStorage = optionsListing.storage ? String(optionsListing.storage).replace(/gb/i, "").trim() : null; const carrierText = chosen.carrier === "Unlocked" ? "Unlocked" : `${chosen.carrier} Locked`; const colourText = chosen.colour === "Standard" ? null : chosen.colour; renderOptSelectors(base); updateOptTotal(); const photoSlot = document.getElementById("optPhotoSlot"); if (photoSlot) { const photoUrl = PRODUCT_PHOTOS[base.listing_id]; photoSlot.innerHTML = photoUrl ? '<img src="' + photoUrl + '" alt="" style="width:100%;height:100%;object-fit:cover;">' : "Photo coming soon"; } document.getElementById("optDescription").textContent = descriptionForGrade(optionsListing.condition_grade); const defaultBundle = document.querySelector('input[name="bundle"][value="case_screen_charger"]'); if (defaultBundle) defaultBundle.checked = true; document.getElementById("warrantyOptIn").checked = false; document.getElementById("warrantyPriceLabel").textContent = money(warrantyPriceForDevice(optionsListing)); document.getElementById("optionsOverlay").classList.add("open"); } const BUNDLE_LABELS = {
+selectedColour[base.listing_id] = chosen.colour; const gradeEntry = chosenGrade(base); optionsListing = { ...base, device_catalog_id: chosen.device_catalog_id, quantity_available: chosen.quantity, carrier: chosen.carrier, colour: chosen.colour, condition_grade: gradeEntry.grade, retail_price: chosen.price }; document.getElementById("optSub").textContent = `${optionsListing.product_name} - ${money(deviceListPrice(optionsListing))}`; const cleanStorage = optionsListing.storage ? String(optionsListing.storage).replace(/gb/i, "").trim() : null; const carrierText = chosen.carrier === "Unlocked" ? "Unlocked" : `${chosen.carrier} Locked`; const colourText = chosen.colour === "Standard" ? null : chosen.colour; renderOptSelectors(base); renderServiceAddon(base); updateOptTotal(); const photoSlot = document.getElementById("optPhotoSlot"); if (photoSlot) { const photoUrl = PRODUCT_PHOTOS[base.listing_id]; photoSlot.innerHTML = photoUrl ? '<img src="' + photoUrl + '" alt="" style="width:100%;height:100%;object-fit:cover;">' : "Photo coming soon"; } document.getElementById("optDescription").textContent = descriptionForGrade(optionsListing.condition_grade); const defaultBundle = document.querySelector('input[name="bundle"][value="case_screen_charger"]'); if (defaultBundle) defaultBundle.checked = true; document.getElementById("warrantyOptIn").checked = false; document.getElementById("warrantyPriceLabel").textContent = money(warrantyPriceForDevice(optionsListing)); document.getElementById("optionsOverlay").classList.add("open"); } // ==================== Service + protection add-ons ====================
+// "Activate with service" is only offered on devices sold Unlocked - locked
+// carrier variants (e.g. Total Wireless) show an explanatory panel instead.
+// No recurring billing integration here: activation/prepaid amounts are
+// added as flat one-time line items to the checkout total, and staff
+// manually activate service/protection per the details logged with the order.
+let serviceAddonState = {};
+function getAddonState(listingId) {
+  if (!serviceAddonState[listingId]) serviceAddonState[listingId] = { service: false, protection: false, prepay4: false };
+  return serviceAddonState[listingId];
+}
+function isUnlockedCarrier(carrier) {
+  return !carrier || String(carrier).trim().toLowerCase() === "unlocked";
+}
+function serviceAddonCharges(l) {
+  const chosen = chosenVariant(l);
+  const state = getAddonState(l.listing_id);
+  if (!state.service || !isUnlockedCarrier(chosen.carrier)) return { total: 0, lines: [], service: false, protection: false, prepay4: false };
+  const lines = [];
+  lines.push({ label: state.prepay4 ? "Service - 4 months prepaid" : "Service - first month", price: state.prepay4 ? 120 : 30 });
+  lines.push({ label: "Activation fee (one-time)", price: 25 });
+  if (state.prepay4) lines.push({ label: "Free bundle promo (Case + Screen Protector + 30W Charging Block, $110 value)", price: 0 });
+  if (state.protection) {
+    lines.push({ label: state.prepay4 ? "Device Protection - 4 months prepaid" : "Device Protection - first month", price: state.prepay4 ? 32 : 8 });
+  }
+  const total = round2(lines.reduce((s, x) => s + x.price, 0));
+  return { total, lines, service: true, protection: state.protection, prepay4: state.prepay4 };
+}
+function addonSummaryLabel(addon) {
+  if (!addon || !addon.service) return null;
+  const parts = [`Service ON - $30/mo + $25 activation${addon.prepay4 ? " (4-month prepay $120, includes free Case+Screen+30W Charger bundle, $110 value)" : " (billed monthly)"}`];
+  if (addon.protection) parts.push(`Device Protection ON - $8/mo${addon.prepay4 ? " (4-month prepay $32)" : " (billed monthly)"}`);
+  return parts.join("; ");
+}
+function renderServiceAddon(l) {
+  const slot = document.getElementById("serviceAddonSlot");
+  if (!slot) return;
+  const chosen = chosenVariant(l);
+  const state = getAddonState(l.listing_id);
+  const unlocked = isUnlockedCarrier(chosen.carrier);
+  if (!unlocked) {
+    const hasUnlockedOption = listingCarriers(l).some((c) => isUnlockedCarrier(c));
+    slot.innerHTML = `<div class="addon-locked-panel">Activation service isn't available on locked devices.${hasUnlockedOption ? ' <a id="switchToUnlockedLink" href="#">Switch to unlocked to see plans</a>' : ""}</div>`;
+    const link = document.getElementById("switchToUnlockedLink");
+    if (link) link.addEventListener("click", (e) => {
+      e.preventDefault();
+      const unlockedValue = listingCarriers(l).find((c) => isUnlockedCarrier(c));
+      if (unlockedValue) selectOptAttr("carrier", unlockedValue);
+    });
+    return;
+  }
+  slot.innerHTML = `
+    <div class="addon-module">
+      <div class="addon-header">
+        <div><span class="addon-title">Activate with service</span><span class="addon-badge">On America's most reliable 5G network</span></div>
+        <button type="button" class="addon-toggle${state.service ? " on" : ""}" id="serviceToggle" aria-pressed="${state.service}"></button>
+      </div>
+      <div class="addon-body" style="display:${state.service ? "block" : "none"};">
+        <div>Unlimited Talk, Text, Data. Unlimited Hotspot Roaming in Mexico and Canada.</div>
+        <div class="addon-line"><span>Monthly service</span><span>$30.00/mo</span></div>
+        <div class="addon-line"><span>Activation fee (one-time)</span><span>$25.00</span></div>
+        <div class="addon-promo">
+          <label><input type="checkbox" id="servicePrepayToggle" ${state.prepay4 ? "checked" : ""} /><span>Prepay 4 months of service ($120) and get a Case, Screen Protector, and 30W Charging Block - a $110 value, free.</span></label>
+        </div>
+        <div class="addon-nested">
+          <div class="addon-header">
+            <span class="addon-title" style="font-size:13px;">Device Protection</span>
+            <button type="button" class="addon-toggle${state.protection ? " on" : ""}" id="protectionToggle" aria-pressed="${state.protection}"></button>
+          </div>
+          <div class="addon-body" style="display:${state.protection ? "block" : "none"};">
+            <div>$8.00/mo - loss &amp; theft replacement coverage, $0 front screen and back glass repair for accidental damage, plus a bonus digital security suite of your choice.</div>
+            <div class="addon-line"><span>Protection${state.prepay4 ? " - 4 months prepaid" : " - monthly"}</span><span>${money(state.prepay4 ? 32 : 8)}</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById("serviceToggle").addEventListener("click", () => {
+    state.service = !state.service;
+    if (!state.service) state.protection = false;
+    renderServiceAddon(l);
+    updateOptTotal();
+  });
+  const prepayEl = document.getElementById("servicePrepayToggle");
+  if (prepayEl) prepayEl.addEventListener("change", () => {
+    state.prepay4 = prepayEl.checked;
+    renderServiceAddon(l);
+    updateOptTotal();
+  });
+  const protToggle = document.getElementById("protectionToggle");
+  if (protToggle) protToggle.addEventListener("click", () => {
+    state.protection = !state.protection;
+    renderServiceAddon(l);
+    updateOptTotal();
+  });
+}
+const BUNDLE_LABELS = {
 none: null,
 case_screen: "Case + screen protector bundle",
 case_screen_charger: "Case + screen + 20W charging block (online exclusive)",
@@ -974,7 +1074,8 @@ const bundlePrice = bundleInput ? (bundlePrices[bundleInput.value] || 0) : 0;
 const warrantyEl = document.getElementById("warrantyOptIn");
 const warrantyChecked = warrantyEl ? warrantyEl.checked : false;
 const warrantyPrice = warrantyChecked ? warrantyPriceForDevice({ retail_price: chosen.price }) : 0;
-const total = Number(chosen.price) + bundlePrice + warrantyPrice;
+const addonCharges = serviceAddonCharges(optionsListing);
+const total = Number(chosen.price) + bundlePrice + warrantyPrice + addonCharges.total;
 const label = document.getElementById("optTotalLabel");
 if (label) label.textContent = money(total);
 }
@@ -992,7 +1093,9 @@ const bundle = BUNDLE_LABELS[bundleValue]
 const warranty = document.getElementById("warrantyOptIn").checked
 ? { label: `12-Month Extended Warranty ($${warrantyPriceForDevice(optionsListing)})`, price: warrantyPriceForDevice(optionsListing) }
 : null;
-cart.push({ kind: "device", listing: optionsListing, bundle, warranty });
+const addonCharges = serviceAddonCharges(optionsListing);
+const addon = addonCharges.total > 0 || addonCharges.service ? addonCharges : null;
+cart.push({ kind: "device", listing: optionsListing, bundle, warranty, addon });
 gtag('event', 'add_to_cart', {
 currency: "USD",
 value: deviceListPrice(optionsListing),
@@ -1054,6 +1157,7 @@ const detail = [
 [cleanStorage ? `${cleanStorage}GB` : null, l.colour, l.carrier, l.condition_grade].filter(Boolean).join(" - "),
 e.bundle ? e.bundle.label : null,
 e.warranty ? e.warranty.label : null,
+e.addon ? addonSummaryLabel(e.addon) : null,
 ].filter(Boolean).join("<br>");
 return `
 <div class="cart-item">
@@ -1163,6 +1267,11 @@ charged,
 bundle_label: e.bundle ? e.bundle.label : null,
 bundle_price: e.bundle ? e.bundle.price : null,
 warranty_label: e.warranty ? e.warranty.label : null,
+addon_label: e.addon ? addonSummaryLabel(e.addon) : null,
+addon_service: e.addon ? !!e.addon.service : false,
+addon_protection: e.addon ? !!e.addon.protection : false,
+addon_prepay_4mo: e.addon ? !!e.addon.prepay4 : false,
+addon_total: e.addon ? e.addon.total : null,
 };
 }
 return {
