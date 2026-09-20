@@ -358,6 +358,7 @@ footer a { color: var(--ink-soft); }
 .row-scroll::-webkit-scrollbar{height:6px;}
 .row-scroll::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px;}
 .row-scroll .card{min-width:220px;max-width:240px;flex:0 0 auto;scroll-snap-align:start;}
+.row-scroll.row-expanded{flex-wrap:wrap;overflow-x:visible;}
 @media (max-width:640px){
   .row-scroll .card{min-width:66vw;max-width:72vw;}
   .field-row{flex-direction:column;gap:0;}
