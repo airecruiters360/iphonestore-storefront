@@ -1010,8 +1010,20 @@ function renderServiceAddon(l) {
     const link = document.getElementById("switchToUnlockedLink");
     if (link) link.addEventListener("click", (e) => {
       e.preventDefault();
-      const unlockedValue = listingCarriers(l).find((c) => isUnlockedCarrier(c));
-      if (unlockedValue) selectOptAttr("carrier", unlockedValue);
+      // Reset grade/colour too, since the currently-selected grade may not
+      // have an Unlocked variant at all (only a locked-carrier one) - pick
+      // any full variant tuple that is Unlocked so the switch always works.
+      const variants = l.variants || [];
+      const target = variants.find((v) => isUnlockedCarrier(v.carrier));
+      if (target) {
+        selectedGrade[l.listing_id] = target.grade;
+        selectedCarrier[l.listing_id] = target.carrier;
+        selectedColour[l.listing_id] = target.colour;
+        selectOptAttr("carrier", target.carrier);
+      } else {
+        const unlockedValue = listingCarriers(l).find((c) => isUnlockedCarrier(c));
+        if (unlockedValue) selectOptAttr("carrier", unlockedValue);
+      }
     });
     return;
   }
