@@ -726,9 +726,12 @@ carriers.map((c) => `<option value="${c}">${c}</option>`).join("");
 }
 
 function modelRank(name) {
-  const matches = String(name).match(/\d{1,4}/g);
-  if (!matches) return 0;
-  return Math.max(...matches.map(Number));
+  // Strip storage-capacity mentions (e.g. "128GB") so they don't get
+  // mistaken for the model number - use the first remaining number, since
+  // the model number consistently appears right after the brand/model name.
+  const cleaned = String(name).replace(/\d+\s*-?\s*gb/gi, "");
+  const m = cleaned.match(/\d{1,4}/);
+  return m ? Number(m[0]) : 0;
 }
 function byNewest(arr) {
   return arr.slice().sort((a, b) => modelRank(b.product_name) - modelRank(a.product_name));
