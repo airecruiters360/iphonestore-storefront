@@ -170,6 +170,7 @@ async function fulfillAndLogOrder(payment, meta) {
       shippingLine ? `Ship to: ${shippingLine}` : null,
       item.bundle_label ? `Bundle: ${item.bundle_label}` : null,
       item.warranty_label ? `Warranty: ${item.warranty_label}` : null,
+      item.addon_label ? `Add-on: ${item.addon_label}` : null,
       imei ? `IMEI: ${imei}` : null,
       item.upc ? `UPC: ${item.upc}` : null,
       m.pay_mode ? `Pay mode: ${m.pay_mode}` : null,
