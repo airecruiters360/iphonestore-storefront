@@ -725,6 +725,51 @@ sel.innerHTML = `<option value="all">All carriers</option>` +
 carriers.map((c) => `<option value="${c}">${c}</option>`).join("");
 }
 
+function modelRank(name) {
+  const matches = String(name).match(/\d{1,4}/g);
+  if (!matches) return 0;
+  return Math.max(...matches.map(Number));
+}
+function byNewest(arr) {
+  return arr.slice().sort((a, b) => modelRank(b.product_name) - modelRank(a.product_name));
+}
+let expandedRows = {};
+function categoryRows(list) {
+  const isSamsung = (l) => manufacturerLabel(l) === "Samsung";
+  const iphone = list.filter((l) => manufacturerLabel(l) === "iPhone");
+  const galaxyS = list.filter((l) => isSamsung(l) && /\bs\d{2}\b|galaxy\s*s\b/i.test(l.product_name));
+  const galaxyA = list.filter((l) => isSamsung(l) && /\ba\d{2}\b|galaxy\s*a\b/i.test(l.product_name));
+  const moto = list.filter((l) => manufacturerLabel(l) === "Motorola");
+  const used = new Set([...iphone, ...galaxyS, ...galaxyA, ...moto]);
+  const more = list.filter((l) => !used.has(l));
+  const rows = [];
+  if (iphone.length) rows.push({ key: "iphone", title: "iPhone", items: byNewest(iphone), seeAll: false });
+  if (galaxyS.length) rows.push({ key: "galaxyS", title: "Galaxy S Series", items: byNewest(galaxyS), seeAll: false });
+  if (galaxyA.length) rows.push({ key: "galaxyA", title: "Galaxy A Series", items: byNewest(galaxyA), seeAll: false });
+  if (moto.length) rows.push({ key: "moto", title: "Motorola", items: byNewest(moto), seeAll: false });
+  if (more.length) rows.push({ key: "more", title: "More devices", items: byNewest(more), seeAll: true });
+  return rows;
+}
+function renderCategoryRows(list, content) {
+  const rows = categoryRows(list);
+  if (rows.length === 0) {
+    content.innerHTML = `<div class="empty">No devices match right now - try a different search or filter.</div>`;
+    return;
+  }
+  content.innerHTML = rows.map((r) => {
+    const expanded = !!expandedRows[r.key];
+    const seeAllLink = r.seeAll ? `<a href="#" class="see-all" data-row-key="${r.key}">${expanded ? "Show less" : "See all &rsaquo;"}</a>` : "";
+    return `<div class="category-row-title">${r.title}${seeAllLink}</div><div class="row-scroll${expanded ? " row-expanded" : ""}">${r.items.map(cardHtml).join("")}</div>`;
+  }).join("");
+  content.querySelectorAll(".cta").forEach((btn) => { btn.addEventListener("click", () => openOptions(btn.dataset.listingId)); });
+  content.querySelectorAll("[data-row-key]").forEach((a) => {
+    a.addEventListener("click", (e) => {
+      e.preventDefault();
+      expandedRows[a.dataset.rowKey] = !expandedRows[a.dataset.rowKey];
+      render();
+    });
+  });
+}
 function render() {
 const content = document.getElementById("content");
 const manufacturer = document.getElementById("manufacturerFilter").value;
@@ -746,6 +791,18 @@ const matchesCarrier = carrier === "all" || listingCarriers(l).includes(carrier)
 const matchesManufacturer = manufacturer === "all" || manufacturerLabel(l) === manufacturer;
 return matchesTerm && matchesCarrier && matchesManufacturer;
 });
+
+// Default homepage view (no search/filter/sort applied): Apple-style
+// horizontal category rows, newest-to-oldest left to right, mobile-friendly
+// horizontally-scrollable carousels. Any active search/filter/sort falls
+// back to the flat sorted grid below so those features keep working exactly
+// as before.
+if (manufacturer === "all" && !term && carrier === "all" && sort === "featured") {
+renderCategoryRows(filtered, content);
+refreshAffirmPromos();
+return;
+}
+
 if (sort === "price_asc") {
 filtered = filtered.slice().sort((a, b) => deviceListPrice(a) - deviceListPrice(b));
 } else if (sort === "price_desc") {
