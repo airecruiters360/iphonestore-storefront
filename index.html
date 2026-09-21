@@ -385,6 +385,49 @@ footer a { color: var(--ink-soft); }
 .addon-nested{margin-top:12px;padding-top:12px;border-top:1px dashed var(--line);}
 .addon-locked-panel{border:1px solid var(--line);border-radius:12px;padding:14px;margin:6px 0 16px;background:#f8fafc;font-size:12px;color:var(--ink-soft);}
 .addon-locked-panel a{color:var(--apple-accent);font-weight:700;cursor:pointer;text-decoration:underline;}
+.gateway-caption { text-align:center; padding: 28px 20px 4px; }
+.gateway-caption .q { font-size:12px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.1em; }
+.gateway { display:grid; grid-template-columns:1fr 1fr; gap:0; max-width:1120px; margin:16px auto 0; border-radius:16px; overflow:hidden; }
+.gate { position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:44px 24px; text-decoration:none; color:#fff; cursor:pointer; border:none; min-height:320px; }
+.gate.apple { background:linear-gradient(160deg,#1c1c1e,#000); }
+.gate.samsung { background:linear-gradient(160deg,#0a1f44,#001b6e); }
+.gate .glyph { width:100px; height:170px; border-radius:22px; margin-bottom:22px; background:linear-gradient(145deg,#4b4b4f,#16161a); box-shadow:0 24px 48px rgba(0,0,0,0.35); }
+.gate.samsung .glyph { background:linear-gradient(145deg,#3a6bff,#0a1f66); }
+.gate .kicker { font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.55); margin-bottom:8px; }
+.gate h2 { font-size:30px; font-weight:700; letter-spacing:-0.02em; margin:0 0 14px; color:#fff; }
+.gate .gate-cta { font-size:13px; font-weight:600; padding:10px 22px; border-radius:20px; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.3); }
+@media (max-width:720px){ .gateway{ grid-template-columns:1fr; } }
+.other-brands { max-width:1120px; margin:0 auto; padding:22px 20px 6px; }
+.ob-head { font-size:11px; font-weight:700; color:var(--ink-soft); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:12px; }
+.ob-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.ob-tile { background:#f1f5f9; border-radius:14px; padding:16px; display:flex; align-items:center; gap:12px; border:none; cursor:pointer; text-align:left; }
+.ob-tile .mini-glyph { width:26px; height:46px; border-radius:6px; background:#0f172a; flex-shrink:0; }
+.ob-tile .label { font-size:13px; font-weight:700; color:var(--ink); }
+.ob-tile .sub { font-size:11px; color:var(--ink-soft); }
+@media (max-width:720px){ .ob-row{ grid-template-columns:1fr 1fr; } }
+.why-section { background:#f1f5f9; margin-top:30px; padding:44px 20px; }
+.why-head { text-align:center; max-width:600px; margin:0 auto 30px; }
+.why-head .kicker { font-size:11px; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:8px; }
+.why-head h3 { font-size:24px; font-weight:700; letter-spacing:-0.02em; margin:0 0 10px; }
+.why-head p { font-size:14px; color:var(--ink-soft); line-height:1.6; margin:0; }
+.why-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; max-width:1120px; margin:0 auto; }
+.why-card { background:#fff; border-radius:14px; padding:20px 18px; }
+.why-card .icon { width:34px; height:34px; border-radius:9px; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:15px; margin-bottom:12px; }
+.why-card h4 { font-size:14px; font-weight:700; margin:0 0 6px; }
+.why-card p { font-size:12px; color:var(--ink-soft); line-height:1.5; margin:0; }
+@media (max-width:720px){ .why-grid{ grid-template-columns:1fr 1fr; } }
+.story-band { max-width:1120px; margin:24px auto 0; background:#0f172a; border-radius:16px; color:#fff; padding:30px 32px; display:flex; align-items:center; gap:28px; }
+.story-band .glyph-row { display:flex; flex-shrink:0; }
+.story-band .sglyph { width:38px; height:66px; border-radius:9px; background:linear-gradient(145deg,#475569,#0f172a); margin-left:-12px; box-shadow:0 10px 20px rgba(0,0,0,0.3); }
+.story-band .sglyph:first-child { margin-left:0; }
+.story-band h4 { font-size:15px; font-weight:700; margin:0 0 6px; color:#fff; }
+.story-band p { font-size:13px; color:#cbd5e1; line-height:1.6; margin:0; }
+@media (max-width:720px){ .story-band{ flex-direction:column; text-align:center; } }
+.wholesale-banner { max-width:1120px; margin:30px auto 0; padding:0 20px; }
+.wholesale-inner { background:linear-gradient(160deg,#eef2ff,#e0e7ff); border-radius:16px; padding:26px 30px; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; }
+.wholesale-inner h3 { font-size:18px; font-weight:700; margin:0 0 4px; color:var(--ink); }
+.wholesale-inner p { font-size:13px; color:var(--ink-soft); margin:0; }
+.wholesale-inner .btn-primary { flex:none; padding:12px 22px; }
 </style>
 </head>
 <body>
@@ -398,6 +441,52 @@ footer a { color: var(--ink-soft); }
 </div>
 </div>
 </header>
+
+<div class="gateway-caption"><span class="q">Which are you?</span></div>
+<div class="gateway">
+<button type="button" class="gate apple" id="gateApple">
+<div class="glyph"></div>
+<span class="kicker">Team iPhone</span>
+<h2>Apple</h2>
+<span class="gate-cta">Shop iPhone &rarr;</span>
+</button>
+<button type="button" class="gate samsung" id="gateSamsung">
+<div class="glyph"></div>
+<span class="kicker">Team Galaxy</span>
+<h2>Samsung</h2>
+<span class="gate-cta">Shop Galaxy &rarr;</span>
+</button>
+</div>
+<div class="other-brands">
+<div class="ob-head">Or browse other brands</div>
+<div class="ob-row">
+<button type="button" class="ob-tile" data-brand="Motorola"><div class="mini-glyph"></div><div><div class="label">Motorola</div><div class="sub">Budget &amp; midrange</div></div></button>
+<button type="button" class="ob-tile" data-brand="TCL"><div class="mini-glyph"></div><div><div class="label">TCL</div><div class="sub">Value picks</div></div></button>
+<button type="button" class="ob-tile" data-brand="Other"><div class="mini-glyph"></div><div><div class="label">Everything else</div><div class="sub">Pixel, tablets &amp; more</div></div></button>
+<button type="button" class="ob-tile" data-brand="Accessories"><div class="mini-glyph"></div><div><div class="label">Accessories &amp; Services</div><div class="sub">Cases, chargers, warranty</div></div></button>
+</div>
+</div>
+
+<div class="why-section">
+<div class="why-head">
+<div class="kicker">Why iPhoneStore.io</div>
+<h3>The store people come back to</h3>
+<p>We inspect, test, and stand behind every device we sell &mdash; here's what that means for you.</p>
+</div>
+<div class="why-grid">
+<div class="why-card"><div class="icon">&#10003;</div><h4>Every device inspected</h4><p>Full diagnostic on battery health, screen, and function before it's ever listed &mdash; graded honestly, not guessed at.</p></div>
+<div class="why-card"><div class="icon">&#128737;</div><h4>90-day warranty</h4><p>Something goes wrong that isn't your fault? We fix it or swap it, no runaround.</p></div>
+<div class="why-card"><div class="icon">&#128179;</div><h4>Pay your way</h4><p>Full price today, or split it with PayPal Pay Later or Affirm &mdash; approved in seconds, no store card needed.</p></div>
+<div class="why-card"><div class="icon">&#9889;</div><h4>Ships fast, or pick up local</h4><p>Most orders leave same or next business day &mdash; or skip shipping and grab it in store.</p></div>
+</div>
+<div class="story-band">
+<div class="glyph-row"><div class="sglyph"></div><div class="sglyph"></div><div class="sglyph"></div></div>
+<div class="text">
+<h4>Our story</h4>
+<p>iPhoneStore.io is run by people who've been buying, testing, and reselling phones for years &mdash; this storefront is just us bringing that same shop online for everyone.</p>
+</div>
+</div>
+</div>
 
 <div class="hero">
 <h1>Unlocked & certified devices, ready to ship.</h1>
@@ -431,6 +520,62 @@ footer a { color: var(--ink-soft); }
 
 <div class="section-title" id="accessoriesTitle" style="display:none;">Accessories & Services</div>
 <div class="grid" id="accessoriesGrid" style="display:none;"></div>
+
+<div class="wholesale-banner">
+<div class="wholesale-inner">
+<div>
+<h3>Buying in bulk?</h3>
+<p>Get pricing for 10+ units &mdash; we work with resellers, repair shops, and businesses.</p>
+</div>
+<button type="button" class="btn-primary" id="wholesaleOpenBtn">Get wholesale pricing</button>
+</div>
+</div>
+
+<div class="modal-overlay" id="wholesaleOverlay">
+<div class="modal">
+<div id="wholesaleForm">
+<h2>Wholesale &amp; bulk orders</h2>
+<p class="sub">Tell us what you're looking for and we'll follow up with pricing.</p>
+<div class="field">
+<label>Company name *</label>
+<input id="wCompany" type="text" placeholder="Your business name">
+</div>
+<div class="field">
+<label>Contact name *</label>
+<input id="wContact" type="text" placeholder="Jane Doe">
+</div>
+<div class="field-row">
+<div class="field">
+<label>Phone</label>
+<input id="wPhone" type="tel" placeholder="(555) 123-4567">
+</div>
+<div class="field">
+<label>Email</label>
+<input id="wEmail" type="email" placeholder="jane@business.com">
+</div>
+</div>
+<div class="field">
+<label>Quantity / volume interested</label>
+<input id="wQuantity" type="text" placeholder="e.g. 25 iPhone 13s">
+</div>
+<div class="field">
+<label>Message (optional)</label>
+<textarea id="wMessage" rows="2" placeholder="Anything else we should know"></textarea>
+</div>
+<div class="modal-actions">
+<button class="btn-secondary" id="wholesaleCancelBtn">Cancel</button>
+<button class="btn-primary" id="wholesaleSubmitBtn">Submit</button>
+</div>
+</div>
+<div id="wholesaleSuccess" style="display:none;">
+<div class="success-msg">
+<h2>Thanks!</h2>
+<p class="sub">We got your request and will follow up with wholesale pricing shortly.</p>
+<button class="btn-primary" id="wholesaleCloseSuccessBtn" style="width:100%;">Close</button>
+</div>
+</div>
+</div>
+</div>
 
 <footer>
 &copy; <span id="year"></span> iPhoneStore.io. Prices and availability subject to change. · <a href="/help.html">Help & Contact</a>
@@ -1637,6 +1782,67 @@ if (validationError) { setPaymentMessage(validationError); return; }
 setPaymentMessage("");
 if (!window.CollectJS) { setPaymentMessage("Card checkout is unavailable right now."); return; }
 window.CollectJS.startPaymentRequest();
+});
+
+document.getElementById("gateApple").addEventListener("click", () => {
+document.getElementById("manufacturerFilter").value = "iPhone";
+applyFilters();
+document.getElementById("content").scrollIntoView({behavior:"smooth"});
+});
+document.getElementById("gateSamsung").addEventListener("click", () => {
+document.getElementById("manufacturerFilter").value = "Samsung";
+applyFilters();
+document.getElementById("content").scrollIntoView({behavior:"smooth"});
+});
+document.querySelectorAll(".ob-tile").forEach((btn) => {
+btn.addEventListener("click", () => {
+document.getElementById("manufacturerFilter").value = btn.dataset.brand;
+applyFilters();
+document.getElementById("content").scrollIntoView({behavior:"smooth"});
+});
+});
+
+function openWholesaleModal() {
+document.getElementById("wholesaleForm").style.display = "block";
+document.getElementById("wholesaleSuccess").style.display = "none";
+document.getElementById("wCompany").value = "";
+document.getElementById("wContact").value = "";
+document.getElementById("wPhone").value = "";
+document.getElementById("wEmail").value = "";
+document.getElementById("wQuantity").value = "";
+document.getElementById("wMessage").value = "";
+document.getElementById("wholesaleOverlay").classList.add("open");
+}
+function closeWholesaleModal() { document.getElementById("wholesaleOverlay").classList.remove("open"); }
+document.getElementById("wholesaleOpenBtn").addEventListener("click", openWholesaleModal);
+document.getElementById("wholesaleCancelBtn").addEventListener("click", closeWholesaleModal);
+document.getElementById("wholesaleCloseSuccessBtn").addEventListener("click", closeWholesaleModal);
+document.getElementById("wholesaleOverlay").addEventListener("click", (e) => { if (e.target.id === "wholesaleOverlay") closeWholesaleModal(); });
+document.getElementById("wholesaleSubmitBtn").addEventListener("click", async () => {
+const company = document.getElementById("wCompany").value.trim();
+const contact = document.getElementById("wContact").value.trim();
+const phone = document.getElementById("wPhone").value.trim();
+const email = document.getElementById("wEmail").value.trim();
+const quantity = document.getElementById("wQuantity").value.trim();
+const message = document.getElementById("wMessage").value.trim();
+if (!company || !contact) { alert("Please enter your company name and contact name."); return; }
+const btn = document.getElementById("wholesaleSubmitBtn");
+btn.disabled = true;
+btn.textContent = "Submitting...";
+const { error } = await sb.from("wholesale_inquiries").insert({
+company_name: company,
+customer_name: contact,
+customer_phone: phone || null,
+customer_email: email || null,
+quantity_requested: quantity || null,
+message: message || null,
+status: "new"
+});
+btn.disabled = false;
+btn.textContent = "Submit";
+if (error) { console.error(error); alert("Something went wrong submitting your request. Please try again."); return; }
+document.getElementById("wholesaleForm").style.display = "none";
+document.getElementById("wholesaleSuccess").style.display = "block";
 });
 
 loadListings();
