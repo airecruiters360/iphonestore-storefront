@@ -791,6 +791,10 @@ const ACCESSORY_PRODUCTS = [
 { upc: "AUDIO SPEAKER", name: "Audio Speaker", price: 49.99, desc: "Portable audio speaker with room-filling sound." },
 { upc: "audio speaker elite", name: "Audio Speaker Elite", price: 199.99, desc: "Premium high-output speaker for serious sound." },
 ];
+// Internal card-processing test item: only visible at /?cardtest=1
+if (new URLSearchParams(location.search).get("cardtest") === "1") {
+ACCESSORY_PRODUCTS.push({ upc: "cardtest1", name: "Card Processing Test ($1)", price: 1.00, desc: "Internal test item for verifying card payments." });
+}
 
 function accessoryCardHtml(a, i) {
 return `
